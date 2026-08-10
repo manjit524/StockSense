@@ -7,6 +7,7 @@ This project features real-time/intraday stock tracking, market data analysis, a
 
 ## 📁 Repository Structure
 
+
 ```text
 .
 ├── static/                         # Frontend static assets (CSS, JavaScript)
@@ -38,3 +39,4 @@ This project features real-time/intraday stock tracking, market data analysis, a
 ├── requirements.txt                # Required Python dependencies
 └── README.md                       # Project documentation
 
+## 📁 Repository Structure
