@@ -41,7 +41,7 @@ This project features real-time/intraday stock tracking, market data analysis, a
 
 ---
 
-## ⚡ Initial Setup Instructions (Do these steps only ONE time on your computer)
+##  Initial Setup Instructions (Do these steps only ONE time on your computer)
 
 ### Step 1: Clone the Repository & Navigate into Folder
 Open VS Code, open the integrated Terminal (`Ctrl + ~`), and run:
@@ -73,7 +73,7 @@ And change this with your folder path.
 
 ---
 
-## 🚀 Step 5: Run Model & Application
+##  Step 5: Run Model & Application
 
 Run this step every time you need to run the code:
 ```bash
@@ -89,7 +89,7 @@ python app.py
 
 ---
 
-## 🔄 How to Make Changes and Push Code
+##  How to Make Changes and Push Code
 
 **Never make changes directly on the main branch. Follow this workflow:**
 
@@ -117,7 +117,7 @@ Once reviewed and merged into `main`, all other team members can click the **Syn
 
 ---
 
-## ⬇️ How to Get Latest Code Changes
+##  How to Get Latest Code Changes
 
 Don't repeat all initial setup steps for new code changes. Just run this in VS Code Terminal:
 
