@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+{% block title %}Markets — Desk & Ledger{% endblock %}
+
+{% block content %}
+<section class="static-page wide">
+  <p class="eyebrow">Beyond single stocks</p>
+  <h1>Every corner of the desk.</h1>
+  <p class="lede">ETFs and crypto update live. Mutual funds and bonds update once a day by nature —
+  labeled honestly, not dressed up as live. IPOs and derivatives are informational, not part of the
+  automated advice engine.</p>
+</section>
+
+<div class="market-tabs" role="tablist">
+  <button class="market-tab active" data-target="tab-etf">ETFs</button>
+  <button class="market-tab" data-target="tab-crypto">Crypto</button>
+  <button class="market-tab" data-target="tab-commodities">Commodities</button>
+  <button class="market-tab" data-target="tab-mf">Mutual Funds</button>
+  <button class="market-tab" data-target="tab-bonds">Bonds</button>
+  <button class="market-tab" data-target="tab-ipo">IPOs</button>
+  <button class="market-tab" data-target="tab-derivatives">Derivatives</button>
+</div>
+
+<div class="market-panels">
+
+  {% if not markets_ready %}
+  <p class="notice">{{ markets_message }} Mutual Funds, IPOs, Derivatives, and US Bonds will populate shortly — ETFs, Crypto, and Commodities are unaffected and already live.</p>
+  {% endif %}
+
+  <!-- ETFs — live via /api/live-quotes -->
+  <section class="market-panel active" id="tab-etf">
+    <div class="panel-head">
+      <h2>ETFs</h2>
+      <span class="live-badge"><span class="live-dot"></span> Live · updated <span class="live-updated-time">just now</span></span>
+    </div>
+    <input type="text" id="etf-search" class="table-search" placeholder="Search ETFs by symbol or name...">
+    <table class="market-table">
+      <thead><tr><th>Symbol</th><th>Name</th><th>Exchange</th><th>Price</th><th>Change</th></tr></thead>
+      <tbody id="etf-table-body">
+        {% for e in etfs %}
+        <tr data-symbol="{{ e.yf_symbol }}" data-currency="{{ '₹' if e.exchange != 'US' else '$' }}">
+          <td class="mono">{{ e.symbol }}</td>
+          <td>{{ e.label }}</td>
+          <td><span class="pick-exchange">{{ e.exchange }}</span></td>
+          <td class="mono"><span class="live-currency">{{ '₹' if e.exchange != 'US' else '$' }}</span><span class="live-price-value">—</span></td>
+          <td class="mono"><span class="live-arrow">·</span> <span class="live-change-value">—</span>%</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Crypto — live via /api/live-quotes (Yahoo Finance tracks crypto tickers too) -->
+  <section class="market-panel" id="tab-crypto">
+    <div class="panel-head">
+      <h2>Crypto</h2>
+      <span class="live-badge"><span class="live-dot"></span> Live · 24/7 · updated <span class="live-updated-time">just now</span></span>
+    </div>
+    <table class="market-table">
+      <thead><tr><th>Symbol</th><th>Name</th><th>Price (USD)</th><th>Change</th></tr></thead>
+      <tbody>
+        {% for c in crypto %}
+        <tr data-symbol="{{ c.yf_symbol }}" data-currency="$">
+          <td class="mono">{{ c.symbol }}</td>
+          <td>{{ c.label }}</td>
+          <td class="mono"><span class="live-currency">$</span><span class="live-price-value">—</span></td>
+          <td class="mono"><span class="live-arrow">·</span> <span class="live-change-value">—</span>%</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p class="panel-note">Crypto carries its own tax treatment in India, separate from equities — check current rules before trading.</p>
+  </section>
+
+  <!-- Commodities — live via /api/live-quotes (global USD futures pricing) -->
+  <section class="market-panel" id="tab-commodities">
+    <div class="panel-head">
+      <h2>Commodities</h2>
+      <span class="live-badge"><span class="live-dot"></span> Live · updated <span class="live-updated-time">just now</span></span>
+    </div>
+    <table class="market-table">
+      <thead><tr><th>Symbol</th><th>Name</th><th>Price</th><th>Change</th></tr></thead>
+      <tbody>
+        {% for m in commodities %}
+        <tr data-symbol="{{ m.yf_symbol }}" data-currency="$">
+          <td class="mono">{{ m.symbol }}</td>
+          <td>{{ m.label }}</td>
+          <td class="mono"><span class="live-currency">$</span><span class="live-price-value">—</span></td>
+          <td class="mono"><span class="live-arrow">·</span> <span class="live-change-value">—</span>%</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p class="panel-note">Global USD futures pricing — MCX INR-denominated commodity prices aren't available through a free live source yet.</p>
+  </section>
+
+  <!-- Mutual Funds — DAILY NAV, not live -->
+  <section class="market-panel" id="tab-mf">
+    <div class="panel-head">
+      <h2>Mutual Funds</h2>
+      <span class="daily-badge">Daily NAV · not live</span>
+    </div>
+    <input type="text" id="mf-search" class="table-search" placeholder="Search all ~40,000 AMFI schemes by name...">
+    <table class="market-table">
+      <thead><tr><th>Scheme</th><th>NAV (₹)</th><th>As of</th></tr></thead>
+      <tbody id="mf-table-body">
+        {% for f in mutual_funds %}
+        <tr>
+          <td>{{ f.name }}</td>
+          <td class="mono">{{ '₹%.4f'|format(f.nav) if f.nav is not none else '—' }}</td>
+          <td class="mono">{{ f.date }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p class="panel-note">Showing 100 schemes by default. NAV is published once per trading day by AMFI (usually evening
+    IST) — refreshing this faster wouldn't show new data. Search above to look up any of the ~40,000 registered schemes,
+    not just these 100.</p>
+  </section>
+
+  <!-- Bonds — daily yields -->
+  <section class="market-panel" id="tab-bonds">
+    <div class="panel-head">
+      <h2>Bonds</h2>
+      <span class="daily-badge">Daily yields · not live</span>
+    </div>
+
+    <h3 class="panel-subhead">US Treasury Yields</h3>
+    {% if us_bonds %}
+    <table class="market-table">
+      <thead><tr><th>Instrument</th><th>Yield</th><th>Date</th></tr></thead>
+      <tbody>
+        {% for b in us_bonds %}
+        <tr>
+          <td>{{ b.name }}</td>
+          <td class="mono">{{ '%.2f'|format(b.yield_pct) + '%' if b.yield_pct is not none else '—' }}</td>
+          <td class="mono">{{ b.date }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="panel-note">Not configured yet — add a free FRED API key to FRED_API_KEY in markets_data.py.</p>
+    {% endif %}
+
+    <h3 class="panel-subhead">Indian Government Securities</h3>
+    <table class="market-table">
+      <thead><tr><th>Instrument</th><th>Yield</th><th>As of</th></tr></thead>
+      <tbody>
+        {% for b in indian_bonds %}
+        <tr>
+          <td>{{ b.name }}</td>
+          <td class="mono">{{ '%.2f'|format(b.yield_pct) + '%' }}</td>
+          <td class="mono">{{ b.as_of }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p class="panel-note">No reliable free live source found for Indian bond yields — this table is manually maintained (see markets_data.py). Update it periodically from RBI or NSE's bond platform.</p>
+  </section>
+
+  <!-- IPOs — NSE unofficial calendar, GMP explicitly unofficial -->
+  <section class="market-panel" id="tab-ipo">
+    <div class="panel-head">
+      <h2>IPO Calendar</h2>
+      <span class="daily-badge">Event calendar · informational only</span>
+    </div>
+    {% if ipos %}
+    <table class="market-table">
+      <thead><tr><th>Company</th><th>Opens</th><th>Closes</th><th>Price Band</th><th>Issue Size</th><th>GMP</th></tr></thead>
+      <tbody>
+        {% for ipo in ipos %}
+        <tr>
+          <td>{{ ipo.company }}</td>
+          <td class="mono">{{ ipo.open_date }}</td>
+          <td class="mono">{{ ipo.close_date }}</td>
+          <td class="mono">{{ ipo.price_band }}</td>
+          <td class="mono">{{ ipo.issue_size }}</td>
+          <td class="mono unofficial">Unofficial — not wired up<br><span class="tiny">(see get_ipo_gmp in markets_data.py)</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="panel-note">No upcoming issues returned right now — this could mean there genuinely are none, or that NSE's endpoint format changed. Check get_ipo_calendar() in markets_data.py.</p>
+    {% endif %}
+    <p class="panel-note">This is NOT part of the automated advice engine — it's an events calendar only. Grey Market Premium (GMP), where shown, is an informal, unregulated secondary-market figure, not an official price.</p>
+  </section>
+
+  <!-- Derivatives — info-only, explicitly not in the advice engine -->
+  <section class="market-panel" id="tab-derivatives">
+    <div class="panel-head">
+      <h2>Derivatives — NIFTY Option Chain</h2>
+      <span class="daily-badge">Informational only · not advice</span>
+    </div>
+    {% if options_summary and options_summary.underlying_value %}
+    <div class="summary-stats">
+      <div class="stat">
+        <span class="stat-label">Underlying (NIFTY)</span>
+        <span class="stat-value">{{ '%.2f'|format(options_summary.underlying_value) }}</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Put/Call Ratio</span>
+        <span class="stat-value">{{ options_summary.put_call_ratio if options_summary.put_call_ratio is not none else '—' }}</span>
+      </div>
+    </div>
+    <p class="panel-note">Strikes near the money: {{ options_summary.near_strikes|join(', ') }}</p>
+    {% else %}
+    <p class="panel-note">Option chain data unavailable right now — NSE's endpoint may be rate-limiting or the market may be closed.</p>
+    {% endif %}
+    <p class="panel-note"><strong>This is deliberately not folded into the automated shortlist.</strong> Derivatives carry
+    leverage risk that plain equity picks don't, and generating automated buy/sell suggestions here is a materially
+    bigger responsibility than recommending a stock.</p>
+  </section>
+
+</div>
+{% endblock %}

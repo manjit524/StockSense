@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}About — Desk & Ledger{% endblock %}
+
+{% block content %}
+<section class="static-page">
+  <p class="eyebrow">About this desk</p>
+  <h1>Built as two honest engines, not one black box.</h1>
+
+  <p class="lede">
+    Desk &amp; Ledger runs two separate systems side by side, because a stock you'd
+    hold for five years and a stock you'd trade in the next five minutes aren't
+    answered by the same kind of model.
+  </p>
+
+  <div class="about-grid">
+    <div class="about-block">
+      <span class="engine-tag">Long horizon</span>
+      <h2>Multi-Exchange Advisor</h2>
+      <p>
+        A GRU neural network trained on historical closing prices across NSE, BSE,
+        and US equities. It's a small model, trained on a sample pool rather than
+        every ticker — treat its growth estimates as one directional signal, not
+        a forecast to bet the house on.
+      </p>
+    </div>
+    <div class="about-block">
+      <span class="engine-tag engine-tag-alt">Same session</span>
+      <h2>Intraday Scanner</h2>
+      <p>
+        No deep model here — intraday data is too short-lived to train on
+        reliably. Instead it reads live 5-minute candles through three
+        established technical signals: EMA crossover, RSI, and VWAP.
+      </p>
+    </div>
+  </div>
+
+  <h3>What this isn't</h3>
+  <p>
+    It isn't SEBI-registered investment advice, it isn't a guarantee of returns,
+    and it isn't a replacement for your own research. Both engines can be
+    confidently wrong. Use them as one input among several, and size any
+    position you wouldn't mind losing.
+  </p>
+</section>
+{% endblock %}

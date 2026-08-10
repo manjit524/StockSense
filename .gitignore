@@ -1,0 +1,60 @@
+# ==========================================
+# 1. Python Virtual Environments
+# ==========================================
+myenv/
+.venv/
+env/
+venv/
+ENV/
+
+# ==========================================
+# 2. Python Caches & Bytecode
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# ==========================================
+# 3. Project Caches, Pickles & Temp Files
+# ==========================================
+*.pkl
+master_df_cache.pkl
+.cache/
+*.log
+
+# ==========================================
+# 4. Large Datasets & Model Files (> 100MB)
+# ==========================================
+# Exclude data directories
+data/
+datasets/
+
+# Exclude standalone data/tabular files
+*.csv
+*.tsv
+*.parquet
+*.h5
+
+# Uncomment the line below if advisor_model.keras is larger than 100MB
+# advisor_model.keras
+
+# ==========================================
+# 5. IDE & Editor Settings
+# ==========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# ==========================================
+# 6. Environment Variables / Secrets
+# ==========================================
+.env
+.env.local
+secrets.json
+
+# Ignore trained model weights
+*.keras
+advisor_model.keras

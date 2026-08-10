@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}Reports — Desk & Ledger{% endblock %}
+
+{% block content %}
+<section class="static-page narrow">
+  <p class="eyebrow">Growth report</p>
+  <h1>How much did it move?</h1>
+  <p class="lede">Pick a stock, ETF, or crypto and a time window — see exactly how much it grew or fell over that period.</p>
+
+  <form action="{{ url_for('reports_growth') }}" method="POST" class="stack-form" id="report-form">
+    <label for="ticker-search">Symbol</label>
+    <div class="autocomplete-wrap">
+      <input type="text" id="ticker-search" placeholder="Search e.g. RELIANCE, AAPL, BTC..." autocomplete="off" value="{{ submitted_symbol or '' }}">
+      <div class="autocomplete-dropdown" id="ticker-dropdown"></div>
+    </div>
+    <input type="hidden" name="symbol" id="ticker-symbol" value="{{ submitted_symbol or '' }}">
+    <input type="hidden" name="exchange" id="ticker-exchange" value="{{ submitted_exchange or 'NSE' }}">
+
+    <label for="period_days">Period</label>
+    <select name="period_days" id="period_days">
+      {% for p in period_options %}
+      <option value="{{ p.value }}">{{ p.label }}</option>
+      {% endfor %}
+      <option value="custom">Custom (days)</option>
+    </select>
+
+    <div id="custom-days-wrap" style="display:none;">
+      <label for="custom_days">Custom period (days)</label>
+      <input type="number" name="custom_days" id="custom_days" min="1" placeholder="e.g. 45">
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block">Generate report</button>
+  </form>
+
+  {% if error %}
+  <p class="notice" style="border-color:var(--risk-high); color:var(--risk-high); background:rgba(248,113,113,0.08);">{{ error }}</p>
+  {% endif %}
+</section>
+
+{% if report %}
+<section class="static-page wide report-result">
+  <div class="report-card {{ 'trend-up' if report.direction == 'up' else 'trend-down' }}">
+    <div class="report-head">
+      <span class="pick-symbol">{{ report.symbol }}</span>
+      <span class="pick-exchange">{{ report.exchange }}</span>
+    </div>
+
+    <div class="report-change">
+      {{ '▲' if report.direction == 'up' else '▼' }}
+      {{ '%.2f'|format(report.pct_change|abs) }}%
+      <span class="report-abs">({{ report.currency }}{{ '%.2f'|format(report.abs_change|abs) }})</span>
+    </div>
+
+    <p class="report-summary">
+      From {{ report.currency }}{{ '%.2f'|format(report.start_price) }} on {{ report.start_date }}
+      to {{ report.currency }}{{ '%.2f'|format(report.end_price) }} on {{ report.end_date }}
+      ({{ report.period_days }} days).
+    </p>
+
+    <svg class="report-chart" viewBox="0 0 300 80" preserveAspectRatio="none">
+      {% set prices = report.chart_points | map(attribute='price') | list %}
+      {% set min_p = prices | min %}
+      {% set max_p = prices | max %}
+      {% set range_p = (max_p - min_p) if (max_p - min_p) > 0 else 1 %}
+      <polyline
+        points="{% for pt in report.chart_points %}{{ (loop.index0 / ((report.chart_points|length - 1) if report.chart_points|length > 1 else 1)) * 300 }},{{ 75 - ((pt.price - min_p) / range_p) * 70 }} {% endfor %}"
+        fill="none" stroke="currentColor" stroke-width="2"/>
+    </svg>
+
+    <div class="report-downloads">
+      <a class="btn btn-ghost"
+         href="{{ url_for('reports_export_pdf', symbol=report.symbol, exchange=report.exchange, period_days=report.period_days) }}">
+         Download PDF
+      </a>
+      <a class="btn btn-ghost"
+         href="{{ url_for('reports_export_excel', symbol=report.symbol, exchange=report.exchange, period_days=report.period_days) }}">
+         Download Excel
+      </a>
+    </div>
+  </div>
+
+  <table class="market-table report-table">
+    <thead><tr><th>Date</th><th>Price</th><th>Change from previous</th></tr></thead>
+    <tbody>
+      {% set prev_price = namespace(value=None) %}
+      {% for pt in report.chart_points %}
+      <tr>
+        <td class="mono">{{ pt.date }}</td>
+        <td class="mono">{{ report.currency }}{{ '%.2f'|format(pt.price) }}</td>
+        <td class="mono">
+          {% if prev_price.value is not none %}
+            {% set diff = pt.price - prev_price.value %}
+            <span class="{{ 'trend-up' if diff >= 0 else 'trend-down' }}">{{ '%+.2f'|format(diff) }}</span>
+          {% else %}
+            —
+          {% endif %}
+        </td>
+      </tr>
+      {% set prev_price.value = pt.price %}
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.getElementById('period_days').addEventListener('change', function () {
+    document.getElementById('custom-days-wrap').style.display = this.value === 'custom' ? 'block' : 'none';
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="refresh" content="4">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('dl_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+<title>Desk & Ledger — Warming up</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-spacer"></div>
+  <div class="site-name">Desk<span class="brand-accent">&amp;</span>Ledger</div>
+</header>
+
+<main class="hero">
+  <p class="eyebrow">One moment</p>
+  <h1>Loading the model.</h1>
+  <p class="hero-sub">{{ message }}</p>
+  <p class="hero-sub">This page refreshes itself every few seconds — no need to reload manually.
+  On a CPU-only machine this can take a minute or two the first time.</p>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Desk & Ledger — Today's Desk{% endblock %}
+
+{% block content %}
+
+<div class="ticker-tape" aria-hidden="true">
+  <div class="ticker-track">
+    {% for s in trend_stocks + trend_stocks %}
+    <span class="tick {{ 'up' if s.change >= 0 else 'down' }}" data-symbol="{{ s.yf_symbol }}" data-currency="{{ '₹' if s.exchange != 'US' else '$' }}">
+      {{ s.symbol }} <b class="live-arrow">{{ '▲' if s.change >= 0 else '▼' }}</b> <span class="live-currency">{{ '₹' if s.exchange != 'US' else '$' }}</span><span class="live-price-value">{{ '%.2f'|format(s.price) }}</span>
+    </span>
+    {% endfor %}
+  </div>
+</div>
+
+<section class="hero">
+  <p class="eyebrow">Two engines, one desk</p>
+  <h1>Read the tape.<br>Then decide with it, not by it.</h1>
+  <p class="hero-sub">
+    One engine studies where a stock might sit years from now. The other watches
+    what it's doing in the next five minutes. Pick the horizon you're trading on,
+    set your budget, and get a risk-sorted shortlist — not a single black-box answer.
+  </p>
+  <div class="hero-anchor">
+    <a href="{{ url_for('get_advice') }}" class="btn btn-primary">Get Advice</a>
+    <a href="{{ url_for('about') }}" class="btn btn-ghost">How it works</a>
+  </div>
+</section>
+
+<section class="trend-section">
+  <div class="trend-head">
+    <h2>Today's mixed tape</h2>
+    <span class="live-badge">
+      <span class="live-dot"></span>
+      Live · updated <span class="live-updated-time">just now</span>
+    </span>
+  </div>
+  <p class="trend-note">Mixed snapshot across NSE · BSE · US. Refreshes automatically every 15s during
+  market hours; outside market hours you'll see the last traded price.</p>
+
+  <div class="trend-grid">
+    {% for s in trend_stocks %}
+    <div class="trend-card {{ 'trend-up' if s.change >= 0 else 'trend-down' }}" data-symbol="{{ s.yf_symbol }}" data-currency="{{ '₹' if s.exchange != 'US' else '$' }}">
+      <div class="trend-top">
+        <span class="trend-symbol">{{ s.symbol }}</span>
+        <span class="trend-exchange">{{ s.exchange }}</span>
+      </div>
+      <div class="trend-price"><span class="live-currency">{{ '₹' if s.exchange != 'US' else '$' }}</span><span class="live-price-value">{{ '%.2f'|format(s.price) }}</span></div>
+      <div class="trend-change">
+        <span class="live-arrow">{{ '▲' if s.change >= 0 else '▼' }}</span> <span class="live-change-value">{{ '%.2f'|format(s.change|abs) }}</span>%
+      </div>
+      <svg class="trend-spark" viewBox="0 0 100 30" preserveAspectRatio="none">
+        <polyline points="{{ s.spark }}" fill="none" stroke="currentColor" stroke-width="2"/>
+      </svg>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="how">
+  <h3>How the shortlist gets built</h3>
+  <div class="how-grid">
+    <div class="how-item">
+      <span class="how-mark low">Low</span>
+      <p>Steadier names, ranked by the model's expected growth within that band.</p>
+    </div>
+    <div class="how-item">
+      <span class="how-mark medium">Medium</span>
+      <p>Balanced volatility — the widest band, usually the deepest shortlist.</p>
+    </div>
+    <div class="how-item">
+      <span class="how-mark high">High</span>
+      <p>Higher swings, higher modeled upside — and higher odds of being wrong.</p>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

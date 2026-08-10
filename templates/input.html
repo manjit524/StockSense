@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Get Advice — Desk & Ledger{% endblock %}
+
+{% block content %}
+<section class="static-page">
+  <p class="eyebrow">Two engines, one desk</p>
+  <h1>Pick your horizon.</h1>
+  <p class="lede">Set your budget below and get a risk-sorted shortlist from whichever engine fits how you're trading.</p>
+</section>
+
+<section class="engines">
+
+  <article class="engine-card" id="advisor-panel">
+    <div class="engine-head">
+      <span class="engine-tag">Long horizon</span>
+      <h2>Multi-Exchange Advisor</h2>
+      <p>A GRU model trained across NSE, BSE, and US price histories, sorted into
+         low, medium, and high-risk shortlists sized to your capital.</p>
+    </div>
+
+    <form action="{{ url_for('advisor_results') }}" method="POST" class="engine-form">
+      <label for="exchange_choice">Exchange pool</label>
+      <select name="exchange_choice" id="exchange_choice">
+        <option value="nse">NSE only</option>
+        <option value="bse">BSE only</option>
+        <option value="nse_bse" selected>Hybrid — NSE + BSE</option>
+        <option value="us">US only</option>
+        <option value="global">Global hybrid — NSE + BSE + US</option>
+      </select>
+
+      <label for="capital_advisor">One-time capital</label>
+      <input type="number" min="1" step="0.01" name="capital" id="capital_advisor" placeholder="e.g. 50000" required>
+
+      <label for="years">Investment horizon (years)</label>
+      <input type="number" min="0.5" step="0.5" name="years" id="years" placeholder="e.g. 5" required>
+
+      <button type="submit" class="btn btn-primary btn-block">Build my shortlist</button>
+    </form>
+  </article>
+
+  <article class="engine-card" id="intraday-panel">
+    <div class="engine-head">
+      <span class="engine-tag engine-tag-alt">Same session</span>
+      <h2>Intraday Scanner</h2>
+      <p>Live 5-minute candles across 25 NSE names, read through EMA crossover,
+         RSI, and VWAP — ranked by momentum, not prediction.</p>
+    </div>
+
+    <form action="{{ url_for('intraday_results') }}" method="POST" class="engine-form">
+      <label for="capital_intraday">Capital for this session</label>
+      <input type="number" min="1" step="0.01" name="capital" id="capital_intraday" placeholder="e.g. 20000" required>
+
+      <label for="risk_choice">Risk band</label>
+      <select name="risk_choice" id="risk_choice">
+        <option value="low">Low risk only</option>
+        <option value="medium">Medium risk only</option>
+        <option value="high">High risk only</option>
+        <option value="all" selected>Show all three</option>
+      </select>
+
+      <button type="submit" class="btn btn-primary btn-block">Scan now</button>
+    </form>
+  </article>
+
+</section>
+{% endblock %}

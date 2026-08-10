@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Login — Desk & Ledger{% endblock %}
+
+{% block content %}
+<section class="static-page narrow">
+  <div class="auth-card">
+    <div class="auth-tabs">
+      <button type="button" class="auth-tab active" data-target="panel-login">Login</button>
+      <button type="button" class="auth-tab" data-target="panel-signup">Sign up</button>
+    </div>
+
+    <div class="auth-panel active" id="panel-login">
+      <form class="stack-form" data-demo-form>
+        <label for="login-email">Email</label>
+        <input type="email" id="login-email" name="email" placeholder="you@example.com" required>
+
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" name="password" placeholder="••••••••" required>
+
+        <button type="submit" class="btn btn-primary btn-block">Log in</button>
+        <p class="form-note">This is a UI demo — no accounts are actually created or checked yet.</p>
+      </form>
+    </div>
+
+    <div class="auth-panel" id="panel-signup">
+      <form class="stack-form" data-demo-form>
+        <label for="signup-name">Name</label>
+        <input type="text" id="signup-name" name="name" placeholder="Your name" required>
+
+        <label for="signup-email">Email</label>
+        <input type="email" id="signup-email" name="email" placeholder="you@example.com" required>
+
+        <label for="signup-password">Password</label>
+        <input type="password" id="signup-password" name="password" placeholder="••••••••" required>
+
+        <button type="submit" class="btn btn-primary btn-block">Create account</button>
+        <p class="form-note">This is a UI demo — no accounts are actually created or checked yet.</p>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}Results — Desk & Ledger{% endblock %}
+
+{% block content %}
+
+<section class="query-summary">
+  <h1>{{ query_label }}</h1>
+  <div class="summary-stats">
+    <div class="stat">
+      <span class="stat-label">Capital</span>
+      <span class="stat-value">{{ "%.2f"|format(capital) }}</span>
+    </div>
+    {% if years %}
+    <div class="stat">
+      <span class="stat-label">Horizon</span>
+      <span class="stat-value">{{ years }} yr</span>
+    </div>
+    {% endif %}
+    <div class="stat">
+      <span class="stat-label">Mode</span>
+      <span class="stat-value">{{ "Multi-Exchange" if mode == "advisor" else "Intraday" }}</span>
+    </div>
+  </div>
+  {% if has_data %}
+  <span class="live-badge">
+    <span class="live-dot"></span>
+    Live prices · updated <span class="live-updated-time">just now</span>
+  </span>
+  {% endif %}
+  {% if mixed_currency %}
+  <p class="notice">Global hybrid results mix ₹ and $ prices without FX conversion — compare within a
+  currency, not across.</p>
+  {% endif %}
+</section>
+
+{% if not has_data %}
+<section class="empty-state">
+  <h2>No data to scan yet.</h2>
+  <p>{{ "Run the backfill in stock_advisor_multi_exchange.py, then restart the app." if mode == "advisor"
+        else "The live scan couldn't reach market data — check your network and try again." }}</p>
+  <a href="{{ url_for('get_advice') }}" class="btn btn-ghost">Back to desk</a>
+</section>
+{% else %}
+
+<section class="risk-columns">
+  {% for risk_name, icon_class in [('Low Risk','low'), ('Medium Risk','medium'), ('High Risk','high')] %}
+  <div class="risk-col risk-{{ icon_class }}">
+    <div class="risk-col-head">
+      <span class="risk-dot risk-dot-{{ icon_class }}"></span>
+      <h2>{{ risk_name }}</h2>
+    </div>
+
+    {% set bucket = buckets.get(risk_name) %}
+    {% if bucket is none %}
+      <p class="risk-empty">Not requested for this scan.</p>
+    {% elif bucket|length == 0 %}
+      <p class="risk-empty">
+        {{ "No matches at this budget in this band." if mode == "advisor"
+           else "No active BUY signal in this band right now — re-scan later." }}
+      </p>
+    {% else %}
+      <ul class="pick-list">
+        {% for item in bucket %}
+        <li class="pick" data-symbol="{{ item.yf_symbol }}" data-currency="{{ item.currency if mode == 'advisor' else '₹' }}">
+          <div class="pick-top">
+            <span class="pick-symbol">{{ item.symbol }}</span>
+            {% if mode == "advisor" %}
+              <span class="pick-exchange">{{ item.exchange }}</span>
+            {% else %}
+              <span class="pick-signal">{{ item.signal }}</span>
+            {% endif %}
+          </div>
+
+          <div class="pick-grid">
+            <div>
+              <span class="pick-label">Price</span>
+              <span class="pick-mono"><span class="live-currency">{{ item.currency if mode == "advisor" else "₹" }}</span><span class="live-price-value">{{ "%.2f"|format(item.current_price) }}</span></span>
+            </div>
+            <div>
+              <span class="pick-label">Shares</span>
+              <span class="pick-mono">{{ item.shares_to_buy }}</span>
+            </div>
+            <div>
+              <span class="pick-label">Leftover</span>
+              <span class="pick-mono">{{ item.currency if mode == "advisor" else "₹" }}{{ "%.2f"|format(item.leftover_cash) }}</span>
+            </div>
+            {% if mode == "advisor" %}
+            <div>
+              <span class="pick-label">Modeled profit</span>
+              <span class="pick-mono">{{ item.currency }}{{ "%.2f"|format(item.net_profit) }}</span>
+            </div>
+            {% else %}
+            <div>
+              <span class="pick-label">RSI</span>
+              <span class="pick-mono">{{ "%.1f"|format(item.rsi) }}</span>
+            </div>
+            {% endif %}
+          </div>
+
+          {% if mode == "intraday" %}
+          <p class="pick-reasons">{{ item.reasons|join(" · ") }}</p>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+  {% endfor %}
+</section>
+
+{% endif %}
+
+<div class="results-actions">
+  <a href="{{ url_for('get_advice') }}" class="btn btn-ghost">Run another scan</a>
+</div>
+
+{% endblock %}
