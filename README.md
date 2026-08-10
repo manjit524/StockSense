@@ -7,7 +7,6 @@ This project features real-time/intraday stock tracking, market data analysis, a
 
 ## 📁 Repository Structure
 
-
 ```text
 .
 ├── static/                         # Frontend static assets (CSS, JavaScript)
@@ -39,59 +38,88 @@ This project features real-time/intraday stock tracking, market data analysis, a
 ├── requirements.txt                # Required Python dependencies
 └── README.md                       # Project documentation
 ```
-##Do this steps only one time in your computer.
 
-#Step 1: Clone the Repository & Navigate into Folder
+---
 
-Opens VS Code, opens the integrated Terminal (Ctrl + ~), and runs:
+## ⚡ Initial Setup Instructions (Do these steps only ONE time on your computer)
+
+### Step 1: Clone the Repository & Navigate into Folder
+Open VS Code, open the integrated Terminal (`Ctrl + ~`), and run:
+```bash
 git clone https://github.com/manjit524/The_Trading_Desk.git
 cd The_Trading_Desk
+```
 
-#Step 2: Create & Activate Virtual Environment
-
+### Step 2: Create & Activate Virtual Environment
+```bash
 python -m venv myenv
 myenv\Scripts\activate
+```
 
-#Step 3: Install Required Packages
-
+### Step 3: Install Required Packages
+```bash
 pip install -r requirements.txt
+```
 
-#Step 4 Add Dataset
-
-Dataset add by yourself as i already shared it with everyone.
-In advisor_engine.py find this:
+### Step 4: Add Dataset
+Dataset add by yourself as I already shared it with everyone.  
+In `advisor_engine.py` find this:
+```python
 NSE_FOLDER = "C:/Users/Manjit/Downloads/Market_Data/NSE"
 BSE_FOLDER = "C:/Users/Manjit/Downloads/Market_Data/BSE"
 US_FOLDER = "C:/Users/Manjit/Downloads/Market_Data/US"
+```
 And change this with your folder path.
 
-#Step 5: Run model as usual(run this steps every time you have to run code):
+---
 
-python stock_advisor_multi_exchange.py 
-python train_model.py (when you run this 2 command then in your project folder it will automatic create 2 file's advisor_model.keras and master_df_cache.pkl) (If you want updated data then only you run this two steps otherwise run only app.py)
-python app.py   
+## 🚀 Step 5: Run Model & Application
 
-##How to Make Changes and Push Code (Never make changes directly on the main branch. Follow this workflow:)
+Run this step every time you need to run the code:
+```bash
+python stock_advisor_multi_exchange.py
+python train_model.py
+```
+*(When you run these 2 commands, it will automatically create 2 files in your project folder: `advisor_model.keras` and `master_df_cache.pkl`.)*  
+*(If you want updated data then only run these two steps, otherwise run only `python app.py`)*
 
-#Create a new branch for your feature:
-git checkout -b feature-your-task-name (gave task name as per your changes eg. if you wan to change login page then run git checkout -b feature-login-page)
+```bash
+python app.py
+```
 
-#After making code edits, stage and commit your changes:
+---
+
+## 🔄 How to Make Changes and Push Code
+
+**Never make changes directly on the main branch. Follow this workflow:**
+
+### 1. Create a new branch for your feature:
+```bash
+git checkout -b feature-your-task-name
+```
+*(Give task name as per your changes, e.g., if you want to change the login page, run `git checkout -b feature-login-page`)*
+
+### 2. After making code edits, stage and commit your changes:
+```bash
 git add .
 git commit -m "Add description of what you changed"
+```
 
-#Push your branch to GitHub:
+### 3. Push your branch to GitHub:
+```bash
 git push origin feature-your-task-name
+```
 
-#At Last:
-Go to https://github.com/manjit524/The_Trading_Desk and click Compare & pull request to submit your work for review.
+### 4. At Last:
+Go to [https://github.com/manjit524/The_Trading_Desk](https://github.com/manjit524/The_Trading_Desk) and click **Compare & pull request** to submit your work for review.
 
-Once reviewed and merged into main, all other team members can click the Sync Changes / Refresh button in the bottom-left corner of VS Code to pull the latest code.
+Once reviewed and merged into `main`, all other team members can click the **Sync Changes / Refresh** button in the bottom-left corner of VS Code to pull the latest code.
 
+---
 
-##Dont do this all for new code with changes just run this in VSCode Terminal:
+## ⬇️ How to Get Latest Code Changes
 
+Don't repeat all initial setup steps for new code changes. Just run this in VS Code Terminal:
+
+```bash
 git pull origin main
-
-
-
