@@ -317,26 +317,26 @@ def initialize_engine(force_refresh=False):
         age_hours = (time.time() - os.path.getmtime(MASTER_DF_CACHE_PATH)) / 3600
         if age_hours < MASTER_DF_CACHE_MAX_AGE_HOURS:
             try:
-                print(f"📂 Loading cached evaluation ({age_hours:.1f}h old) — skipping re-prediction...")
+                print(f"[CACHE] Loading cached evaluation ({age_hours:.1f}h old) -- skipping re-prediction...")
                 return pd.read_pickle(MASTER_DF_CACHE_PATH)
             except Exception:
                 pass  # fall through and recompute if the cache file is corrupt
 
     if os.path.exists(MODEL_PATH):
-        print(f"📂 Loading pre-trained model from {MODEL_PATH}...")
+        print(f"[MODEL] Loading pre-trained model from {MODEL_PATH}...")
         model = load_saved_model()
     else:
-        print("🧠 No saved model found — training one now (this only happens once)...")
+        print("[MODEL] No saved model found -- training one now (this only happens once)...")
         model = train_model(registry)
         save_model(model)
-        print(f"💾 Saved trained model to {MODEL_PATH}")
+        print(f"[MODEL] Saved trained model to {MODEL_PATH}")
 
-    print(f"🔮 Evaluating {len(registry)} tickers (this is the slow step on a large registry)...")
+    print(f"[EVAL] Evaluating {len(registry)} tickers (this is the slow step on a large registry)...")
     df = evaluate_all(registry, model)
 
     try:
         df.to_pickle(MASTER_DF_CACHE_PATH)
-        print(f"💾 Cached evaluation results to {MASTER_DF_CACHE_PATH} (valid for {MASTER_DF_CACHE_MAX_AGE_HOURS}h)")
+        print(f"[CACHE] Cached evaluation results to {MASTER_DF_CACHE_PATH} (valid for {MASTER_DF_CACHE_MAX_AGE_HOURS}h)")
     except Exception:
         pass
 

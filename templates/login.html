@@ -1,8 +1,9 @@
 {% extends "base.html" %}
-{% block title %}Login — Desk & Ledger{% endblock %}
+{% block title %}Login — Desk &amp; Ledger{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">{% endblock %}
 
 {% block content %}
-<section class="static-page narrow">
+<div class="login-wrap">
   <div class="auth-card">
     <div class="auth-tabs">
       <button type="button" class="auth-tab active" data-target="panel-login">Login</button>
@@ -10,12 +11,15 @@
     </div>
 
     <div class="auth-panel active" id="panel-login">
-      <form class="stack-form" data-demo-form>
+      <h2>Welcome back</h2>
+      <p class="auth-sub">Sign in to your Desk &amp; Ledger account.</p>
+      <form class="form-stack" data-demo-form>
         <label for="login-email">Email</label>
         <input type="email" id="login-email" name="email" placeholder="you@example.com" required>
 
         <label for="login-password">Password</label>
         <input type="password" id="login-password" name="password" placeholder="••••••••" required>
+        <a href="#" class="auth-forgot">Forgot password?</a>
 
         <button type="submit" class="btn btn-primary btn-block">Log in</button>
         <p class="form-note">This is a UI demo — no accounts are actually created or checked yet.</p>
@@ -23,7 +27,9 @@
     </div>
 
     <div class="auth-panel" id="panel-signup">
-      <form class="stack-form" data-demo-form>
+      <h2>Create account</h2>
+      <p class="auth-sub">Start analysing markets in seconds.</p>
+      <form class="form-stack" data-demo-form>
         <label for="signup-name">Name</label>
         <input type="text" id="signup-name" name="name" placeholder="Your name" required>
 
@@ -38,5 +44,5 @@
       </form>
     </div>
   </div>
-</section>
+</div>
 {% endblock %}

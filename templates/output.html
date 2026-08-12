@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% block title %}Results — Desk & Ledger{% endblock %}
+{% block title %}Results — Desk &amp; Ledger{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{{ url_for('static', filename='results.css') }}">{% endblock %}
 
 {% block content %}
 
@@ -38,7 +39,7 @@
   <h2>No data to scan yet.</h2>
   <p>{{ "Run the backfill in stock_advisor_multi_exchange.py, then restart the app." if mode == "advisor"
         else "The live scan couldn't reach market data — check your network and try again." }}</p>
-  <a href="{{ url_for('get_advice') }}" class="btn btn-ghost">Back to desk</a>
+  <a href="{{ url_for('get_advice') }}" class="btn btn-ghost" style="margin-top:16px;">Back to desk</a>
 </section>
 {% else %}
 

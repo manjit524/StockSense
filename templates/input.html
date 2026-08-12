@@ -1,16 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Get Advice — Desk & Ledger{% endblock %}
+{% block title %}Get Advice — Desk &amp; Ledger{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{{ url_for('static', filename='advice.css') }}">{% endblock %}
 
 {% block content %}
-<section class="static-page">
+<div class="advice-hero">
   <p class="eyebrow">Two engines, one desk</p>
   <h1>Pick your horizon.</h1>
   <p class="lede">Set your budget below and get a risk-sorted shortlist from whichever engine fits how you're trading.</p>
-</section>
+</div>
 
 <section class="engines">
 
-  <article class="engine-card" id="advisor-panel">
+  <article class="engine-card engine-gold" id="advisor-panel">
     <div class="engine-head">
       <span class="engine-tag">Long horizon</span>
       <h2>Multi-Exchange Advisor</h2>
@@ -38,7 +39,7 @@
     </form>
   </article>
 
-  <article class="engine-card" id="intraday-panel">
+  <article class="engine-card engine-teal" id="intraday-panel">
     <div class="engine-head">
       <span class="engine-tag engine-tag-alt">Same session</span>
       <h2>Intraday Scanner</h2>
@@ -58,7 +59,7 @@
         <option value="all" selected>Show all three</option>
       </select>
 
-      <button type="submit" class="btn btn-primary btn-block">Scan now</button>
+      <button type="submit" class="btn btn-teal btn-block">Scan now</button>
     </form>
   </article>
 

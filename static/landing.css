@@ -1,0 +1,533 @@
+/* ==========================================================================
+   LANDING-ONLY THEME — same variable names as style.css, new palette.
+   When the site-wide theme change happens, these values move into style.css.
+   ========================================================================== */
+:root {
+  --bg: #14100D;
+  --panel: #1C1611;
+  --panel-hi: #241C16;
+  --text: #F5EFE8;
+  --text-muted: #A79A8C;
+  --hairline: rgba(255, 255, 255, 0.08);
+  --gold: #FF7A29;
+  --gold-hi: #FF8F4D;
+  --gold-ink: #1A0E04;
+  --teal: #34C9A6;
+  --risk-low: #34D399;
+  --risk-medium: #FBBF24;
+  --risk-high: #F87171;
+  --shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body.vw {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.55;
+}
+
+.vw a { color: inherit; text-decoration: none; }
+
+/* ==========================================================================
+   TOP NAVBAR
+   ========================================================================== */
+.vw-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 5%;
+  background: rgba(20, 16, 13, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.vw-brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.vw-brand-accent { color: var(--gold); }
+
+.vw-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.vw-nav-links a {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.vw-nav-links a:hover { color: var(--text); }
+
+.vw-nav-actions { display: flex; align-items: center; gap: 12px; }
+
+.vw-nav-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  color: var(--text);
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .vw-nav-links { display: none; }
+  .vw-nav-toggle { display: flex; }
+  .vw-nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--panel);
+    padding: 20px 5%;
+    gap: 18px;
+    border-bottom: 1px solid var(--hairline);
+  }
+}
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+.vw-btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 100px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.86rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.vw-btn:hover { transform: translateY(-1px); }
+
+.vw-btn-primary { background: var(--gold); color: var(--gold-ink); }
+.vw-btn-primary:hover { background: var(--gold-hi); }
+
+.vw-btn-ghost { background: transparent; border-color: var(--hairline); color: var(--text); }
+.vw-btn-ghost:hover { border-color: var(--gold); }
+
+.vw-btn-sm { padding: 9px 18px; font-size: 0.78rem; }
+
+/* ==========================================================================
+   HERO
+   ========================================================================== */
+.vw-hero {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 90px 24px 70px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.vw-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--gold);
+  background: rgba(255, 122, 41, 0.12);
+  border: 1px solid rgba(255, 122, 41, 0.3);
+  padding: 6px 14px;
+  border-radius: 100px;
+  margin-bottom: 24px;
+}
+
+.vw-hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 5vw, 3.4rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 22px;
+  letter-spacing: -0.01em;
+}
+
+.vw-hero-sub {
+  color: var(--text-muted);
+  font-size: 1.02rem;
+  max-width: 580px;
+  margin: 0 auto 34px;
+}
+
+.vw-hero-actions {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.vw-hero-icon {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--panel);
+  border: 1px solid var(--hairline);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.85;
+}
+
+.vw-hero-icon svg { width: 22px; height: 22px; color: var(--gold); }
+
+/* ==========================================================================
+   SOURCES BAR (honest replacement for fake press logos)
+   ========================================================================== */
+.vw-sources {
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  padding: 22px 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.vw-sources-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.vw-sources span.name {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   SECTION HEADS
+   ========================================================================== */
+.vw-section {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 90px 24px;
+}
+
+.vw-section-head {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 50px;
+}
+
+.vw-section-head h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  margin: 0 0 14px;
+  line-height: 1.2;
+}
+
+.vw-section-head p { color: var(--text-muted); font-size: 0.98rem; }
+
+/* ==========================================================================
+   MARKET / FEATURE CARDS
+   ========================================================================== */
+.vw-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+@media (max-width: 800px) { .vw-grid-3 { grid-template-columns: 1fr; } }
+
+.vw-card {
+  background: var(--panel);
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
+  padding: 26px;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.vw-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+
+.vw-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(255, 122, 41, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.vw-card-icon svg { width: 22px; height: 22px; color: var(--gold); }
+
+.vw-card h3 { font-family: var(--font-display); font-size: 1.05rem; margin: 0 0 8px; }
+.vw-card p { color: var(--text-muted); font-size: 0.88rem; margin: 0; }
+
+/* ==========================================================================
+   STEPS
+   ========================================================================== */
+.vw-steps {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+}
+
+@media (max-width: 700px) { .vw-steps { grid-template-columns: 1fr; } }
+
+.vw-step { display: flex; gap: 16px; }
+
+.vw-step-num {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--gold-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.vw-step h4 { font-family: var(--font-display); font-size: 1rem; margin: 4px 0 6px; }
+.vw-step p { color: var(--text-muted); font-size: 0.86rem; margin: 0; }
+
+/* ==========================================================================
+   ASSET CARDS (live data, filterable)
+   ========================================================================== */
+.vw-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.vw-filter-btn {
+  background: var(--panel);
+  border: 1px solid var(--hairline);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.8rem;
+  padding: 8px 16px;
+  border-radius: 100px;
+  cursor: pointer;
+}
+
+.vw-filter-btn.active { background: var(--gold); color: var(--gold-ink); border-color: var(--gold); }
+
+.vw-asset-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+@media (max-width: 900px) { .vw-asset-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .vw-asset-grid { grid-template-columns: 1fr; } }
+
+.vw-asset-card {
+  background: var(--panel);
+  border: 1px solid var(--hairline);
+  border-radius: 14px;
+  padding: 18px;
+}
+
+.vw-asset-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+
+.vw-asset-symbol { font-family: var(--font-mono); font-weight: 700; font-size: 0.95rem; }
+
+.vw-asset-badge {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border: 1px solid var(--hairline);
+  padding: 2px 8px;
+  border-radius: 100px;
+}
+
+.vw-asset-price { font-family: var(--font-mono); font-size: 1.2rem; margin-bottom: 4px; }
+
+.vw-asset-change { font-family: var(--font-mono); font-size: 0.82rem; margin-bottom: 14px; }
+.vw-asset-card.up .vw-asset-change,
+.vw-asset-change.up { color: var(--risk-low); }
+.vw-asset-card.down .vw-asset-change,
+.vw-asset-change.down { color: var(--risk-high); }
+
+.vw-asset-card.live-flash { animation: vw-flash-bg 0.7s ease; }
+
+@keyframes vw-flash-bg {
+  0% { background: rgba(255, 122, 41, 0.14); }
+  100% { background: var(--panel); }
+}
+
+.vw-asset-actions { display: flex; gap: 8px; }
+.vw-asset-actions .vw-btn { flex: 1; text-align: center; }
+
+/* ==========================================================================
+   INSIGHTS / EDUCATION CARDS
+   ========================================================================== */
+.vw-insight-card {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--hairline);
+  background: var(--panel);
+}
+
+.vw-insight-visual {
+  height: 140px;
+  background: linear-gradient(135deg, rgba(255,122,41,0.25), rgba(52,201,166,0.15));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vw-insight-visual svg { width: 40px; height: 40px; color: var(--gold); }
+
+.vw-insight-body { padding: 20px; }
+.vw-insight-body h3 { font-family: var(--font-display); font-size: 1rem; margin: 0 0 8px; }
+.vw-insight-body p { color: var(--text-muted); font-size: 0.85rem; margin: 0 0 14px; }
+.vw-insight-body a { color: var(--gold); font-weight: 600; font-size: 0.85rem; }
+
+/* ==========================================================================
+   CREDIBILITY STRIP (honest replacement for fabricated testimonial)
+   ========================================================================== */
+.vw-credibility {
+  background: var(--panel);
+  border: 1px solid var(--hairline);
+  border-radius: 20px;
+  padding: 48px;
+  text-align: center;
+}
+
+.vw-credibility h2 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  margin: 0 0 14px;
+}
+
+.vw-credibility p {
+  color: var(--text-muted);
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   NEWSLETTER
+   ========================================================================== */
+.vw-newsletter {
+  background: linear-gradient(135deg, rgba(255,122,41,0.14), rgba(28,22,17,0));
+  border: 1px solid var(--hairline);
+  border-radius: 20px;
+  padding: 40px 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.vw-newsletter h3 { font-family: var(--font-display); font-size: 1.2rem; margin: 0 0 6px; }
+.vw-newsletter p { color: var(--text-muted); font-size: 0.88rem; margin: 0; }
+
+.vw-newsletter-form { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.vw-newsletter-form input {
+  background: var(--bg);
+  border: 1px solid var(--hairline);
+  color: var(--text);
+  padding: 12px 16px;
+  border-radius: 100px;
+  font-family: var(--font-body);
+  font-size: 0.86rem;
+  min-width: 220px;
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.vw-footer {
+  border-top: 1px solid var(--hairline);
+  padding: 60px 5% 30px;
+}
+
+.vw-footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr repeat(4, 1fr);
+  gap: 32px;
+  max-width: 1120px;
+  margin: 0 auto 40px;
+}
+
+@media (max-width: 800px) { .vw-footer-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.vw-footer-col h5 {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin: 0 0 16px;
+}
+
+.vw-footer-col a {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  margin-bottom: 10px;
+}
+
+.vw-footer-col a:hover { color: var(--gold); }
+
+.vw-footer-bottom {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-top: 24px;
+  border-top: 1px solid var(--hairline);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.vw-disclaimer {
+  max-width: 1120px;
+  margin: 0 auto 30px;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  background: var(--panel);
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 16px 20px;
+}
+
+.vw-disclaimer strong { color: var(--text); }
+
+.vw-newsletter-note {
+  font-size: 0.78rem;
+  color: var(--teal);
+  margin-top: 8px;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.2s ease;
+  width: 100%;
+}
+
+.vw-newsletter-note.visible { opacity: 1; max-height: 30px; }

@@ -1,11 +1,14 @@
 {% extends "base.html" %}
-{% block title %}Reports — Desk & Ledger{% endblock %}
+{% block title %}Reports — Desk &amp; Ledger{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{{ url_for('static', filename='reports.css') }}">{% endblock %}
 
 {% block content %}
-<section class="static-page narrow">
+
+<div class="reports-form-wrap">
   <p class="eyebrow">Growth report</p>
   <h1>How much did it move?</h1>
-  <p class="lede">Pick a stock, ETF, or crypto and a time window — see exactly how much it grew or fell over that period.</p>
+  <p class="lede">Pick a stock, ETF, or crypto and a time window. 1 week / 2 weeks get a quick snapshot;
+  1 month and longer get the full technical + AI breakdown.</p>
 
   <form action="{{ url_for('reports_growth') }}" method="POST" class="stack-form" id="report-form">
     <label for="ticker-search">Symbol</label>
@@ -33,16 +36,18 @@
   </form>
 
   {% if error %}
-  <p class="notice" style="border-color:var(--risk-high); color:var(--risk-high); background:rgba(248,113,113,0.08);">{{ error }}</p>
+  <p class="notice notice-error" style="margin-top:16px;">{{ error }}</p>
   {% endif %}
-</section>
+</div>
 
 {% if report %}
-<section class="static-page wide report-result">
+<div class="report-result">
+
   <div class="report-card {{ 'trend-up' if report.direction == 'up' else 'trend-down' }}">
     <div class="report-head">
       <span class="pick-symbol">{{ report.symbol }}</span>
       <span class="pick-exchange">{{ report.exchange }}</span>
+      <span class="daily-badge">{{ report.period_label }}</span>
     </div>
 
     <div class="report-change">
@@ -53,8 +58,7 @@
 
     <p class="report-summary">
       From {{ report.currency }}{{ '%.2f'|format(report.start_price) }} on {{ report.start_date }}
-      to {{ report.currency }}{{ '%.2f'|format(report.end_price) }} on {{ report.end_date }}
-      ({{ report.period_days }} days).
+      to {{ report.currency }}{{ '%.2f'|format(report.end_price) }} on {{ report.end_date }}.
     </p>
 
     <svg class="report-chart" viewBox="0 0 300 80" preserveAspectRatio="none">
@@ -68,39 +72,78 @@
     </svg>
 
     <div class="report-downloads">
-      <a class="btn btn-ghost"
+      <a class="btn btn-ghost btn-sm"
          href="{{ url_for('reports_export_pdf', symbol=report.symbol, exchange=report.exchange, period_days=report.period_days) }}">
-         Download PDF
+         ↓ Download PDF
       </a>
-      <a class="btn btn-ghost"
+      <a class="btn btn-ghost btn-sm"
          href="{{ url_for('reports_export_excel', symbol=report.symbol, exchange=report.exchange, period_days=report.period_days) }}">
-         Download Excel
+         ↓ Download Excel
       </a>
     </div>
   </div>
 
-  <table class="market-table report-table">
-    <thead><tr><th>Date</th><th>Price</th><th>Change from previous</th></tr></thead>
+  <!-- Metric breakdown -->
+  <div class="panel-head" style="margin-top:36px;">
+    <h2>Metric Breakdown</h2>
+  </div>
+  <table class="data-table metrics-table">
     <tbody>
-      {% set prev_price = namespace(value=None) %}
-      {% for pt in report.chart_points %}
+      {% for label, key in report_columns %}
+      {% if key not in ["symbol", "period_label"] %}
       <tr>
-        <td class="mono">{{ pt.date }}</td>
-        <td class="mono">{{ report.currency }}{{ '%.2f'|format(pt.price) }}</td>
-        <td class="mono">
-          {% if prev_price.value is not none %}
-            {% set diff = pt.price - prev_price.value %}
-            <span class="{{ 'trend-up' if diff >= 0 else 'trend-down' }}">{{ '%+.2f'|format(diff) }}</span>
-          {% else %}
-            —
-          {% endif %}
-        </td>
+        <th>{{ label }}</th>
+        <td class="mono
+          {% if key in ['ai_trend'] %}{{ 'trend-up' if report.ai_trend == 'Bullish' else ('trend-down' if report.ai_trend == 'Bearish' else '') }}{% endif %}
+          {% if key in ['ai_recommendation'] %}{{ 'trend-up' if report.ai_recommendation == 'Buy' else ('trend-down' if report.ai_recommendation == 'Sell' else '') }}{% endif %}
+          {% if key == 'news_sentiment' %}{{ 'trend-up' if report.news_sentiment == 'Positive' else ('trend-down' if report.news_sentiment == 'Negative' else '') }}{% endif %}
+        ">{{ report[key] }}</td>
       </tr>
-      {% set prev_price.value = pt.price %}
+      {% endif %}
       {% endfor %}
     </tbody>
   </table>
-</section>
+  <p class="panel-note">
+    AI Score/Trend/Recommendation/Confidence are a rule-based composite of the RSI, MACD, SMA, and return
+    signals above — not the trained GRU model's output. News Sentiment is a simple keyword heuristic over
+    recent headlines ({{ report.headline_count }} found), not a trained NLP model. Sharpe Ratio assumes a
+    flat risk-free rate, not a live one.
+  </p>
+
+  <!-- Price History OHLCV -->
+  <div class="panel-head" style="margin-top:36px;">
+    <h2>Price History</h2>
+  </div>
+  <div class="report-table-scroll">
+  <table class="data-table report-table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Open</th>
+        <th>High</th>
+        <th>Low</th>
+        <th>Close</th>
+        <th>Adj Close</th>
+        <th>Volume</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for pt in report.chart_points %}
+      <tr>
+        <td class="mono">{{ pt.date }}</td>
+        <td class="mono">{{ report.currency }}{{ '%.2f'|format(pt.open) }}</td>
+        <td class="mono trend-up">{{ report.currency }}{{ '%.2f'|format(pt.high) }}</td>
+        <td class="mono trend-down">{{ report.currency }}{{ '%.2f'|format(pt.low) }}</td>
+        <td class="mono">{{ report.currency }}{{ '%.2f'|format(pt.close) }}</td>
+        <td class="mono">{{ report.currency }}{{ '%.8g'|format(pt.adj_close) }}</td>
+        <td class="mono">{{ '{:,}'.format(pt.volume) if pt.volume is not none else '—' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+
+</div>
 {% endif %}
 
 {% endblock %}
