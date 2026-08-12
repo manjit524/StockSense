@@ -1,16 +1,4 @@
-"""
-================================================================================
- APP.PY — Flask website wrapping the multi-exchange advisor + intraday scanner
-================================================================================
-Run with: python app.py
-Then open http://127.0.0.1:5000
 
-The long-term advisor's model trains ONCE at startup (see initialize_engine())
-and is cached in memory — individual page requests just query the cached
-results, they don't retrain anything. The intraday scanner runs live on each
-request since it's meant to reflect the current session.
-================================================================================
-"""
 
 from flask import Flask, render_template, request, jsonify, Response
 import threading
@@ -51,7 +39,7 @@ def _load_engine_in_background():
         f"Ready — {len(df)} tickers loaded." if not df.empty
         else "No ticker data found. Check your NSE_FOLDER / BSE_FOLDER / US_FOLDER paths."
     )
-    print(f"✅ {ENGINE_STATUS['message']}")
+    print(f"[OK] {ENGINE_STATUS['message']}")
 
 
 # Runs in the background so the Flask server starts responding right away —
@@ -196,9 +184,9 @@ def _refresh_markets_cache():
             MARKETS_CACHE["us_bonds"] = markets_data.get_us_treasury_yields()
             MARKETS_CACHE["ready"] = True
             MARKETS_CACHE["message"] = "Ready"
-            print("✅ Markets cache refreshed.")
+            print("[OK] Markets cache refreshed.")
         except Exception as e:
-            print(f"⚠️ Markets cache refresh failed: {e}")
+            print(f"[WARN] Markets cache refresh failed: {e}")
         time.sleep(MARKETS_REFRESH_SECONDS)
 
 
@@ -220,6 +208,143 @@ def markets():
         options_summary=MARKETS_CACHE["options_summary"],
         markets_ready=MARKETS_CACHE["ready"],
         markets_message=MARKETS_CACHE["message"],
+    )
+
+
+@app.route("/markets/<category_id>")
+def market_category(category_id):
+    # Top curated stocks for dedicated US & Indian stock detail views
+    us_stocks = [
+        {"symbol": "AAPL", "yf_symbol": "AAPL", "label": "Apple Inc.", "exchange": "US"},
+        {"symbol": "MSFT", "yf_symbol": "MSFT", "label": "Microsoft Corp.", "exchange": "US"},
+        {"symbol": "NVDA", "yf_symbol": "NVDA", "label": "NVIDIA Corp.", "exchange": "US"},
+        {"symbol": "AMZN", "yf_symbol": "AMZN", "label": "Amazon.com Inc.", "exchange": "US"},
+        {"symbol": "GOOGL", "yf_symbol": "GOOGL", "label": "Alphabet Inc.", "exchange": "US"},
+        {"symbol": "META", "yf_symbol": "META", "label": "Meta Platforms Inc.", "exchange": "US"},
+        {"symbol": "TSLA", "yf_symbol": "TSLA", "label": "Tesla Inc.", "exchange": "US"},
+    ]
+
+    indian_stocks = [
+        {"symbol": "RELIANCE", "yf_symbol": "RELIANCE.NS", "label": "Reliance Industries Ltd.", "exchange": "NSE"},
+        {"symbol": "TCS", "yf_symbol": "TCS.NS", "label": "Tata Consultancy Services", "exchange": "NSE"},
+        {"symbol": "HDFCBANK", "yf_symbol": "HDFCBANK.NS", "label": "HDFC Bank Ltd.", "exchange": "NSE"},
+        {"symbol": "INFY", "yf_symbol": "INFY.NS", "label": "Infosys Ltd.", "exchange": "NSE"},
+        {"symbol": "ICICIBANK", "yf_symbol": "ICICIBANK.NS", "label": "ICICI Bank Ltd.", "exchange": "NSE"},
+        {"symbol": "BHARTIARTL", "yf_symbol": "BHARTIARTL.NS", "label": "Bharti Airtel Ltd.", "exchange": "NSE"},
+        {"symbol": "SBIN", "yf_symbol": "SBIN.NS", "label": "State Bank of India", "exchange": "NSE"},
+    ]
+
+    category_config = {
+        "etfs": {
+            "title": "ETFs (Exchange Traded Funds)",
+            "eyebrow": "Index & Sector Trackers",
+            "badge": "Live Quotes",
+            "is_live": True,
+            "description": "High-liquidity index, gold, and sector ETFs across Indian (NSE) and US (NYSE/NASDAQ) exchanges.",
+            "items_list": TRACKED_ETFS,
+            "type": "etfs"
+        },
+        "crypto": {
+            "title": "Crypto Assets",
+            "eyebrow": "Digital Currencies",
+            "badge": "Live 24/7",
+            "is_live": True,
+            "description": "Real-time pricing for major cryptocurrency assets traded globally 24 hours a day, 7 days a week.",
+            "items_list": TRACKED_CRYPTO,
+            "type": "crypto"
+        },
+        "commodities": {
+            "title": "Commodities",
+            "eyebrow": "Precious Metals & Energy",
+            "badge": "Live Quotes",
+            "is_live": True,
+            "description": "Global USD futures pricing for Gold, Silver, and Crude Oil.",
+            "items_list": TRACKED_COMMODITIES,
+            "type": "commodities"
+        },
+        "mutual-funds": {
+            "title": "Mutual Funds",
+            "eyebrow": "AMFI Registered Schemes",
+            "badge": "Daily NAV",
+            "is_live": False,
+            "description": "Official daily Net Asset Values (NAV) for ~40,000 schemes published by AMFI India.",
+            "items_list": MARKETS_CACHE["mutual_funds"],
+            "type": "mutual-funds"
+        },
+        "bonds": {
+            "title": "Bonds & Sovereign Yields",
+            "eyebrow": "Fixed Income",
+            "badge": "Daily Yields",
+            "is_live": False,
+            "description": "Benchmark US Treasury yields and Indian Government Securities (G-Sec) yield curves.",
+            "us_bonds": MARKETS_CACHE["us_bonds"],
+            "indian_bonds": MARKETS_CACHE["indian_bonds"],
+            "type": "bonds"
+        },
+        "ipos": {
+            "title": "IPO Calendar",
+            "eyebrow": "Primary Market Issues",
+            "badge": "Event Calendar",
+            "is_live": False,
+            "description": "Upcoming and current Initial Public Offerings listed on Indian exchanges.",
+            "items_list": MARKETS_CACHE["ipos"],
+            "type": "ipos"
+        },
+        "derivatives": {
+            "title": "Derivatives & Options",
+            "eyebrow": "NSE Option Chain",
+            "badge": "Informational",
+            "is_live": False,
+            "description": "Live NIFTY 50 option chain summary, Put-Call Ratio (PCR), and near-the-money strike distribution.",
+            "options_summary": MARKETS_CACHE["options_summary"],
+            "type": "derivatives"
+        },
+        "us-stocks": {
+            "title": "US Stocks",
+            "eyebrow": "NYSE & NASDAQ Equities",
+            "badge": "Live Quotes",
+            "is_live": True,
+            "description": "Mega-cap US technology and growth equities tracked with live market pricing.",
+            "items_list": us_stocks,
+            "type": "stocks"
+        },
+        "indian-stocks": {
+            "title": "Indian Stocks",
+            "eyebrow": "NSE & BSE Equities",
+            "badge": "Live Quotes",
+            "is_live": True,
+            "description": "Benchmark Indian equities from official bhavcopy backfills and live market feeds.",
+            "items_list": indian_stocks,
+            "type": "stocks"
+        }
+    }
+
+    if category_id == "etfs":
+        top_equity = [e for e in TRACKED_ETFS if e["symbol"] in ["SPY", "QQQ", "NIFTYBEES", "BANKBEES"]]
+        top_commodity = [e for e in TRACKED_ETFS if e["symbol"] in ["GLD", "GOLDBEES", "XLK", "MAFANG"]]
+        return render_template(
+            "etf_detail.html",
+            active="markets",
+            etfs=TRACKED_ETFS,
+            top_equity=top_equity,
+            top_commodity=top_commodity,
+            markets_ready=MARKETS_CACHE["ready"],
+            markets_message=MARKETS_CACHE["message"]
+        )
+
+    config = category_config.get(category_id)
+    if not config:
+        # Fallback to ETFs if invalid category specified
+        config = category_config["etfs"]
+        category_id = "etfs"
+
+    return render_template(
+        "market_detail.html",
+        active="markets",
+        category_id=category_id,
+        config=config,
+        markets_ready=MARKETS_CACHE["ready"],
+        markets_message=MARKETS_CACHE["message"]
     )
 
 
@@ -318,6 +443,7 @@ def reports_growth():
     return render_template(
         "reports.html",
         active="reports",
+        report_columns=reports_data.get_report_columns(period_days) if report else None,
         period_options=reports_data.PERIOD_OPTIONS,
         report=report,
         error=error,

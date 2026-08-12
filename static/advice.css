@@ -1,0 +1,159 @@
+/* ==========================================================================
+   GET ADVICE PAGE (input.html)
+   ========================================================================== */
+
+/* Page hero */
+.advice-hero {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 56px 24px 0;
+  text-align: center;
+}
+
+.advice-hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+  margin: 16px 0 16px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+/* Engine cards grid */
+.engines {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 36px 24px 80px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 800px) { .engines { grid-template-columns: 1fr; } }
+
+.engine-card {
+  background: var(--panel);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 32px;
+  scroll-margin-top: 24px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.engine-card:hover {
+  border-color: rgba(255, 122, 41, 0.25);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Gold vs teal theme for the two engines */
+.engine-card.engine-gold { border-top: 2px solid var(--gold); }
+.engine-card.engine-teal { border-top: 2px solid var(--teal); }
+
+.engine-tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  background: var(--gold-dim);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 14px;
+}
+
+.engine-tag-alt {
+  color: var(--teal);
+  background: var(--teal-dim);
+}
+
+.engine-head h2 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  margin: 0 0 10px;
+}
+
+.engine-head p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0 0 28px;
+  line-height: 1.65;
+}
+
+.engine-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.engine-form label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 12px;
+  font-weight: 500;
+}
+
+.engine-form select,
+.engine-form input {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--hairline);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  width: 100%;
+  transition: border-color 0.15s ease;
+}
+
+.engine-form select:focus,
+.engine-form input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+/* How it works */
+.how {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+.how h3 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 22px;
+}
+
+.how-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 700px) { .how-grid { grid-template-columns: 1fr; } }
+
+.how-item {
+  border-top: 2px solid var(--hairline);
+  padding-top: 14px;
+}
+
+.how-mark {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.how-mark.low    { color: var(--risk-low); }
+.how-mark.medium { color: var(--risk-medium); }
+.how-mark.high   { color: var(--risk-high); }
+
+.how-item p {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  margin: 8px 0 0;
+  line-height: 1.6;
+}

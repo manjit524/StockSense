@@ -1,35 +1,4 @@
 (function () {
-  var root = document.documentElement;
-  var themeToggle = document.getElementById('themeToggle');
-  var sidebarToggle = document.getElementById('sidebarToggle');
-  var sidebar = document.getElementById('sidebar');
-
-  function updateThemeIcon(theme) {
-    if (!themeToggle) return;
-    themeToggle.textContent = theme === 'dark' ? '☀' : '☾';
-  }
-
-  updateThemeIcon(root.getAttribute('data-theme') || 'dark');
-
-  if (themeToggle) {
-    themeToggle.addEventListener('click', function () {
-      var current = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-      var next = current === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', next);
-      try { localStorage.setItem('dl_theme', next); } catch (e) {}
-      updateThemeIcon(next);
-    });
-  }
-
-  if (sidebarToggle && sidebar) {
-    sidebarToggle.addEventListener('click', function () {
-      sidebar.classList.toggle('collapsed');
-      try {
-        localStorage.setItem('dl_sidebar', sidebar.classList.contains('collapsed') ? 'collapsed' : 'open');
-      } catch (e) {}
-    });
-  }
-
   // Generic tab switcher — powers both the login/signup tabs and the
   // Markets page tabs (any .auth-tab/.market-tab + matching .auth-panel/.market-panel)
   function wireTabs(tabSelector, panelSelector, activeClass) {
@@ -167,6 +136,27 @@
     document.addEventListener('click', function (e) {
       if (!dropdown.contains(e.target) && e.target !== searchInput) {
         dropdown.classList.remove('open');
+      }
+    });
+  }
+
+  // Fallback: if the user types a symbol and hits Generate without ever
+  // clicking a dropdown suggestion, the hidden symbol/exchange fields would
+  // otherwise stay empty and the form would silently submit nothing. Fill
+  // them from the typed text right before submit.
+  var reportForm = document.getElementById('report-form');
+  if (reportForm && searchInput && symbolField) {
+    reportForm.addEventListener('submit', function (e) {
+      if (!symbolField.value.trim() && searchInput.value.trim()) {
+        symbolField.value = searchInput.value.trim().toUpperCase();
+        if (exchangeField && !exchangeField.value) {
+          exchangeField.value = 'NSE';
+        }
+      }
+      if (!symbolField.value.trim()) {
+        e.preventDefault();
+        searchInput.focus();
+        searchInput.style.borderColor = 'var(--risk-high)';
       }
     });
   }

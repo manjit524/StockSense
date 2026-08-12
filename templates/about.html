@@ -1,16 +1,18 @@
 {% extends "base.html" %}
-{% block title %}About — Desk & Ledger{% endblock %}
+{% block title %}About — Desk &amp; Ledger{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{{ url_for('static', filename='about.css') }}">{% endblock %}
 
 {% block content %}
-<section class="static-page">
-  <p class="eyebrow">About this desk</p>
-  <h1>Built as two honest engines, not one black box.</h1>
-
-  <p class="lede">
-    Desk &amp; Ledger runs two separate systems side by side, because a stock you'd
-    hold for five years and a stock you'd trade in the next five minutes aren't
-    answered by the same kind of model.
-  </p>
+<div class="page-col">
+  <div class="about-hero">
+    <p class="eyebrow">About this desk</p>
+    <h1>Built as two honest engines,<br>not one black box.</h1>
+    <p class="lede">
+      Desk &amp; Ledger runs two separate systems side by side, because a stock you'd
+      hold for five years and a stock you'd trade in the next five minutes aren't
+      answered by the same kind of model.
+    </p>
+  </div>
 
   <div class="about-grid">
     <div class="about-block">
@@ -34,12 +36,14 @@
     </div>
   </div>
 
-  <h3>What this isn't</h3>
-  <p>
-    It isn't SEBI-registered investment advice, it isn't a guarantee of returns,
-    and it isn't a replacement for your own research. Both engines can be
-    confidently wrong. Use them as one input among several, and size any
-    position you wouldn't mind losing.
-  </p>
-</section>
+  <div class="about-disclaimer">
+    <h3>What this isn't</h3>
+    <p>
+      It isn't SEBI-registered investment advice, it isn't a guarantee of returns,
+      and it isn't a replacement for your own research. Both engines can be
+      confidently wrong. Use them as one input among several, and size any
+      position you wouldn't mind losing.
+    </p>
+  </div>
+</div>
 {% endblock %}

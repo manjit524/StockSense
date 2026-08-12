@@ -1,25 +1,28 @@
 {% extends "base.html" %}
-{% block title %}Contact — Desk & Ledger{% endblock %}
+{% block title %}Contact — Desk &amp; Ledger{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{{ url_for('static', filename='contact.css') }}">{% endblock %}
 
 {% block content %}
-<section class="static-page narrow">
-  <p class="eyebrow">Get in touch</p>
-  <h1>Questions, bug reports, ideas.</h1>
-  <p class="lede">This form doesn't send anywhere yet — wire it to email or a database
-  whenever you're ready to collect real messages.</p>
+<div class="page-col narrow" style="padding-top:56px; padding-bottom:56px;">
+  <div class="contact-card">
+    <p class="eyebrow">Get in touch</p>
+    <h1>Questions, bug reports, ideas.</h1>
+    <p class="lede">This form doesn't send anywhere yet — wire it to email or a database
+    whenever you're ready to collect real messages.</p>
 
-  <form class="stack-form" data-demo-form>
-    <label for="name">Name</label>
-    <input type="text" id="name" name="name" placeholder="Your name" required>
+    <form class="form-stack" data-demo-form>
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" placeholder="Your name" required>
 
-    <label for="email">Email</label>
-    <input type="email" id="email" name="email" placeholder="you@example.com" required>
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="you@example.com" required>
 
-    <label for="message">Message</label>
-    <textarea id="message" name="message" rows="5" placeholder="What's on your mind?" required></textarea>
+      <label for="message">Message</label>
+      <textarea id="message" name="message" rows="5" placeholder="What's on your mind?" required></textarea>
 
-    <button type="submit" class="btn btn-primary btn-block">Send message</button>
-    <p class="form-note">Thanks — this is a UI demo, so nothing was actually sent yet.</p>
-  </form>
-</section>
+      <button type="submit" class="btn btn-primary btn-block">Send message</button>
+      <p class="form-note">Thanks — this is a UI demo, so nothing was actually sent yet.</p>
+    </form>
+  </div>
+</div>
 {% endblock %}

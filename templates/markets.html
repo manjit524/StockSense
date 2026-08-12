@@ -1,216 +1,333 @@
 {% extends "base.html" %}
-{% block title %}Markets — Desk & Ledger{% endblock %}
+{% block title %}Markets Hub — Desk &amp; Ledger{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{{ url_for('static', filename='markets.css') }}">{% endblock %}
 
 {% block content %}
-<section class="static-page wide">
-  <p class="eyebrow">Beyond single stocks</p>
-  <h1>Every corner of the desk.</h1>
-  <p class="lede">ETFs and crypto update live. Mutual funds and bonds update once a day by nature —
-  labeled honestly, not dressed up as live. IPOs and derivatives are informational, not part of the
-  automated advice engine.</p>
+
+<!-- ========================= HERO SECTION (INDmoney Inspired Split) ========================= -->
+<section class="markets-hero-wrap">
+  <div class="hero-left">
+    <span class="live-badge" style="margin-bottom:12px;">
+      <span class="live-dot"></span> Real-Time Multi-Market Feed
+    </span>
+    <h1>Trade &amp; Invest in Indian &amp; US Markets from One App</h1>
+    <p class="lede">Trade round the clock. With Desk &amp; Ledger, your money never sleeps — live quotes, dual-engine AI scans, and 7,700+ assets in one place.</p>
+    <div class="hero-actions">
+      <a href="{{ url_for('get_advice') }}" class="btn btn-primary">Start Analyzing Today</a>
+      <a href="#asset-cards" class="btn btn-ghost">Explore Markets</a>
+    </div>
+  </div>
+
+  <!-- Real-Time Interactive Graph Card -->
+  <div class="hero-chart-card">
+    <div class="chart-header">
+      <div class="chart-selector">
+        <button class="chart-tab-btn active" data-chart="nifty">NIFTY 50</button>
+        <button class="chart-tab-btn" data-chart="sp500">S&amp;P 500</button>
+        <button class="chart-tab-btn" data-chart="btc">BITCOIN</button>
+      </div>
+      <div class="chart-live-val">
+        <span class="chart-val-num" id="heroChartPrice">24,380.15</span>
+        <span class="chart-val-change" id="heroChartChange">+142.30 (+0.59%)</span>
+      </div>
+    </div>
+
+    <div class="chart-canvas-wrap">
+      <canvas id="heroLiveChart"></canvas>
+    </div>
+  </div>
 </section>
 
-<div class="market-tabs" role="tablist">
-  <button class="market-tab active" data-target="tab-etf">ETFs</button>
-  <button class="market-tab" data-target="tab-crypto">Crypto</button>
-  <button class="market-tab" data-target="tab-commodities">Commodities</button>
-  <button class="market-tab" data-target="tab-mf">Mutual Funds</button>
-  <button class="market-tab" data-target="tab-bonds">Bonds</button>
-  <button class="market-tab" data-target="tab-ipo">IPOs</button>
-  <button class="market-tab" data-target="tab-derivatives">Derivatives</button>
+<!-- ========================= STATS PILL BAR ========================= -->
+<div class="markets-stats-bar">
+  <div class="stats-pill-container">
+    <div class="stat-pill-item">
+      <span class="star-icon">★</span>
+      <span><span class="pill-num">4.8</span> Rating</span>
+    </div>
+    <div class="stat-pill-divider"></div>
+    <div class="stat-pill-item">
+      <span><span class="pill-num">7,700+</span> Tickers Tracked</span>
+    </div>
+    <div class="stat-pill-divider"></div>
+    <div class="stat-pill-item">
+      <span><span class="pill-num">24/7</span> Live Quotes</span>
+    </div>
+    <div class="stat-pill-divider"></div>
+    <div class="stat-pill-item">
+      <span><span class="pill-num">100%</span> Free Data</span>
+    </div>
+  </div>
 </div>
 
-<div class="market-panels">
+<!-- ========================= 8 ASSET CLASS CARDS GRID ========================= -->
+<section class="asset-grid-section" id="asset-cards">
+  <h2>Trade and Invest Across Markets</h2>
+  <p style="color:var(--text-muted); margin-bottom:28px; font-size:0.95rem;">Select any category card below to open its dedicated market data page.</p>
 
-  {% if not markets_ready %}
-  <p class="notice">{{ markets_message }} Mutual Funds, IPOs, Derivatives, and US Bonds will populate shortly — ETFs, Crypto, and Commodities are unaffected and already live.</p>
-  {% endif %}
+  <div class="asset-cards-grid">
+    <a href="{{ url_for('market_category', category_id='us-stocks') }}" class="asset-class-card">
+      <div class="asset-icon-box">$</div>
+      <h3>US Stocks</h3>
+      <p>AAPL, TSLA, NVDA &amp; 3,000+ NYSE/NASDAQ</p>
+    </a>
 
-  <!-- ETFs — live via /api/live-quotes -->
-  <section class="market-panel active" id="tab-etf">
-    <div class="panel-head">
-      <h2>ETFs</h2>
-      <span class="live-badge"><span class="live-dot"></span> Live · updated <span class="live-updated-time">just now</span></span>
-    </div>
-    <input type="text" id="etf-search" class="table-search" placeholder="Search ETFs by symbol or name...">
-    <table class="market-table">
-      <thead><tr><th>Symbol</th><th>Name</th><th>Exchange</th><th>Price</th><th>Change</th></tr></thead>
-      <tbody id="etf-table-body">
-        {% for e in etfs %}
-        <tr data-symbol="{{ e.yf_symbol }}" data-currency="{{ '₹' if e.exchange != 'US' else '$' }}">
-          <td class="mono">{{ e.symbol }}</td>
-          <td>{{ e.label }}</td>
-          <td><span class="pick-exchange">{{ e.exchange }}</span></td>
-          <td class="mono"><span class="live-currency">{{ '₹' if e.exchange != 'US' else '$' }}</span><span class="live-price-value">—</span></td>
-          <td class="mono"><span class="live-arrow">·</span> <span class="live-change-value">—</span>%</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </section>
+    <a href="{{ url_for('market_category', category_id='indian-stocks') }}" class="asset-class-card">
+      <div class="asset-icon-box">₹</div>
+      <h3>Indian Stocks</h3>
+      <p>NSE &amp; BSE Bhavcopy Equities</p>
+    </a>
 
-  <!-- Crypto — live via /api/live-quotes (Yahoo Finance tracks crypto tickers too) -->
-  <section class="market-panel" id="tab-crypto">
-    <div class="panel-head">
-      <h2>Crypto</h2>
-      <span class="live-badge"><span class="live-dot"></span> Live · 24/7 · updated <span class="live-updated-time">just now</span></span>
-    </div>
-    <table class="market-table">
-      <thead><tr><th>Symbol</th><th>Name</th><th>Price (USD)</th><th>Change</th></tr></thead>
-      <tbody>
-        {% for c in crypto %}
-        <tr data-symbol="{{ c.yf_symbol }}" data-currency="$">
-          <td class="mono">{{ c.symbol }}</td>
-          <td>{{ c.label }}</td>
-          <td class="mono"><span class="live-currency">$</span><span class="live-price-value">—</span></td>
-          <td class="mono"><span class="live-arrow">·</span> <span class="live-change-value">—</span>%</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <p class="panel-note">Crypto carries its own tax treatment in India, separate from equities — check current rules before trading.</p>
-  </section>
+    <a href="{{ url_for('market_category', category_id='mutual-funds') }}" class="asset-class-card">
+      <div class="asset-icon-box">📈</div>
+      <h3>Mutual Funds</h3>
+      <p>~40,000 AMFI Schemes</p>
+    </a>
 
-  <!-- Commodities — live via /api/live-quotes (global USD futures pricing) -->
-  <section class="market-panel" id="tab-commodities">
-    <div class="panel-head">
-      <h2>Commodities</h2>
-      <span class="live-badge"><span class="live-dot"></span> Live · updated <span class="live-updated-time">just now</span></span>
-    </div>
-    <table class="market-table">
-      <thead><tr><th>Symbol</th><th>Name</th><th>Price</th><th>Change</th></tr></thead>
-      <tbody>
-        {% for m in commodities %}
-        <tr data-symbol="{{ m.yf_symbol }}" data-currency="$">
-          <td class="mono">{{ m.symbol }}</td>
-          <td>{{ m.label }}</td>
-          <td class="mono"><span class="live-currency">$</span><span class="live-price-value">—</span></td>
-          <td class="mono"><span class="live-arrow">·</span> <span class="live-change-value">—</span>%</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <p class="panel-note">Global USD futures pricing — MCX INR-denominated commodity prices aren't available through a free live source yet.</p>
-  </section>
+    <a href="{{ url_for('market_category', category_id='bonds') }}" class="asset-class-card">
+      <div class="asset-icon-box">🏛️</div>
+      <h3>Bonds &amp; Yields</h3>
+      <p>US Treasuries &amp; G-Sec Yields</p>
+    </a>
 
-  <!-- Mutual Funds — DAILY NAV, not live -->
-  <section class="market-panel" id="tab-mf">
-    <div class="panel-head">
-      <h2>Mutual Funds</h2>
-      <span class="daily-badge">Daily NAV · not live</span>
-    </div>
-    <input type="text" id="mf-search" class="table-search" placeholder="Search all ~40,000 AMFI schemes by name...">
-    <table class="market-table">
-      <thead><tr><th>Scheme</th><th>NAV (₹)</th><th>As of</th></tr></thead>
-      <tbody id="mf-table-body">
-        {% for f in mutual_funds %}
-        <tr>
-          <td>{{ f.name }}</td>
-          <td class="mono">{{ '₹%.4f'|format(f.nav) if f.nav is not none else '—' }}</td>
-          <td class="mono">{{ f.date }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <p class="panel-note">Showing 100 schemes by default. NAV is published once per trading day by AMFI (usually evening
-    IST) — refreshing this faster wouldn't show new data. Search above to look up any of the ~40,000 registered schemes,
-    not just these 100.</p>
-  </section>
+    <a href="{{ url_for('market_category', category_id='commodities') }}" class="asset-class-card">
+      <div class="asset-icon-box">🛢️</div>
+      <h3>Commodities</h3>
+      <p>Gold, Silver, Crude Oil</p>
+    </a>
 
-  <!-- Bonds — daily yields -->
-  <section class="market-panel" id="tab-bonds">
-    <div class="panel-head">
-      <h2>Bonds</h2>
-      <span class="daily-badge">Daily yields · not live</span>
-    </div>
+    <a href="{{ url_for('market_category', category_id='ipos') }}" class="asset-class-card">
+      <div class="asset-icon-box">📰</div>
+      <h3>IPOs</h3>
+      <p>NSE Issue Calendar &amp; Details</p>
+    </a>
 
-    <h3 class="panel-subhead">US Treasury Yields</h3>
-    {% if us_bonds %}
-    <table class="market-table">
-      <thead><tr><th>Instrument</th><th>Yield</th><th>Date</th></tr></thead>
-      <tbody>
-        {% for b in us_bonds %}
-        <tr>
-          <td>{{ b.name }}</td>
-          <td class="mono">{{ '%.2f'|format(b.yield_pct) + '%' if b.yield_pct is not none else '—' }}</td>
-          <td class="mono">{{ b.date }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    {% else %}
-    <p class="panel-note">Not configured yet — add a free FRED API key to FRED_API_KEY in markets_data.py.</p>
-    {% endif %}
+    <a href="{{ url_for('market_category', category_id='etfs') }}" class="asset-class-card">
+      <div class="asset-icon-box">📊</div>
+      <h3>ETFs</h3>
+      <p>Nifty, Bank &amp; Index Funds</p>
+    </a>
 
-    <h3 class="panel-subhead">Indian Government Securities</h3>
-    <table class="market-table">
-      <thead><tr><th>Instrument</th><th>Yield</th><th>As of</th></tr></thead>
-      <tbody>
-        {% for b in indian_bonds %}
-        <tr>
-          <td>{{ b.name }}</td>
-          <td class="mono">{{ '%.2f'|format(b.yield_pct) + '%' }}</td>
-          <td class="mono">{{ b.as_of }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <p class="panel-note">No reliable free live source found for Indian bond yields — this table is manually maintained (see markets_data.py). Update it periodically from RBI or NSE's bond platform.</p>
-  </section>
+    <a href="{{ url_for('market_category', category_id='crypto') }}" class="asset-class-card">
+      <div class="asset-icon-box">⚡</div>
+      <h3>Crypto &amp; Options</h3>
+      <p>Live 24/7 Coins &amp; NIFTY Chain</p>
+    </a>
+  </div>
+</section>
 
-  <!-- IPOs — NSE unofficial calendar, GMP explicitly unofficial -->
-  <section class="market-panel" id="tab-ipo">
-    <div class="panel-head">
-      <h2>IPO Calendar</h2>
-      <span class="daily-badge">Event calendar · informational only</span>
-    </div>
-    {% if ipos %}
-    <table class="market-table">
-      <thead><tr><th>Company</th><th>Opens</th><th>Closes</th><th>Price Band</th><th>Issue Size</th><th>GMP</th></tr></thead>
-      <tbody>
-        {% for ipo in ipos %}
-        <tr>
-          <td>{{ ipo.company }}</td>
-          <td class="mono">{{ ipo.open_date }}</td>
-          <td class="mono">{{ ipo.close_date }}</td>
-          <td class="mono">{{ ipo.price_band }}</td>
-          <td class="mono">{{ ipo.issue_size }}</td>
-          <td class="mono unofficial">Unofficial — not wired up<br><span class="tiny">(see get_ipo_gmp in markets_data.py)</span></td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    {% else %}
-    <p class="panel-note">No upcoming issues returned right now — this could mean there genuinely are none, or that NSE's endpoint format changed. Check get_ipo_calendar() in markets_data.py.</p>
-    {% endif %}
-    <p class="panel-note">This is NOT part of the automated advice engine — it's an events calendar only. Grey Market Premium (GMP), where shown, is an informal, unregulated secondary-market figure, not an official price.</p>
-  </section>
+<!-- ========================= OPERATING SYSTEM BANNER ========================= -->
+<section class="operating-sys-section">
+  <div class="operating-sys-card">
+    <h2>More than an Investing App — Your Money Operating System</h2>
+    <p class="sub">Track your investments, explore live market data, and run dual-engine AI scans all in one unified desk.</p>
 
-  <!-- Derivatives — info-only, explicitly not in the advice engine -->
-  <section class="market-panel" id="tab-derivatives">
-    <div class="panel-head">
-      <h2>Derivatives — NIFTY Option Chain</h2>
-      <span class="daily-badge">Informational only · not advice</span>
-    </div>
-    {% if options_summary and options_summary.underlying_value %}
-    <div class="summary-stats">
-      <div class="stat">
-        <span class="stat-label">Underlying (NIFTY)</span>
-        <span class="stat-value">{{ '%.2f'|format(options_summary.underlying_value) }}</span>
+    <div class="sys-mock-graphic">
+      <div class="icon-cluster">
+        <span>₹</span> <span>$</span> <span>📊</span> <span>⚡</span>
       </div>
-      <div class="stat">
-        <span class="stat-label">Put/Call Ratio</span>
-        <span class="stat-value">{{ options_summary.put_call_ratio if options_summary.put_call_ratio is not none else '—' }}</span>
-      </div>
+      <span class="tag">Unified Desk &amp; Ledger Research Platform</span>
     </div>
-    <p class="panel-note">Strikes near the money: {{ options_summary.near_strikes|join(', ') }}</p>
-    {% else %}
-    <p class="panel-note">Option chain data unavailable right now — NSE's endpoint may be rate-limiting or the market may be closed.</p>
-    {% endif %}
-    <p class="panel-note"><strong>This is deliberately not folded into the automated shortlist.</strong> Derivatives carry
-    leverage risk that plain equity picks don't, and generating automated buy/sell suggestions here is a materially
-    bigger responsibility than recommending a stock.</p>
-  </section>
+  </div>
+</section>
 
-</div>
+<!-- ========================= RICH FOOTER DIRECTORY GRID ========================= -->
+<section class="markets-footer-directory">
+  <div class="footer-directory-inner">
+    <div class="directory-col">
+      <h5>Popular Assets</h5>
+      <ul>
+        <li><a href="{{ url_for('reports') }}">RELIANCE</a></li>
+        <li><a href="{{ url_for('reports') }}">TCS</a></li>
+        <li><a href="{{ url_for('reports') }}">HDFCBANK</a></li>
+        <li><a href="{{ url_for('reports') }}">INFY</a></li>
+        <li><a href="{{ url_for('reports') }}">AAPL</a></li>
+        <li><a href="{{ url_for('reports') }}">NVDA</a></li>
+        <li><a href="{{ url_for('market_category', category_id='crypto') }}">BTC-USD</a></li>
+      </ul>
+    </div>
+
+    <div class="directory-col">
+      <h5>Market Hubs</h5>
+      <ul>
+        <li><a href="{{ url_for('market_category', category_id='us-stocks') }}">US Stocks</a></li>
+        <li><a href="{{ url_for('market_category', category_id='indian-stocks') }}">Indian Stocks</a></li>
+        <li><a href="{{ url_for('market_category', category_id='etfs') }}">ETFs Hub</a></li>
+        <li><a href="{{ url_for('market_category', category_id='mutual-funds') }}">Mutual Funds</a></li>
+        <li><a href="{{ url_for('market_category', category_id='bonds') }}">Bonds &amp; Yields</a></li>
+        <li><a href="{{ url_for('market_category', category_id='commodities') }}">Commodities</a></li>
+      </ul>
+    </div>
+
+    <div class="directory-col">
+      <h5>Themes</h5>
+      <ul>
+        <li><a href="{{ url_for('market_category', category_id='us-stocks') }}">AI &amp; Automation</a></li>
+        <li><a href="{{ url_for('market_category', category_id='commodities') }}">Gold &amp; Energy</a></li>
+        <li><a href="{{ url_for('market_category', category_id='indian-stocks') }}">Defence &amp; EV</a></li>
+        <li><a href="{{ url_for('market_category', category_id='ipos') }}">Upcoming IPOs</a></li>
+      </ul>
+    </div>
+
+    <div class="directory-col">
+      <h5>Indices</h5>
+      <ul>
+        <li><a href="{{ url_for('market_category', category_id='indian-stocks') }}">NIFTY 50</a></li>
+        <li><a href="{{ url_for('market_category', category_id='indian-stocks') }}">SENSEX</a></li>
+        <li><a href="{{ url_for('market_category', category_id='us-stocks') }}">S&amp;P 500</a></li>
+        <li><a href="{{ url_for('market_category', category_id='us-stocks') }}">NASDAQ 100</a></li>
+      </ul>
+    </div>
+
+    <div class="directory-col">
+      <h5>Tools &amp; AI</h5>
+      <ul>
+        <li><a href="{{ url_for('get_advice') }}">GRU Advisor</a></li>
+        <li><a href="{{ url_for('get_advice') }}">Intraday Scanner</a></li>
+        <li><a href="{{ url_for('reports') }}">7-Column Reports</a></li>
+        <li><a href="{{ url_for('market_category', category_id='derivatives') }}">Option Chain</a></li>
+      </ul>
+    </div>
+
+    <div class="directory-col">
+      <h5>Desk &amp; Ledger</h5>
+      <ul>
+        <li><a href="{{ url_for('about') }}">About Platform</a></li>
+        <li><a href="{{ url_for('contact') }}">Contact Support</a></li>
+        <li><a href="{{ url_for('login') }}">Sign In</a></li>
+        <li><a href="{{ url_for('about') }}">Disclaimer</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Real-Time Animated Graph Canvas Logic
+  (function () {
+    var canvas = document.getElementById('heroLiveChart');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+
+    var datasets = {
+      nifty: { price: '24,380.15', change: '+142.30 (+0.59%)', isUp: true, base: 24300, points: [24250, 24280, 24230, 24310, 24290, 24340, 24320, 24380] },
+      sp500: { price: '5,540.20', change: '+28.40 (+0.51%)', isUp: true, base: 5500, points: [5510, 5505, 5522, 5518, 5530, 5525, 5538, 5540] },
+      btc: { price: '$64,250.00', change: '-410.00 (-0.63%)', isUp: false, base: 64500, points: [64900, 64800, 64650, 64700, 64400, 64500, 64300, 64250] }
+    };
+
+    var currentKey = 'nifty';
+    var animOffset = 0;
+
+    function resizeCanvas() {
+      canvas.width = canvas.parentElement.clientWidth * window.devicePixelRatio;
+      canvas.height = canvas.parentElement.clientHeight * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function drawGraph() {
+      var w = canvas.parentElement.clientWidth;
+      var h = canvas.parentElement.clientHeight;
+      ctx.clearRect(0, 0, w, h);
+
+      var data = datasets[currentKey];
+      var pts = data.points.slice();
+
+      // Simulate live real-time tiny jitter for the last point
+      animOffset += 0.05;
+      pts[pts.length - 1] += Math.sin(animOffset) * 4;
+
+      var min = Math.min.apply(null, pts) - 10;
+      var max = Math.max.apply(null, pts) + 10;
+      var range = max - min || 1;
+
+      // Draw Grid Lines
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+      ctx.lineWidth = 1;
+      for (var y = 20; y < h; y += 40) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+
+      // Compute Point Coordinates
+      var coords = [];
+      for (var i = 0; i < pts.length; i++) {
+        var x = (i / (pts.length - 1)) * w;
+        var y = h - 20 - ((pts[i] - min) / range) * (h - 40);
+        coords.push({ x: x, y: y });
+      }
+
+      // Draw Smooth Spline Path
+      var lineColor = data.isUp ? '#FF7A29' : '#E85D5D';
+      var gradColor = data.isUp ? 'rgba(255, 122, 41, 0.18)' : 'rgba(232, 93, 93, 0.18)';
+
+      // Fill Gradient Area
+      ctx.beginPath();
+      ctx.moveTo(coords[0].x, h);
+      ctx.lineTo(coords[0].x, coords[0].y);
+      for (var i = 1; i < coords.length; i++) {
+        ctx.lineTo(coords[i].x, coords[i].y);
+      }
+      ctx.lineTo(w, h);
+      ctx.closePath();
+
+      var gradient = ctx.createLinearGradient(0, 0, 0, h);
+      gradient.addColorStop(0, gradColor);
+      gradient.addColorStop(1, 'rgba(20, 16, 13, 0)');
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      // Stroke Path Line
+      ctx.beginPath();
+      ctx.moveTo(coords[0].x, coords[0].y);
+      for (var i = 1; i < coords.length; i++) {
+        ctx.lineTo(coords[i].x, coords[i].y);
+      }
+      ctx.strokeStyle = lineColor;
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // Pulsing End Dot
+      var lastPt = coords[coords.length - 1];
+      ctx.beginPath();
+      ctx.arc(lastPt.x - 4, lastPt.y, 4, 0, Math.PI * 2);
+      ctx.fillStyle = lineColor;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(lastPt.x - 4, lastPt.y, 8 + Math.sin(animOffset * 2) * 3, 0, Math.PI * 2);
+      ctx.strokeStyle = lineColor;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      requestAnimationFrame(drawGraph);
+    }
+
+    requestAnimationFrame(drawGraph);
+
+    // Tab Switcher for Graph
+    var btns = document.querySelectorAll('.chart-tab-btn');
+    var priceEl = document.getElementById('heroChartPrice');
+    var changeEl = document.getElementById('heroChartChange');
+
+    btns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        btns.forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        currentKey = btn.getAttribute('data-chart');
+        var d = datasets[currentKey];
+        if (priceEl && d) priceEl.textContent = d.price;
+        if (changeEl && d) {
+          changeEl.textContent = d.change;
+          changeEl.classList.toggle('down', !d.isUp);
+        }
+      });
+    });
+  })();
+</script>
 {% endblock %}

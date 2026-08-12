@@ -1,0 +1,119 @@
+/* ==========================================================================
+   RESULTS PAGE (output.html)
+   ========================================================================== */
+
+/* Query summary banner */
+.query-summary {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px 0;
+}
+
+.query-summary h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  margin: 0 0 20px;
+}
+
+.summary-stats {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+/* Risk columns */
+.risk-columns {
+  max-width: 1100px;
+  margin: 36px auto 0;
+  padding: 0 24px 80px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+@media (max-width: 900px) { .risk-columns { grid-template-columns: 1fr; } }
+
+.risk-col {
+  background: var(--panel);
+  border: 1px solid var(--hairline);
+  border-top: 3px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 22px;
+}
+
+.risk-col.risk-low    { border-top-color: var(--risk-low); }
+.risk-col.risk-medium { border-top-color: var(--risk-medium); }
+.risk-col.risk-high   { border-top-color: var(--risk-high); }
+
+.risk-col-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.risk-col-head h2 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.risk-dot          { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.risk-dot-low      { background: var(--risk-low); }
+.risk-dot-medium   { background: var(--risk-medium); }
+.risk-dot-high     { background: var(--risk-high); }
+
+.risk-empty {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* Pick list */
+.pick-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pick {
+  background: var(--panel-hi);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  transition: border-color 0.15s ease;
+}
+.pick:hover { border-color: rgba(255, 122, 41, 0.25); }
+
+.pick-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.pick-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 460px) { .pick-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* Live flash */
+.live-flash { animation: live-flash-bg 0.7s ease; }
+
+@keyframes live-flash-bg {
+  0%   { background: rgba(52, 201, 166, 0.16); }
+  100% { background: transparent; }
+}
+
+/* Actions row */
+.results-actions {
+  max-width: 1100px;
+  margin: 0 auto 60px;
+  padding: 0 24px;
+}

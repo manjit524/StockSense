@@ -1,0 +1,77 @@
+/* ==========================================================================
+   REPORTS PAGE
+   ========================================================================== */
+
+/* Form section */
+.reports-form-wrap {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 52px 24px 0;
+}
+
+.reports-form-wrap h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 3.8vw, 2.3rem);
+  font-weight: 700;
+  margin: 16px 0 14px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+/* Stack form inside the reports page */
+.stack-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 20px;
+}
+
+.stack-form label {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-top: 12px;
+}
+
+.stack-form input,
+.stack-form select {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--hairline);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  width: 100%;
+  transition: border-color 0.15s ease;
+}
+
+.stack-form input:focus,
+.stack-form select:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+/* Report result section */
+.report-result {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+}
+
+/* Full-width OHLCV table scroll wrapper */
+.report-table-scroll { overflow-x: auto; margin-top: 20px; }
+
+/* Metric breakdown table */
+.metrics-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--panel);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+/* Trend colours in metrics table */
+.metrics-table td.trend-up   { color: var(--risk-low); }
+.metrics-table td.trend-down { color: var(--risk-high); }

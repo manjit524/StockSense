@@ -3,94 +3,83 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>
-  // Set theme before first paint to avoid a flash of the wrong theme.
-  (function () {
-    try {
-      var t = localStorage.getItem('dl_theme') || 'dark';
-      document.documentElement.setAttribute('data-theme', t);
-    } catch (e) {}
-  })();
-</script>
-<title>{% block title %}Desk & Ledger{% endblock %}</title>
+<title>{% block title %}Desk &amp; Ledger{% endblock %}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% block styles %}{% endblock %}
 </head>
 <body>
 
-<div class="shell">
+<!-- ========================= TOP NAVBAR ========================= -->
+<nav class="dl-nav" id="dlNav">
+  <a href="{{ url_for('landing') }}" class="dl-brand">
+    Desk<span class="dl-brand-dot">&#x26;</span>Ledger
+  </a>
 
-  <aside class="sidebar" id="sidebar">
-    <nav class="side-nav">
-      <a href="{{ url_for('landing') }}" class="side-link {{ 'active' if active == 'landing' }}">
-        <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>
-        <span class="side-label">Landing</span>
-      </a>
-      <a href="{{ url_for('about') }}" class="side-link {{ 'active' if active == 'about' }}">
-        <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><circle cx="12" cy="7.5" r="0.9" fill="currentColor" stroke="none"/></svg>
-        <span class="side-label">About</span>
-      </a>
-      <a href="{{ url_for('contact') }}" class="side-link {{ 'active' if active == 'contact' }}">
-        <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
-        <span class="side-label">Contact</span>
-      </a>
-      <a href="{{ url_for('login') }}" class="side-link {{ 'active' if active == 'login' }}">
-        <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c1.4-3.6 4.3-5.5 7-5.5S18.6 16.4 20 20"/></svg>
-        <span class="side-label">Login / Sign up</span>
-      </a>
-      <a href="{{ url_for('get_advice') }}" class="side-link {{ 'active' if active == 'advice' }}">
-        <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5"/><path d="m4 15 5-5 4 4 7-8"/></svg>
-        <span class="side-label">Get Advice</span>
-      </a>
-      <a href="{{ url_for('markets') }}" class="side-link {{ 'active' if active == 'markets' }}">
-        <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        <span class="side-label">Markets</span>
-      </a>
-      <a href="{{ url_for('reports') }}" class="side-link {{ 'active' if active == 'reports' }}">
-        <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M9 12h6M9 16h6M9 8h2"/></svg>
-        <span class="side-label">Reports</span>
-      </a>
-    </nav>
-  </aside>
-  <script>
-    // Restore sidebar collapsed state immediately, before layout settles.
-    (function () {
-      try {
-        if (localStorage.getItem('dl_sidebar') === 'collapsed') {
-          document.getElementById('sidebar').classList.add('collapsed');
-        }
-      } catch (e) {}
-    })();
-  </script>
-
-  <div class="main-col">
-    <header class="topbar">
-      <button id="sidebarToggle" class="icon-btn" aria-label="Toggle navigation" title="Toggle navigation">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-      </button>
-
-      <div class="topbar-spacer"></div>
-
-      <button id="themeToggle" class="icon-btn theme-toggle" aria-label="Toggle theme" title="Toggle theme">☾</button>
-      <div class="site-name">Desk<span class="brand-accent">&amp;</span>Ledger</div>
-    </header>
-
-    <main class="page-content">
-      {% block content %}{% endblock %}
-    </main>
-
-    <footer class="disclaimer">
-      <p><strong>This isn't investment advice.</strong> Shortlists come from a small,
-      lightly-trained model and rule-based signals — both can be wrong, and past
-      price patterns don't guarantee future ones. Size positions you can afford to
-      be wrong about, and treat this as one input among many.</p>
-    </footer>
+  <div class="dl-nav-links" id="dlNavLinks">
+    <a href="{{ url_for('landing') }}" class="dl-nav-link {{ 'active' if active == 'landing' }}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>
+      Home
+    </a>
+    <a href="{{ url_for('get_advice') }}" class="dl-nav-link {{ 'active' if active == 'advice' }}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5"/><path d="m4 15 5-5 4 4 7-8"/></svg>
+      Get Advice
+    </a>
+    <a href="{{ url_for('markets') }}" class="dl-nav-link {{ 'active' if active == 'markets' }}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Markets
+    </a>
+    <a href="{{ url_for('reports') }}" class="dl-nav-link {{ 'active' if active == 'reports' }}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M9 12h6M9 16h6M9 8h2"/></svg>
+      Reports
+    </a>
+    <a href="{{ url_for('about') }}" class="dl-nav-link {{ 'active' if active == 'about' }}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><circle cx="12" cy="7.5" r="0.9" fill="currentColor" stroke="none"/></svg>
+      About
+    </a>
+    <a href="{{ url_for('contact') }}" class="dl-nav-link {{ 'active' if active == 'contact' }}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
+      Contact
+    </a>
   </div>
 
+  <div class="dl-nav-actions">
+    <a href="{{ url_for('login') }}" class="btn btn-ghost btn-sm">Sign In</a>
+    <a href="{{ url_for('get_advice') }}" class="btn btn-primary btn-sm">Get Started</a>
+    <button class="dl-nav-toggle" id="dlNavToggle" aria-label="Toggle navigation">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ========================= PAGE CONTENT ========================= -->
+<div class="dl-page">
+  <main class="dl-main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="dl-footer">
+    <p><strong>This isn't investment advice.</strong> Shortlists come from a small,
+    lightly-trained model and rule-based signals — both can be wrong, and past
+    price patterns don't guarantee future ones. Size positions you can afford to
+    be wrong about, and treat this as one input among many.</p>
+  </footer>
 </div>
 
 <script src="{{ url_for('static', filename='app.js') }}"></script>
+<script>
+  // Mobile nav toggle
+  (function () {
+    var toggle = document.getElementById('dlNavToggle');
+    var links  = document.getElementById('dlNavLinks');
+    if (toggle && links) {
+      toggle.addEventListener('click', function () {
+        links.classList.toggle('open');
+      });
+    }
+  })();
+</script>
 {% block scripts %}{% endblock %}
 </body>
 </html>
