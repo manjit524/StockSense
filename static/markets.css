@@ -440,3 +440,106 @@ canvas#heroLiveChart {
 .directory-col a:hover {
   color: var(--text);
 }
+
+/* =====================================================
+   IPO CARD GRID (market_detail.html - ipos view)
+   ===================================================== */
+.ipo-cards-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ipo-list-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--panel-hi);
+  border: 1px solid var(--hairline);
+  border-radius: 14px;
+  padding: 16px 20px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.ipo-list-card:hover {
+  border-color: var(--gold);
+  transform: translateX(4px);
+  box-shadow: 0 6px 20px rgba(255, 122, 41, 0.1);
+}
+
+.ipo-lc-logo {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--gold), #c85e0d);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: #1A0E04;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(255, 122, 41, 0.22);
+}
+
+.ipo-lc-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.ipo-lc-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ipo-lc-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ipo-lc-band {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.ipo-lc-dot { color: var(--hairline); }
+
+.ipo-lc-size {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.ipo-lc-dates {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+}
+
+.ipo-lc-arrow {
+  color: var(--gold);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+.ipo-list-card:hover .ipo-lc-arrow { transform: translateX(4px); }

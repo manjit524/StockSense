@@ -137,22 +137,28 @@
     <!-- ==================== CATEGORY: IPOs ==================== -->
     {% elif config.type == 'ipos' %}
       {% if config.items_list %}
-      <div class="table-scroll">
-      <table class="data-table">
-        <thead><tr><th>Company</th><th>Opens</th><th>Closes</th><th>Price Band</th><th>Issue Size</th><th>GMP</th></tr></thead>
-        <tbody>
-          {% for ipo in config.items_list %}
-          <tr>
-            <td>{{ ipo.company }}</td>
-            <td class="mono">{{ ipo.open_date }}</td>
-            <td class="mono">{{ ipo.close_date }}</td>
-            <td class="mono">{{ ipo.price_band }}</td>
-            <td class="mono">{{ ipo.issue_size }}</td>
-            <td class="mono unofficial">Unofficial</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:18px;">Click any IPO card to view full details — timeline, investor categories, subscription tracker and more.</p>
+      <div class="ipo-cards-grid" id="ipoCardsGrid">
+        {% for ipo in config.items_list %}
+        {% set slug = ipo.company | lower | replace(' ', '-') | replace('.', '') | replace(',', '') | replace('(', '') | replace(')', '') | replace('&', '') | replace('/', '-') %}
+        <a href="/markets/ipo/{{ slug }}" class="ipo-list-card">
+          <div class="ipo-lc-logo">{{ ipo.company[0] }}</div>
+          <div class="ipo-lc-body">
+            <span class="ipo-lc-name">{{ ipo.company }}</span>
+            <div class="ipo-lc-meta">
+              <span class="ipo-lc-band">{{ ipo.price_band if ipo.price_band else '—' }}</span>
+              <span class="ipo-lc-dot">·</span>
+              <span class="ipo-lc-size">{{ ipo.issue_size if ipo.issue_size else '—' }}</span>
+            </div>
+            <div class="ipo-lc-dates">
+              <span>📅 {{ ipo.open_date }}</span>
+              <span style="color:var(--hairline);">—</span>
+              <span>🔒 {{ ipo.close_date }}</span>
+            </div>
+          </div>
+          <span class="ipo-lc-arrow">→</span>
+        </a>
+        {% endfor %}
       </div>
       {% else %}
       <p class="panel-note">No upcoming IPO issues returned at this moment.</p>

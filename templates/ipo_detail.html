@@ -1,0 +1,460 @@
+{% extends "base.html" %}
+{% block title %}{{ ipo.company }} IPO — StockSense Markets{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{{ url_for('static', filename='markets.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='ipo_detail.css') }}">{% endblock %}
+
+{% block content %}
+<div class="ipo-detail-page">
+
+  <!-- ===== BREADCRUMB ===== -->
+  <div class="ipo-breadcrumb">
+    <a href="{{ url_for('markets') }}">Markets</a>
+    <span class="sep">›</span>
+    <a href="{{ url_for('market_category', category_id='ipos') }}">IPO Calendar</a>
+    <span class="sep">›</span>
+    <span>{{ ipo.company }}</span>
+  </div>
+
+  <!-- ===== HERO BANNER ===== -->
+  <div class="ipo-hero-banner">
+    <div class="ipo-hero-left">
+      <div class="ipo-logo-wrap">
+        <div class="ipo-logo-circle">
+          {{ ipo.company[0] }}
+        </div>
+      </div>
+      <div class="ipo-hero-info">
+        <div class="ipo-eyebrow">
+          <span class="ipo-type-badge">SME IPO</span>
+          <span class="ipo-exchange-badge">NSE · BSE</span>
+          {% if ipo.status == 'open' %}
+          <span class="status-badge open"><span class="pulse-dot"></span>Open Now</span>
+          {% elif ipo.status == 'upcoming' %}
+          <span class="status-badge upcoming">Upcoming</span>
+          {% else %}
+          <span class="status-badge closed">Closed</span>
+          {% endif %}
+        </div>
+        <h1 class="ipo-company-name">{{ ipo.company }}</h1>
+        <p class="ipo-tagline">Initial Public Offering — Primary Market Issue on Indian Exchanges</p>
+      </div>
+    </div>
+
+    <div class="ipo-hero-right">
+      <div class="ipo-cta-card">
+        <div class="ipo-price-band-display">
+          <span class="price-label">Price Band</span>
+          <span class="price-value">{{ ipo.price_band if ipo.price_band else '₹—' }}</span>
+        </div>
+        <div class="ipo-gmp-row">
+          <span class="gmp-label">Est. GMP</span>
+          <span class="gmp-value unofficial">Unofficial / N/A</span>
+        </div>
+        <a href="{{ url_for('get_advice') }}" class="btn btn-primary ipo-apply-btn">
+          Get AI Investment Advice
+        </a>
+        <p class="ipo-cta-note">StockSense does not facilitate direct IPO applications. Use your broker.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== KEY INFO PILLS ===== -->
+  <div class="ipo-key-pills">
+    <div class="key-pill">
+      <span class="pill-icon">📅</span>
+      <div>
+        <span class="pill-label">Open Date</span>
+        <span class="pill-val">{{ ipo.open_date if ipo.open_date else '—' }}</span>
+      </div>
+    </div>
+    <div class="key-pill">
+      <span class="pill-icon">🔒</span>
+      <div>
+        <span class="pill-label">Close Date</span>
+        <span class="pill-val">{{ ipo.close_date if ipo.close_date else '—' }}</span>
+      </div>
+    </div>
+    <div class="key-pill">
+      <span class="pill-icon">💰</span>
+      <div>
+        <span class="pill-label">Issue Size</span>
+        <span class="pill-val">{{ ipo.issue_size if ipo.issue_size else '—' }}</span>
+      </div>
+    </div>
+    <div class="key-pill">
+      <span class="pill-icon">📊</span>
+      <div>
+        <span class="pill-label">Lot Size</span>
+        <span class="pill-val">{{ ipo.lot_size if ipo.lot_size else '—' }}</span>
+      </div>
+    </div>
+    <div class="key-pill">
+      <span class="pill-icon">🏛️</span>
+      <div>
+        <span class="pill-label">Listing Exchange</span>
+        <span class="pill-val">NSE &amp; BSE</span>
+      </div>
+    </div>
+    <div class="key-pill">
+      <span class="pill-icon">📆</span>
+      <div>
+        <span class="pill-label">Est. Listing Date</span>
+        <span class="pill-val">{{ ipo.listing_date if ipo.listing_date else 'T+6 days' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MAIN CONTENT GRID ===== -->
+  <div class="ipo-content-grid">
+
+    <!-- LEFT COLUMN — Detail Sections -->
+    <div class="ipo-main-col">
+
+      <!-- IPO Timeline -->
+      <div class="ipo-section-card">
+        <h2 class="section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 2v4M16 2v4M3 10h18M3 6h18a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1z"/></svg>
+          IPO Timeline
+        </h2>
+        <div class="ipo-timeline">
+          <div class="timeline-step {{ 'done' if ipo.status != 'upcoming' else '' }}">
+            <div class="tl-dot"></div>
+            <div class="tl-body">
+              <span class="tl-label">IPO Opens</span>
+              <span class="tl-date">{{ ipo.open_date if ipo.open_date else 'TBA' }}</span>
+            </div>
+          </div>
+          <div class="timeline-connector"></div>
+          <div class="timeline-step {{ 'done' if ipo.status == 'closed' else '' }}">
+            <div class="tl-dot"></div>
+            <div class="tl-body">
+              <span class="tl-label">IPO Closes</span>
+              <span class="tl-date">{{ ipo.close_date if ipo.close_date else 'TBA' }}</span>
+            </div>
+          </div>
+          <div class="timeline-connector"></div>
+          <div class="timeline-step">
+            <div class="tl-dot pending"></div>
+            <div class="tl-body">
+              <span class="tl-label">Allotment</span>
+              <span class="tl-date">T+1 after close</span>
+            </div>
+          </div>
+          <div class="timeline-connector"></div>
+          <div class="timeline-step">
+            <div class="tl-dot pending"></div>
+            <div class="tl-body">
+              <span class="tl-label">Refunds / Transfer</span>
+              <span class="tl-date">T+2 after close</span>
+            </div>
+          </div>
+          <div class="timeline-connector"></div>
+          <div class="timeline-step">
+            <div class="tl-dot pending"></div>
+            <div class="tl-body">
+              <span class="tl-label">Listing on Exchange</span>
+              <span class="tl-date">{{ ipo.listing_date if ipo.listing_date else 'Est. T+6 days' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Issue Details Table -->
+      <div class="ipo-section-card">
+        <h2 class="section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          Issue Details
+        </h2>
+        <div class="ipo-details-table">
+          <div class="dt-row">
+            <span class="dt-label">Company Name</span>
+            <span class="dt-val">{{ ipo.company }}</span>
+          </div>
+          <div class="dt-row">
+            <span class="dt-label">IPO Type</span>
+            <span class="dt-val">Book Built Issue IPO</span>
+          </div>
+          <div class="dt-row">
+            <span class="dt-label">Price Band</span>
+            <span class="dt-val highlight">{{ ipo.price_band if ipo.price_band else '—' }}</span>
+          </div>
+          <div class="dt-row">
+            <span class="dt-label">Issue Size</span>
+            <span class="dt-val">{{ ipo.issue_size if ipo.issue_size else '—' }}</span>
+          </div>
+          <div class="dt-row">
+            <span class="dt-label">Lot Size</span>
+            <span class="dt-val">{{ ipo.lot_size if ipo.lot_size else '—' }}</span>
+          </div>
+          <div class="dt-row">
+            <span class="dt-label">Subscription Dates</span>
+            <span class="dt-val">{{ ipo.open_date }} – {{ ipo.close_date }}</span>
+          </div>
+          <div class="dt-row">
+            <span class="dt-label">Listing Exchange</span>
+            <span class="dt-val">NSE &amp; BSE</span>
+          </div>
+          <div class="dt-row">
+            <span class="dt-label">Share Category</span>
+            <span class="dt-val">Equity Shares ₹10 F.V.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Investor Categories -->
+      <div class="ipo-section-card">
+        <h2 class="section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0-3-3.87"/></svg>
+          Investor Categories
+        </h2>
+        <div class="investor-categories">
+          <div class="inv-cat-card">
+            <div class="inv-cat-icon" style="color:var(--gold);">QIB</div>
+            <span class="inv-cat-name">Qualified Institutional Buyers</span>
+            <span class="inv-cat-pct">50%</span>
+            <p class="inv-cat-desc">Banks, mutual funds, FIIs, and insurance companies. Can bid at cut-off price.</p>
+          </div>
+          <div class="inv-cat-card">
+            <div class="inv-cat-icon" style="color:var(--teal);">NII</div>
+            <span class="inv-cat-name">Non-Institutional Investors (HNI)</span>
+            <span class="inv-cat-pct">15%</span>
+            <p class="inv-cat-desc">Individuals bidding over ₹2 lakh. Cannot bid at cut-off; must specify price.</p>
+          </div>
+          <div class="inv-cat-card">
+            <div class="inv-cat-icon" style="color:#34D399;">RII</div>
+            <span class="inv-cat-name">Retail Individual Investors</span>
+            <span class="inv-cat-pct">35%</span>
+            <p class="inv-cat-desc">Individual investors bidding up to ₹2 lakh. Can bid at cut-off price.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- What is an IPO -->
+      <div class="ipo-section-card ipo-about-section">
+        <h2 class="section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          About IPO Investing
+        </h2>
+        <div class="ipo-about-grid">
+          <div class="ipo-about-card">
+            <h4>What is an IPO?</h4>
+            <p>An Initial Public Offering (IPO) is when a private company sells shares to the public for the first time, enabling it to raise capital by listing on a stock exchange. Investors can subscribe during the offer window and receive shares (subject to allotment) upon listing.</p>
+          </div>
+          <div class="ipo-about-card">
+            <h4>How to Apply?</h4>
+            <p>Apply via your broker's ASBA (Application Supported by Blocked Amount) facility through UPI or bank mandate. Your bank blocks the bid amount until allotment — no upfront deduction. Allotment is typically lottery-based for oversubscribed retail quota.</p>
+          </div>
+          <div class="ipo-about-card">
+            <h4>Key Risks</h4>
+            <p>IPO investing carries real risks: oversubscription doesn't guarantee listing gains, poor fundamental companies can list at a discount, and GMP (Grey Market Premium) is unofficial and unregulated. Always read the DRHP before investing.</p>
+          </div>
+          <div class="ipo-about-card">
+            <h4>What is GMP?</h4>
+            <p>Grey Market Premium (GMP) is the unofficial premium at which IPO shares trade in the informal grey market before listing. It is illegal to trade in, entirely unregulated, and should NOT be relied upon as a listing price indicator. StockSense does not show GMP data.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="ipo-section-card">
+        <h2 class="section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 9a3 3 0 1 1 6 0c0 2-3 3-3 3M12 17h.01"/></svg>
+          Frequently Asked Questions
+        </h2>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>How is allotment decided for retail investors?</summary>
+            <p>If the retail quota is oversubscribed, SEBI mandates a computerised lottery system — every eligible applicant gets one lot if allotment percentage allows. If fully oversubscribed, some applicants get no allotment.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Can I cancel my IPO application?</summary>
+            <p>Yes, you can withdraw your bid before the issue closes by contacting your broker or via the exchange's online platform. After the close date, modifications are not allowed.</p>
+          </details>
+          <details class="faq-item">
+            <summary>What is the minimum investment for retail investors?</summary>
+            <p>Retail investors must apply for at least one lot. The minimum investment = Lot Size × Upper Price Band. Most IPOs are designed so the minimum bid is under ₹15,000.</p>
+          </details>
+          <details class="faq-item">
+            <summary>When will my account be credited if allotted?</summary>
+            <p>As per SEBI's T+6 listing norms, shares are credited to your Demat account by T+2 after closure, and listing happens on T+6 from the IPO close date.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Does StockSense help me apply for the IPO?</summary>
+            <p>No. StockSense is a research and analysis platform — it provides market data and AI-assisted investment shortlists. To apply for an IPO, use your broker's platform (Zerodha, Groww, Upstox, etc.) via ASBA/UPI.</p>
+          </details>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="ipo-sidebar">
+
+      <!-- Subscription Tracker (Visual) -->
+      <div class="ipo-sidebar-card">
+        <h3 class="sidebar-title">Subscription Tracker</h3>
+        <p class="sidebar-note">Live subscription data from NSE is unofficial and may not reflect real-time figures. Treat these as indicative only.</p>
+        <div class="sub-tracker">
+          <div class="sub-category">
+            <div class="sub-cat-top">
+              <span class="sub-cat-name">QIB</span>
+              <span class="sub-cat-times" id="qib-sub">—×</span>
+            </div>
+            <div class="sub-bar-track"><div class="sub-bar-fill qib" style="width:0%;" id="qib-bar"></div></div>
+          </div>
+          <div class="sub-category">
+            <div class="sub-cat-top">
+              <span class="sub-cat-name">NII / HNI</span>
+              <span class="sub-cat-times" id="nii-sub">—×</span>
+            </div>
+            <div class="sub-bar-track"><div class="sub-bar-fill nii" style="width:0%;" id="nii-bar"></div></div>
+          </div>
+          <div class="sub-category">
+            <div class="sub-cat-top">
+              <span class="sub-cat-name">Retail (RII)</span>
+              <span class="sub-cat-times" id="rii-sub">—×</span>
+            </div>
+            <div class="sub-bar-track"><div class="sub-bar-fill rii" style="width:0%;" id="rii-bar"></div></div>
+          </div>
+          <div class="sub-category total-sub">
+            <div class="sub-cat-top">
+              <span class="sub-cat-name">Total</span>
+              <span class="sub-cat-times" id="total-sub">—×</span>
+            </div>
+            <div class="sub-bar-track"><div class="sub-bar-fill total" style="width:0%;" id="total-bar"></div></div>
+          </div>
+        </div>
+        <p class="sub-disclaimer">⚠️ Subscription figures are not live. Check your broker's app or NSE's website for official data.</p>
+      </div>
+
+      <!-- Market Analysis Widget -->
+      <div class="ipo-sidebar-card">
+        <h3 class="sidebar-title">Market Analysis</h3>
+        <div class="mini-chart-wrap">
+          <canvas id="ipoMiniChart"></canvas>
+        </div>
+        <div class="market-analysis-row">
+          <div class="ma-stat">
+            <span class="ma-label">NIFTY 50</span>
+            <span class="ma-val" id="maNifty">24,380</span>
+          </div>
+          <div class="ma-stat">
+            <span class="ma-label">Sensex</span>
+            <span class="ma-val" id="maSensex">80,210</span>
+          </div>
+        </div>
+        <p class="ma-note">Broader market sentiment at time of IPO is a key factor in listing-day performance.</p>
+      </div>
+
+      <!-- Apply via Broker -->
+      <div class="ipo-sidebar-card ipo-broker-card">
+        <h3 class="sidebar-title">Apply For Live IPOs Online</h3>
+        <p>StockSense provides research — use your preferred broker to apply via ASBA or UPI mandate.</p>
+        <div class="broker-list">
+          <div class="broker-item">Zerodha (Kite)</div>
+          <div class="broker-item">Groww</div>
+          <div class="broker-item">Upstox</div>
+          <div class="broker-item">Angel One</div>
+          <div class="broker-item">HDFC Securities</div>
+        </div>
+        <a href="{{ url_for('get_advice') }}" class="btn btn-ghost btn-sm" style="width:100%; text-align:center; margin-top:14px;">Get AI Advice Instead →</a>
+      </div>
+
+      <!-- Disclaimer -->
+      <div class="ipo-sidebar-card ipo-disclaimer-card">
+        <p>
+          <strong>⚠️ Not Investment Advice.</strong> IPO data sourced from NSE's unofficial API — figures may be delayed or inaccurate. StockSense is an educational research tool, not a SEBI-registered advisor. Always read the DRHP and consult a qualified financial advisor before investing.
+        </p>
+      </div>
+
+    </aside>
+  </div>
+
+  <!-- ===== OTHER IPOs SECTION ===== -->
+  {% if other_ipos %}
+  <div class="ipo-other-section">
+    <h2 class="section-title">Other Active &amp; Upcoming IPOs</h2>
+    <div class="other-ipo-grid">
+      {% for o in other_ipos %}
+      <a href="{{ url_for('ipo_detail', company_slug=o.slug) }}" class="other-ipo-card">
+        <div class="other-ipo-logo">{{ o.company[0] }}</div>
+        <div class="other-ipo-info">
+          <span class="other-ipo-name">{{ o.company }}</span>
+          <span class="other-ipo-band">{{ o.price_band if o.price_band else '—' }}</span>
+          <span class="other-ipo-dates">{{ o.open_date }} – {{ o.close_date }}</span>
+        </div>
+        <span class="other-ipo-arrow">→</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Mini Nifty mini-chart for sidebar
+  (function() {
+    var canvas = document.getElementById('ipoMiniChart');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    canvas.width = canvas.parentElement.clientWidth * window.devicePixelRatio;
+    canvas.height = 80 * window.devicePixelRatio;
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+    var pts = [24100, 24150, 24120, 24200, 24180, 24280, 24250, 24310, 24290, 24380];
+    var w = canvas.parentElement.clientWidth;
+    var h = 80;
+    var min = Math.min.apply(null, pts) - 30;
+    var max = Math.max.apply(null, pts) + 30;
+    var range = max - min;
+    var animOffset = 0;
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      var curPts = pts.slice();
+      animOffset += 0.04;
+      curPts[curPts.length - 1] += Math.sin(animOffset) * 5;
+
+      var coords = curPts.map(function(p, i) {
+        return { x: (i / (curPts.length - 1)) * w, y: h - 10 - ((p - min) / range) * (h - 20) };
+      });
+
+      ctx.beginPath();
+      ctx.moveTo(coords[0].x, h);
+      ctx.lineTo(coords[0].x, coords[0].y);
+      coords.forEach(function(c) { ctx.lineTo(c.x, c.y); });
+      ctx.lineTo(w, h);
+      ctx.closePath();
+      var gr = ctx.createLinearGradient(0, 0, 0, h);
+      gr.addColorStop(0, 'rgba(255,122,41,0.22)');
+      gr.addColorStop(1, 'rgba(255,122,41,0)');
+      ctx.fillStyle = gr;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(coords[0].x, coords[0].y);
+      coords.forEach(function(c) { ctx.lineTo(c.x, c.y); });
+      ctx.strokeStyle = '#FF7A29';
+      ctx.lineWidth = 1.8;
+      ctx.stroke();
+
+      var last = coords[coords.length - 1];
+      ctx.beginPath();
+      ctx.arc(last.x, last.y, 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = '#FF7A29';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(last.x, last.y, 7 + Math.sin(animOffset * 2) * 2, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255,122,41,0.4)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      requestAnimationFrame(draw);
+    }
+    requestAnimationFrame(draw);
+  })();
+</script>
+{% endblock %}
