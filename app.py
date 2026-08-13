@@ -364,6 +364,68 @@ def api_ipo_calendar():
     return jsonify(MARKETS_CACHE["ipos"])
 
 
+def _slugify(text):
+    """Turn a company name into a URL-safe slug."""
+    import re
+    text = text.lower()
+    text = re.sub(r'[^a-z0-9]+', '-', text)
+    return text.strip('-')
+
+
+@app.route("/markets/ipo/<company_slug>")
+def ipo_detail(company_slug):
+    """Detailed IPO page for a single company."""
+    ipos = MARKETS_CACHE["ipos"]
+
+    # Attach slugs and status to every IPO
+    from datetime import datetime
+    today = datetime.today().date()
+    enriched = []
+    for ipo in ipos:
+        slug = _slugify(ipo.get("company", ""))
+        # Determine open/upcoming/closed status
+        status = "upcoming"
+        try:
+            open_d = datetime.strptime(ipo.get("open_date", ""), "%d-%b-%Y").date()
+            close_d = datetime.strptime(ipo.get("close_date", ""), "%d-%b-%Y").date()
+            if today > close_d:
+                status = "closed"
+            elif open_d <= today <= close_d:
+                status = "open"
+        except Exception:
+            pass
+        enriched.append({**ipo, "slug": slug, "status": status, "lot_size": ipo.get("lot_size", "—"), "listing_date": ipo.get("listing_date", None)})
+
+    # Find the requested IPO
+    target = next((i for i in enriched if i["slug"] == company_slug), None)
+    if not target:
+        # Fallback: just take the first IPO if any
+        if enriched:
+            target = enriched[0]
+        else:
+            return render_template("market_detail.html", active="markets",
+                                   category_id="ipos",
+                                   config={
+                                       "title": "IPO Calendar", "eyebrow": "Primary Market Issues",
+                                       "badge": "Event Calendar", "is_live": False,
+                                       "description": "Upcoming and current Initial Public Offerings listed on Indian exchanges.",
+                                       "items_list": [], "type": "ipos"
+                                   },
+                                   markets_ready=MARKETS_CACHE["ready"],
+                                   markets_message=MARKETS_CACHE["message"])
+
+    other_ipos = [i for i in enriched if i["slug"] != company_slug][:6]
+
+    return render_template(
+        "ipo_detail.html",
+        active="markets",
+        ipo=target,
+        other_ipos=other_ipos,
+        markets_ready=MARKETS_CACHE["ready"],
+        markets_message=MARKETS_CACHE["message"],
+    )
+
+
 @app.route("/api/option-chain-summary")
 def api_option_chain_summary():
     symbol = request.args.get("symbol", "NIFTY")
