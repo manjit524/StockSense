@@ -1,4 +1,4 @@
-# The Trading Desk (An investment Website)
+# StockSense (An investment Website)
 
 An AI-powered financial analytics and advisory web application built with Python, Flask, and TensorFlow/Keras. 
 This project features real-time/intraday stock tracking, market data analysis, and deep learning prediction models.
