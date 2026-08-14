@@ -2,43 +2,6 @@
 
 An AI-powered financial analytics and advisory web application built with Python, Flask, and TensorFlow/Keras. 
 This project features real-time/intraday stock tracking, market data analysis, and deep learning prediction models.
-
----
-
-## 📁 Repository Structure
-
-```text
-.
-├── static/                         # Frontend static assets (CSS, JavaScript)
-│   ├── app.js
-│   └── style.css
-├── templates/                      # HTML templates (Flask views)
-│   ├── about.html
-│   ├── base.html
-│   ├── contact.html
-│   ├── input.html
-│   ├── landing.html
-│   ├── loading.html
-│   ├── login.html
-│   ├── markets.html
-│   ├── output.html
-│   └── reports.html
-├── .gitignore                      # Configured to ignore virtualenvs, cache & datasets
-├── advisor_engine.py               # Core financial advisory engine logic
-├── app.py                          # Main Flask application entrypoint
-├── etf_tickers.py                  # ETF data configurations
-├── intraday_advisor.py             # Short-term market signals and recommendations
-├── intraday_engine.py              # Intraday market data processing engine
-├── markets_data.py                 # Market data extraction scripts
-├── reports_data.py                 # Report generation utilities
-├── sp500_tickers_cache.json        # Cached tickers list
-├── stock_advisor_multi_exchange.py # Multi-exchange stock data handling
-├── train_model.py                  # Keras model training pipeline
-├── us_tickers.py                   # US stock tickers dataset/utility
-├── requirements.txt                # Required Python dependencies
-└── README.md                       # Project documentation
-```
-
 ---
 
 ##  Initial Setup Instructions (Do these steps only ONE time on your computer)
@@ -46,8 +9,8 @@ This project features real-time/intraday stock tracking, market data analysis, a
 ### Step 1: Clone the Repository & Navigate into Folder
 Open VS Code, open the integrated Terminal (`Ctrl + ~`), and run:
 ```bash
-git clone https://github.com/manjit524/The_Trading_Desk.git
-cd The_Trading_Desk
+git clone https://github.com/manjit524/StockSense
+cd StockSense
 ```
 
 ### Step 2: Create & Activate Virtual Environment
@@ -65,9 +28,9 @@ pip install -r requirements.txt
 Dataset add by yourself as I already shared it with everyone.  
 In `advisor_engine.py` find this:
 ```python
-NSE_FOLDER = "C:/Users/Manjit/Downloads/Market_Data/NSE"
-BSE_FOLDER = "C:/Users/Manjit/Downloads/Market_Data/BSE"
-US_FOLDER = "C:/Users/Manjit/Downloads/Market_Data/US"
+NSE_FOLDER = "YOUR_NSE_FOLDER_PATH"
+BSE_FOLDER = "YOUR_BSE_FOLDER_PATH"
+US_FOLDER = "YOUR_US_FOLDER_PATH"
 ```
 And change this with your folder path.
 
@@ -111,7 +74,7 @@ git push origin feature-your-task-name
 ```
 
 ### 4. At Last:
-Go to [https://github.com/manjit524/The_Trading_Desk](https://github.com/manjit524/The_Trading_Desk) and click **Compare & pull request** to submit your work for review.
+Go to [https://github.com/manjit524/StockSense](https://github.com/manjit524/StockSense) and click **Compare & pull request** to submit your work for review.
 
 Once reviewed and merged into `main`, all other team members can click the **Sync Changes / Refresh** button in the bottom-left corner of VS Code to pull the latest code.
 
