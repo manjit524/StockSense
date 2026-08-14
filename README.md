@@ -64,6 +64,7 @@ git checkout -b feature-your-task-name
 
 ### 2. After making code edits, stage and commit your changes:
 ```bash
+pip freeze > requirements.txt
 git add .
 git commit -m "Add description of what you changed"
 ```
