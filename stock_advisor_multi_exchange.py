@@ -39,9 +39,9 @@ print("✅ Cell 1 Ready: Libraries imported successfully.")
 # ==============================================================================
 # CONFIG — update these
 # ==============================================================================
-NSE_FOLDER = "C:/Users/Manjit/Downloads/Market_Data/NSE"
-BSE_FOLDER = "C:/Users/Manjit/Downloads/Market_Data/BSE"
-US_FOLDER = "C:/Users/Manjit/Downloads/Market_Data/US"   # will be created automatically
+NSE_FOLDER = "C:/Ved/project/Model/Market_Data/NSE"
+BSE_FOLDER = "C:/Ved/project/Model/Market_Data/BSE"
+US_FOLDER = "C:/Ved/project/Model/Market_Data/US"   # will be created automatically
 
 TWELVE_DATA_API_KEY = "YOUR_API_KEY_HERE"   # sign up free at https://twelvedata.com
 

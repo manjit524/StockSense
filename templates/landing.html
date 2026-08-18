@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Desk &amp; Ledger — Grow Your Wealth Smarter{% endblock %}
+{% block title %}StockSense — Grow Your Wealth Smarter{% endblock %}
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='landing_v2.css') }}">
@@ -17,7 +17,7 @@
         <span class="badge-pulse"></span>
         Dual-Engine AI Analysis · 7,700+ Assets
       </span>
-      <h1>Grow Your Wealth<br><span class="hero-highlight">Smarter</span> with Desk &amp; Ledger</h1>
+      <h1>Grow Your Wealth<br><span class="hero-highlight">Smarter</span> with StockSense</h1>
       <p class="vw-hero-sub">
         A dual-engine research platform for NSE, BSE &amp; US markets. GRU model for long-horizon position shortlists + live rule-based scanner for intraday sessions. Set budget, pick horizon, get risk-sorted answers.
       </p>
@@ -60,10 +60,10 @@
           <button class="w-tab" data-symbol="btc" data-name="BITCOIN" data-currency="$" data-base="64250.00" data-change="-410.00 (-0.63%)">BTC</button>
         </div>
         <div class="widget-tf-group">
-          <button class="tf-btn active">1D</button>
-          <button class="tf-btn">1W</button>
-          <button class="tf-btn">1M</button>
-          <button class="tf-btn">1Y</button>
+          <button class="tf-btn active" data-tf="1D">1D</button>
+          <button class="tf-btn" data-tf="1W">1W</button>
+          <button class="tf-btn" data-tf="1M">1M</button>
+          <button class="tf-btn" data-tf="1Y">1Y</button>
         </div>
       </div>
 
@@ -90,6 +90,7 @@
         <canvas id="heroWidgetCanvas"></canvas>
         <div class="chart-tooltip" id="heroChartTooltip">
           <span class="tt-price" id="ttPrice">₹24,380.15</span>
+          <span class="tt-change up" id="ttChange">+0.59%</span>
           <span class="tt-time" id="ttTime">Live Tick</span>
         </div>
       </div>
@@ -97,11 +98,11 @@
       <!-- Metrics Footer Bar inside Widget -->
       <div class="widget-metrics-bar">
         <div class="wm-stat">
-          <span class="wm-lbl">Day High</span>
+          <span class="wm-lbl" id="wmHighLbl">Day High</span>
           <span class="wm-val up" id="wmHigh">24,412.50</span>
         </div>
         <div class="wm-stat">
-          <span class="wm-lbl">Day Low</span>
+          <span class="wm-lbl" id="wmLowLbl">Day Low</span>
           <span class="wm-val down" id="wmLow">24,198.30</span>
         </div>
         <div class="wm-stat">
@@ -110,36 +111,13 @@
         </div>
         <div class="wm-stat">
           <span class="wm-lbl">AI Model Signal</span>
-          <span class="wm-val ai-badge">Strong Outperform</span>
+          <span class="wm-val ai-badge" id="wmSignal">Strong Outperform</span>
         </div>
       </div>
     </div>
 
   </div>
 </section>
-
-<!-- ===================== MARQUEE TICKER SCROLL BAR ===================== -->
-<div class="ticker-scroll-wrap" aria-hidden="true">
-  <div class="ticker-scroll-track" id="tickerTrack">
-    {% for a in trend_stocks %}
-    <div class="ticker-item" data-symbol="{{ a.yf_symbol }}" data-currency="{{ '$' if a.exchange == 'US' else '₹' }}">
-      <span class="t-sym">{{ a.symbol }}</span>
-      <span class="t-exch">{{ a.exchange }}</span>
-      <span class="t-price"><span class="t-cur">{{ '$' if a.exchange == 'US' else '₹' }}</span><span class="live-price-value">{{ '%.2f'|format(a.price) }}</span></span>
-      <span class="t-change {{ 'up' if a.change >= 0 else 'down' }}"><span class="live-arrow">{{ '▲' if a.change >= 0 else '▼' }}</span><span class="live-change-value">{{ '%.2f'|format(a.change|abs) }}</span>%</span>
-    </div>
-    {% endfor %}
-    <!-- Duplicate for seamless scroll -->
-    {% for a in trend_stocks %}
-    <div class="ticker-item">
-      <span class="t-sym">{{ a.symbol }}</span>
-      <span class="t-exch">{{ a.exchange }}</span>
-      <span class="t-price"><span class="t-cur">{{ '$' if a.exchange == 'US' else '₹' }}</span>{{ '%.2f'|format(a.price) }}</span>
-      <span class="t-change {{ 'up' if a.change >= 0 else 'down' }}"><span>{{ '▲' if a.change >= 0 else '▼' }}</span>{{ '%.2f'|format(a.change|abs) }}%</span>
-    </div>
-    {% endfor %}
-  </div>
-</div>
 
 <!-- ===================== DATA SOURCES ===================== -->
 <div class="vw-sources">
@@ -194,8 +172,13 @@
           <span class="live-badge-sm"><span class="live-dot"></span>Live</span>
         </div>
       </div>
-      <div class="home-chart-canvas-wrap">
+      <div class="home-chart-canvas-wrap" id="homeMainChartWrap">
         <canvas id="homeMainChart"></canvas>
+        <div class="chart-tooltip" id="homeChartTooltip">
+          <span class="tt-price" id="homeTtPrice">₹24,380.15</span>
+          <span class="tt-change up" id="homeTtChange">+0.59%</span>
+          <span class="tt-time" id="homeTtTime">Live Tick</span>
+        </div>
       </div>
     </div>
 
@@ -219,13 +202,54 @@
       </div>
       <div class="cs-pill">
         <span class="cs-label">52W High</span>
-        <span class="cs-val cs-high">26,277.35</span>
+        <span class="cs-val cs-high" id="cs52High">26,277.35</span>
       </div>
       <div class="cs-pill">
         <span class="cs-label">52W Low</span>
-        <span class="cs-val cs-low">21,964.60</span>
+        <span class="cs-val cs-low" id="cs52Low">21,964.60</span>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ===================== LIVE ASSET CARDS ===================== -->
+<section class="vw-section">
+  <div class="vw-section-head" style="text-align:left; margin: 0 0 30px;">
+    <h2>Watchlist — Live Prices</h2>
+    <p>Real quotes updating right on this page via yfinance.</p>
+  </div>
+
+  <div class="vw-filters">
+    <button class="vw-filter-btn active" data-category="all">All assets</button>
+    <button class="vw-filter-btn" data-category="stocks">Stocks</button>
+    <button class="vw-filter-btn" data-category="crypto">Crypto</button>
+    <button class="vw-filter-btn" data-category="etfs">ETFs</button>
+  </div>
+
+  <div class="vw-asset-grid">
+    {% for a in trend_stocks %}
+    <div class="vw-asset-card" data-category="{{ a.category if a.category is defined else 'stocks' }}" data-symbol="{{ a.yf_symbol }}">
+      <div class="vw-asset-top">
+        <span class="vw-asset-symbol">{{ a.symbol }}</span>
+        <span class="vw-asset-badge">{{ a.exchange }}</span>
+      </div>
+      <div class="vw-asset-sparkline-wrap">
+        <svg viewBox="0 0 100 28" class="asset-spark" data-spark="{{ a.spark }}">
+          <polyline fill="none" stroke="{{ '#34D399' if a.change >= 0 else '#F87171' }}" stroke-width="1.6" points="{{ a.spark }}" vector-effect="non-scaling-stroke"/>
+        </svg>
+      </div>
+      <div class="vw-asset-price">
+        <span class="live-currency">{{ '$' if a.exchange == 'US' else '₹' }}</span><span class="live-price-value">{{ '%.2f'|format(a.price) if a.price is defined else '—' }}</span>
+      </div>
+      <div class="vw-asset-change {{ 'up' if (a.change is defined and a.change >= 0) else 'down' }}">
+        <span class="live-arrow">{{ '▲' if (a.change is defined and a.change >= 0) else '▼' }}</span>
+        <span class="live-change-value">{{ '%.2f'|format(a.change) if a.change is defined else '—' }}</span>%
+      </div>
+      <div class="vw-asset-actions">
+        <a href="{{ url_for('reports') }}" class="vw-btn vw-btn-ghost vw-btn-sm">View Report</a>
+      </div>
+    </div>
+    {% endfor %}
   </div>
 </section>
 
@@ -291,52 +315,11 @@
   </div>
 </section>
 
-<!-- ===================== MULTI-MARKET GRID ===================== -->
+<!-- ===================== HOW IT WORKS ===================== -->
 <section class="vw-section">
   <div class="vw-section-head">
-    <h2>One Platform for Multi-Market Investing</h2>
-    <p>Every asset class you need in one unified workspace — not six different tabs.</p>
-  </div>
-
-  <div class="vw-grid-3" style="grid-template-columns: repeat(3, 1fr);">
-    <a href="{{ url_for('get_advice') }}" class="vw-card">
-      <div class="vw-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5"/><path d="m4 15 5-5 4 4 7-8"/></svg></div>
-      <h3>Stocks</h3>
-      <p>NSE, BSE, and US equities with a GRU-modeled long-horizon shortlist.</p>
-    </a>
-    <a href="{{ url_for('get_advice') }}" class="vw-card">
-      <div class="vw-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M8 10h8M8 14h8"/></svg></div>
-      <h3>Intraday</h3>
-      <p>Live 5-minute candles read through EMA, RSI, and VWAP for same-session signals.</p>
-    </a>
-    <a href="{{ url_for('markets') }}" class="vw-card">
-      <div class="vw-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></div>
-      <h3>Crypto</h3>
-      <p>Live 24/7 pricing across major coins — no market-hours restriction.</p>
-    </a>
-    <a href="{{ url_for('markets') }}" class="vw-card">
-      <div class="vw-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6H9z"/></svg></div>
-      <h3>ETFs</h3>
-      <p>Curated, real, high-confidence tickers across NSE and US exchanges.</p>
-    </a>
-    <a href="{{ url_for('markets') }}" class="vw-card">
-      <div class="vw-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20 12 4l8 16"/></svg></div>
-      <h3>Mutual Funds</h3>
-      <p>Real daily NAV pulled from AMFI — ~40,000 registered schemes, searchable.</p>
-    </a>
-    <a href="{{ url_for('market_category', category_id='ipos') }}" class="vw-card">
-      <div class="vw-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12h18M3 6h18M3 18h18"/></svg></div>
-      <h3>Bonds, IPOs &amp; Derivatives</h3>
-      <p>US Treasury yields, NSE IPO calendar with detail pages, and NIFTY option chain.</p>
-    </a>
-  </div>
-</section>
-
-<!-- ===================== HOW IT WORKS ===================== -->
-<section class="vw-section" style="padding-top:0;">
-  <div class="vw-section-head">
     <h2>Start Your Analysis in 4 Steps</h2>
-    <p>From opening Desk &amp; Ledger to a risk-sorted shortlist in your hands.</p>
+    <p>From opening StockSense to a risk-sorted shortlist in your hands.</p>
   </div>
 
   <div class="vw-steps">
@@ -359,53 +342,12 @@
   </div>
 </section>
 
-<!-- ===================== LIVE ASSET CARDS ===================== -->
-<section class="vw-section">
-  <div class="vw-section-head" style="text-align:left; margin: 0 0 30px;">
-    <h2>Watchlist — Live Prices</h2>
-    <p>Real quotes updating right on this page via yfinance.</p>
-  </div>
-
-  <div class="vw-filters">
-    <button class="vw-filter-btn active" data-category="all">All assets</button>
-    <button class="vw-filter-btn" data-category="stocks">Stocks</button>
-    <button class="vw-filter-btn" data-category="crypto">Crypto</button>
-    <button class="vw-filter-btn" data-category="etfs">ETFs</button>
-  </div>
-
-  <div class="vw-asset-grid">
-    {% for a in trend_stocks %}
-    <div class="vw-asset-card" data-category="{{ a.category if a.category is defined else 'stocks' }}" data-symbol="{{ a.yf_symbol }}">
-      <div class="vw-asset-top">
-        <span class="vw-asset-symbol">{{ a.symbol }}</span>
-        <span class="vw-asset-badge">{{ a.exchange }}</span>
-      </div>
-      <div class="vw-asset-sparkline-wrap">
-        <svg viewBox="0 0 100 28" class="asset-spark" data-spark="{{ a.spark }}">
-          <polyline fill="none" stroke="{{ '#34D399' if a.change >= 0 else '#F87171' }}" stroke-width="1.6" points="{{ a.spark }}" vector-effect="non-scaling-stroke"/>
-        </svg>
-      </div>
-      <div class="vw-asset-price">
-        <span class="live-currency">{{ '$' if a.exchange == 'US' else '₹' }}</span><span class="live-price-value">{{ '%.2f'|format(a.price) if a.price is defined else '—' }}</span>
-      </div>
-      <div class="vw-asset-change {{ 'up' if (a.change is defined and a.change >= 0) else 'down' }}">
-        <span class="live-arrow">{{ '▲' if (a.change is defined and a.change >= 0) else '▼' }}</span>
-        <span class="live-change-value">{{ '%.2f'|format(a.change) if a.change is defined else '—' }}</span>%
-      </div>
-      <div class="vw-asset-actions">
-        <a href="{{ url_for('reports') }}" class="vw-btn vw-btn-ghost vw-btn-sm">View Report</a>
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-</section>
-
 <!-- ===================== PORTFOLIO RISK VISUAL ===================== -->
 <section class="vw-section home-risk-section">
   <div class="risk-split">
     <div class="risk-left">
       <h2>Understand Your Risk, Before You Invest</h2>
-      <p>Desk &amp; Ledger classifies every recommendation into Low, Medium, and High risk — automatically, based on volatility, momentum, and model confidence.</p>
+      <p>StockSense classifies every recommendation into Low, Medium, and High risk — automatically, based on volatility, momentum, and model confidence.</p>
       <div class="risk-legend">
         <div class="rl-item low">
           <div class="rl-dot"></div>

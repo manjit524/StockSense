@@ -61,3 +61,24 @@
   width: 16px;
   height: 16px;
 }
+
+/* ==========================================================================
+   LIGHT THEME ENHANCEMENTS FOR CONTACT PAGE
+   ========================================================================== */
+[data-theme="light"] .contact-card {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 24px 60px -12px rgba(79, 70, 229, 0.08);
+}
+
+[data-theme="light"] .contact-card:focus-within {
+  border-color: rgba(79, 70, 229, 0.5);
+  box-shadow: 0 30px 70px -10px rgba(79, 70, 229, 0.16);
+}
+
+[data-theme="light"] .contact-alt a:hover {
+  color: #4F46E5;
+}
+

@@ -41,13 +41,13 @@
 }
 
 .engine-card:hover {
-  border-color: rgba(255, 122, 41, 0.25);
-  box-shadow: var(--shadow-sm);
+  border-color: rgba(16, 216, 144, 0.35);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(16, 216, 144, 0.08);
 }
 
 /* Gold vs teal theme for the two engines */
 .engine-card.engine-gold { border-top: 2px solid var(--gold); }
-.engine-card.engine-teal { border-top: 2px solid var(--teal); }
+.engine-card.engine-teal { border-top: 2px solid var(--cyan); }
 
 .engine-tag {
   display: inline-block;
@@ -63,13 +63,15 @@
 }
 
 .engine-tag-alt {
-  color: var(--teal);
-  background: var(--teal-dim);
+  color: var(--cyan);
+  background: var(--cyan-dim);
 }
 
 .engine-head h2 {
   font-family: var(--font-display);
   font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   margin: 0 0 10px;
 }
 
@@ -95,7 +97,7 @@
 
 .engine-form select,
 .engine-form input {
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--input-bg);
   border: 1px solid var(--hairline);
   color: var(--text);
   font-family: var(--font-mono);
@@ -103,13 +105,21 @@
   padding: 11px 14px;
   border-radius: var(--radius-sm);
   width: 100%;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.engine-form select option {
+  background-color: var(--panel);
+  color: var(--text);
+  padding: 12px 14px;
 }
 
 .engine-form select:focus,
 .engine-form input:focus {
   outline: none;
   border-color: var(--gold);
+  background: var(--input-bg);
+  box-shadow: 0 0 0 3px var(--gold-dim);
 }
 
 /* How it works */
@@ -157,3 +167,56 @@
   margin: 8px 0 0;
   line-height: 1.6;
 }
+
+/* ==========================================================================
+   VIBRANT DUAL ENGINE LIGHT THEME POLISH FOR GET ADVICE PAGE
+   ========================================================================== */
+[data-theme="light"] .engine-card {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 14px 36px -6px rgba(79, 70, 229, 0.08);
+}
+
+[data-theme="light"] .engine-card.engine-gold {
+  border-top: 4px solid;
+  border-image: linear-gradient(90deg, #00A86B, #06B6D4) 1;
+}
+
+[data-theme="light"] .engine-card.engine-teal {
+  border-top: 4px solid;
+  border-image: linear-gradient(90deg, #4F46E5, #8B5CF6) 1;
+}
+
+[data-theme="light"] .engine-card.engine-gold:hover {
+  border-color: #00A86B;
+  box-shadow: 0 20px 48px -8px rgba(0, 168, 107, 0.2), 0 0 20px rgba(6, 182, 212, 0.15);
+  transform: translateY(-3px);
+}
+
+[data-theme="light"] .engine-card.engine-teal:hover {
+  border-color: #4F46E5;
+  box-shadow: 0 20px 48px -8px rgba(79, 70, 229, 0.2), 0 0 20px rgba(139, 92, 246, 0.15);
+  transform: translateY(-3px);
+}
+
+[data-theme="light"] .engine-tag {
+  color: #008756;
+  background: linear-gradient(135deg, rgba(0, 168, 107, 0.12), rgba(6, 182, 212, 0.1));
+  border: 1px solid rgba(0, 168, 107, 0.3);
+  font-weight: 700;
+}
+
+[data-theme="light"] .engine-tag-alt {
+  color: #4338CA;
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.12), rgba(139, 92, 246, 0.1));
+  border: 1px solid rgba(79, 70, 229, 0.3);
+  font-weight: 700;
+}
+
+[data-theme="light"] .how-item {
+  border-top: 2px solid #CBD5E1;
+}
+
+

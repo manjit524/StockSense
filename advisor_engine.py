@@ -32,9 +32,9 @@ from sklearn.preprocessing import MinMaxScaler
 # ==============================================================================
 # CONFIG — same as your standalone script
 # ==============================================================================
-NSE_FOLDER = "C:/Users/Manjit/Downloads/Market_Data/NSE"
-BSE_FOLDER = "C:/Users/Manjit/Downloads/Market_Data/BSE"
-US_FOLDER = "C:/Users/Manjit/Downloads/Market_Data/US"
+NSE_FOLDER = "C:/Ved/project/Model/Market_Data/NSE"
+BSE_FOLDER = "C:/Ved/project/Model/Market_Data/BSE"
+US_FOLDER = "C:/Ved/project/Model/Market_Data/US"
 
 TWELVE_DATA_API_KEY = "f2a2afa08f944f429637b64d23044e13"
 TIME_STEPS = 30
