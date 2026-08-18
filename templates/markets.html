@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Markets Hub — Desk &amp; Ledger{% endblock %}
+{% block title %}Markets Hub — StockSense{% endblock %}
 {% block styles %}<link rel="stylesheet" href="{{ url_for('static', filename='markets.css') }}">{% endblock %}
 
 {% block content %}
@@ -11,7 +11,7 @@
       <span class="live-dot"></span> Real-Time Multi-Market Feed
     </span>
     <h1>Trade &amp; Invest in Indian &amp; US Markets from One App</h1>
-    <p class="lede">Trade round the clock. With Desk &amp; Ledger, your money never sleeps — live quotes, dual-engine AI scans, and 7,700+ assets in one place.</p>
+    <p class="lede">Trade round the clock. With StockSense, your money never sleeps — live quotes, dual-engine AI scans, and 7,700+ assets in one place.</p>
     <div class="hero-actions">
       <a href="{{ url_for('get_advice') }}" class="btn btn-primary">Start Analyzing Today</a>
       <a href="#asset-cards" class="btn btn-ghost">Explore Markets</a>
@@ -126,7 +126,7 @@
       <div class="icon-cluster">
         <span>₹</span> <span>$</span> <span>📊</span> <span>⚡</span>
       </div>
-      <span class="tag">Unified Desk &amp; Ledger Research Platform</span>
+      <span class="tag">Unified StockSense Research Platform</span>
     </div>
   </div>
 </section>
@@ -190,7 +190,7 @@
     </div>
 
     <div class="directory-col">
-      <h5>Desk &amp; Ledger</h5>
+      <h5>StockSense</h5>
       <ul>
         <li><a href="{{ url_for('about') }}">About Platform</a></li>
         <li><a href="{{ url_for('contact') }}">Contact Support</a></li>
@@ -263,8 +263,8 @@
       }
 
       // Draw Smooth Spline Path
-      var lineColor = data.isUp ? '#FF7A29' : '#E85D5D';
-      var gradColor = data.isUp ? 'rgba(255, 122, 41, 0.18)' : 'rgba(232, 93, 93, 0.18)';
+      var lineColor = data.isUp ? '#10D890' : '#FF4D6D';
+      var gradColor = data.isUp ? 'rgba(16, 216, 144, 0.22)' : 'rgba(255, 77, 109, 0.22)';
 
       // Fill Gradient Area
       ctx.beginPath();
@@ -278,7 +278,7 @@
 
       var gradient = ctx.createLinearGradient(0, 0, 0, h);
       gradient.addColorStop(0, gradColor);
-      gradient.addColorStop(1, 'rgba(20, 16, 13, 0)');
+      gradient.addColorStop(1, 'rgba(8, 11, 16, 0)');
       ctx.fillStyle = gradient;
       ctx.fill();
 

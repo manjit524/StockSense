@@ -1,27 +1,6 @@
 /* ==========================================================================
-   LANDING-ONLY THEME — same variable names as style.css, new palette.
-   When the site-wide theme change happens, these values move into style.css.
+   LANDING-ONLY THEME — Uses global dual theme variables from style.css
    ========================================================================== */
-:root {
-  --bg: #14100D;
-  --panel: #1C1611;
-  --panel-hi: #241C16;
-  --text: #F5EFE8;
-  --text-muted: #A79A8C;
-  --hairline: rgba(255, 255, 255, 0.08);
-  --gold: #FF7A29;
-  --gold-hi: #FF8F4D;
-  --gold-ink: #1A0E04;
-  --teal: #34C9A6;
-  --risk-low: #34D399;
-  --risk-medium: #FBBF24;
-  --risk-high: #F87171;
-  --shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
-
-  --font-display: 'Space Grotesk', sans-serif;
-  --font-body: 'Inter', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
-}
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -32,6 +11,8 @@ body.vw {
   color: var(--text);
   font-family: var(--font-body);
   line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  transition: var(--theme-transition);
 }
 
 .vw a { color: inherit; text-decoration: none; }
@@ -46,33 +27,43 @@ body.vw {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 5%;
-  background: rgba(20, 16, 13, 0.85);
-  backdrop-filter: blur(10px);
+  padding: 16px 5%;
+  background: rgba(8, 11, 16, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--hairline);
 }
 
 .vw-brand {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.2rem;
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
 }
 
-.vw-brand-accent { color: var(--gold); }
+.vw-brand-accent { color: var(--gold); text-shadow: 0 0 12px rgba(16, 216, 144, 0.4); }
 
 .vw-nav-links {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 4px 6px;
+  border-radius: 100px;
 }
 
 .vw-nav-links a {
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   font-weight: 500;
   color: var(--text-muted);
+  padding: 6px 16px;
+  border-radius: 100px;
+  transition: all 0.15s ease;
 }
 
-.vw-nav-links a:hover { color: var(--text); }
+.vw-nav-links a:hover { color: var(--text); background: rgba(255, 255, 255, 0.06); }
 
 .vw-nav-actions { display: flex; align-items: center; gap: 12px; }
 
@@ -100,8 +91,9 @@ body.vw {
     right: 0;
     background: var(--panel);
     padding: 20px 5%;
-    gap: 18px;
+    gap: 12px;
     border-bottom: 1px solid var(--hairline);
+    border-radius: 0;
   }
 }
 
@@ -109,26 +101,44 @@ body.vw {
    BUTTONS
    ========================================================================== */
 .vw-btn {
-  display: inline-block;
-  padding: 12px 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 11px 24px;
   border-radius: 100px;
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 0.86rem;
   border: 1px solid transparent;
   cursor: pointer;
-  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .vw-btn:hover { transform: translateY(-1px); }
 
-.vw-btn-primary { background: var(--gold); color: var(--gold-ink); }
-.vw-btn-primary:hover { background: var(--gold-hi); }
+.vw-btn-primary {
+  background: var(--gold);
+  color: var(--gold-ink);
+  font-weight: 700;
+  box-shadow: 0 2px 10px rgba(16, 216, 144, 0.25);
+}
+.vw-btn-primary:hover {
+  background: var(--gold-hi);
+  box-shadow: 0 4px 20px rgba(16, 216, 144, 0.45);
+}
 
-.vw-btn-ghost { background: transparent; border-color: var(--hairline); color: var(--text); }
-.vw-btn-ghost:hover { border-color: var(--gold); }
+.vw-btn-ghost {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.14);
+  color: var(--text);
+}
+.vw-btn-ghost:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(16, 216, 144, 0.1);
+}
 
-.vw-btn-sm { padding: 9px 18px; font-size: 0.78rem; }
+.vw-btn-sm { padding: 8px 18px; font-size: 0.78rem; }
 
 /* ==========================================================================
    HERO
@@ -149,8 +159,8 @@ body.vw {
   font-family: var(--font-mono);
   font-size: 0.72rem;
   color: var(--gold);
-  background: rgba(255, 122, 41, 0.12);
-  border: 1px solid rgba(255, 122, 41, 0.3);
+  background: rgba(16, 216, 144, 0.12);
+  border: 1px solid rgba(16, 216, 144, 0.3);
   padding: 6px 14px;
   border-radius: 100px;
   margin-bottom: 24px;
@@ -159,10 +169,10 @@ body.vw {
 .vw-hero h1 {
   font-family: var(--font-display);
   font-size: clamp(2.1rem, 5vw, 3.4rem);
-  font-weight: 700;
+  font-weight: 800;
   line-height: 1.15;
   margin: 0 0 22px;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.03em;
 }
 
 .vw-hero-sub {
@@ -196,7 +206,7 @@ body.vw {
 
 /* ==========================================================================
    SOURCES BAR (honest replacement for fake press logos)
-   ========================================================================== */
+   ========================================================================= */
 .vw-sources {
   border-top: 1px solid var(--hairline);
   border-bottom: 1px solid var(--hairline);
@@ -240,8 +250,10 @@ body.vw {
 .vw-section-head h2 {
   font-family: var(--font-display);
   font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  font-weight: 700;
   margin: 0 0 14px;
   line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
 .vw-section-head p { color: var(--text-muted); font-size: 0.98rem; }
@@ -258,16 +270,20 @@ body.vw {
   border: 1px solid var(--hairline);
   border-radius: 16px;
   padding: 26px;
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.vw-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+.vw-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(16, 216, 144, 0.1);
+}
 
 .vw-card-icon {
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  background: rgba(255, 122, 41, 0.12);
+  background: rgba(16, 216, 144, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -276,7 +292,7 @@ body.vw {
 
 .vw-card-icon svg { width: 22px; height: 22px; color: var(--gold); }
 
-.vw-card h3 { font-family: var(--font-display); font-size: 1.05rem; margin: 0 0 8px; }
+.vw-card h3 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; margin: 0 0 8px; }
 .vw-card p { color: var(--text-muted); font-size: 0.88rem; margin: 0; }
 
 /* ==========================================================================
@@ -307,7 +323,7 @@ body.vw {
   font-size: 0.92rem;
 }
 
-.vw-step h4 { font-family: var(--font-display); font-size: 1rem; margin: 4px 0 6px; }
+.vw-step h4 { font-family: var(--font-display); font-size: 1rem; font-weight: 700; margin: 4px 0 6px; }
 .vw-step p { color: var(--text-muted); font-size: 0.86rem; margin: 0; }
 
 /* ==========================================================================
@@ -330,9 +346,11 @@ body.vw {
   padding: 8px 16px;
   border-radius: 100px;
   cursor: pointer;
+  transition: all 0.15s ease;
 }
 
-.vw-filter-btn.active { background: var(--gold); color: var(--gold-ink); border-color: var(--gold); }
+.vw-filter-btn:hover { color: var(--text); border-color: var(--hairline-hi); }
+.vw-filter-btn.active { background: var(--gold); color: var(--gold-ink); border-color: var(--gold); font-weight: 700; }
 
 .vw-asset-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
 
@@ -344,6 +362,11 @@ body.vw {
   border: 1px solid var(--hairline);
   border-radius: 14px;
   padding: 18px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.vw-asset-card:hover {
+  border-color: rgba(16, 216, 144, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 .vw-asset-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
@@ -371,7 +394,7 @@ body.vw {
 .vw-asset-card.live-flash { animation: vw-flash-bg 0.7s ease; }
 
 @keyframes vw-flash-bg {
-  0% { background: rgba(255, 122, 41, 0.14); }
+  0% { background: rgba(16, 216, 144, 0.14); }
   100% { background: var(--panel); }
 }
 
@@ -390,7 +413,7 @@ body.vw {
 
 .vw-insight-visual {
   height: 140px;
-  background: linear-gradient(135deg, rgba(255,122,41,0.25), rgba(52,201,166,0.15));
+  background: linear-gradient(135deg, rgba(16, 216, 144, 0.2), rgba(0, 210, 255, 0.12));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -430,8 +453,8 @@ body.vw {
    NEWSLETTER
    ========================================================================== */
 .vw-newsletter {
-  background: linear-gradient(135deg, rgba(255,122,41,0.14), rgba(28,22,17,0));
-  border: 1px solid var(--hairline);
+  background: linear-gradient(135deg, rgba(16, 216, 144, 0.1) 0%, var(--panel) 60%, rgba(17, 22, 34, 0.8) 100%);
+  border: 1px solid rgba(16, 216, 144, 0.2);
   border-radius: 20px;
   padding: 40px 5%;
   display: flex;
@@ -439,22 +462,37 @@ body.vw {
   justify-content: space-between;
   gap: 24px;
   flex-wrap: wrap;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55), 0 0 20px rgba(16, 216, 144, 0.06);
 }
 
-.vw-newsletter h3 { font-family: var(--font-display); font-size: 1.2rem; margin: 0 0 6px; }
-.vw-newsletter p { color: var(--text-muted); font-size: 0.88rem; margin: 0; }
+.vw-newsletter h3 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+  color: var(--text);
+}
+.vw-newsletter p { color: var(--text-muted); font-size: 0.9rem; margin: 0; }
 
 .vw-newsletter-form { display: flex; gap: 10px; flex-wrap: wrap; }
 
 .vw-newsletter-form input {
-  background: var(--bg);
+  background: rgba(8, 11, 16, 0.9);
   border: 1px solid var(--hairline);
   color: var(--text);
-  padding: 12px 16px;
+  padding: 12px 18px;
   border-radius: 100px;
   font-family: var(--font-body);
-  font-size: 0.86rem;
-  min-width: 220px;
+  font-size: 0.88rem;
+  min-width: 240px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.vw-newsletter-form input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(16, 216, 144, 0.18);
 }
 
 /* ==========================================================================
@@ -531,3 +569,83 @@ body.vw {
 }
 
 .vw-newsletter-note.visible { opacity: 1; max-height: 30px; }
+
+/* ==========================================================================
+   VIBRANT AURORA LIGHT THEME ENHANCEMENTS FOR LANDING PAGE
+   ========================================================================== */
+[data-theme="light"] .vw-filter-btn {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #CBD5E1;
+  color: #475569;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+[data-theme="light"] .vw-filter-btn:hover {
+  background: #EFF4FC;
+  border-color: #4F46E5;
+  color: #4F46E5;
+}
+
+[data-theme="light"] .vw-filter-btn.active {
+  background: linear-gradient(135deg, #4F46E5 0%, #00A86B 100%);
+  border-color: transparent;
+  color: #FFFFFF;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+}
+
+[data-theme="light"] .vw-asset-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 8px 24px -4px rgba(79, 70, 229, 0.06);
+}
+
+[data-theme="light"] .vw-asset-card:hover {
+  border-color: rgba(79, 70, 229, 0.4);
+  box-shadow: 0 16px 36px -6px rgba(79, 70, 229, 0.16), 0 0 16px rgba(0, 168, 107, 0.12);
+  transform: translateY(-3px);
+}
+
+[data-theme="light"] .vw-asset-badge {
+  background: linear-gradient(135deg, #EEF2FF, #E0F2FE);
+  border-color: rgba(99, 102, 241, 0.2);
+  color: #4338CA;
+  font-weight: 700;
+}
+
+[data-theme="light"] .vw-newsletter {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.08) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(0, 168, 107, 0.08) 100%);
+  border: 1px solid rgba(79, 70, 229, 0.25);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 24px 60px -10px rgba(79, 70, 229, 0.12), 0 0 30px rgba(0, 168, 107, 0.1);
+}
+
+[data-theme="light"] .vw-newsletter-form input {
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+  color: #0A0F1D;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+[data-theme="light"] .vw-newsletter-form input:focus {
+  border-color: #4F46E5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.18);
+}
+
+[data-theme="light"] .vw-insight-visual {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.14) 0%, rgba(0, 168, 107, 0.12) 100%);
+}
+
+[data-theme="light"] .vw-credibility {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 14px 40px -6px rgba(79, 70, 229, 0.08);
+}
+
+

@@ -1,9 +1,9 @@
 /* ==========================================================================
-   LOGIN / SIGN-UP PAGE
+   LOGIN / SIGN-UP PAGE — CHAINEX SLEEK DARK THEME
    ========================================================================== */
 
 .login-wrap {
-  min-height: calc(100vh - 64px - 80px);
+  min-height: calc(100vh - 68px - 80px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,12 +17,14 @@
   padding: 8px;
   box-shadow: var(--shadow);
   width: 100%;
-  max-width: 420px;
+  max-width: 430px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 /* Glow ring on focus-within */
 .auth-card:focus-within {
-  border-color: rgba(255, 122, 41, 0.3);
+  border-color: rgba(16, 216, 144, 0.4);
+  box-shadow: var(--shadow), 0 0 25px rgba(16, 216, 144, 0.15);
 }
 
 /* Tab bar */
@@ -31,7 +33,7 @@
   gap: 4px;
   padding: 6px;
   background: var(--panel-hi);
-  border-radius: 10px;
+  border-radius: 12px;
   margin-bottom: 4px;
 }
 
@@ -44,13 +46,18 @@
   font-weight: 600;
   font-size: 0.88rem;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 9px;
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.auth-tab:hover { color: var(--text); background: var(--panel); }
-.auth-tab.active { background: var(--panel); color: var(--gold); }
+.auth-tab:hover { color: var(--text); background: var(--panel-hover); }
+.auth-tab.active {
+  background: var(--panel);
+  color: var(--gold);
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+}
 
 /* Panels */
 .auth-panel       { display: none; padding: 20px 22px 26px; }
@@ -58,7 +65,9 @@
 
 .auth-panel h2 {
   font-family: var(--font-display);
-  font-size: 1.3rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   margin: 0 0 6px;
 }
 
@@ -93,5 +102,44 @@
   text-align: right;
   margin-top: 6px;
   display: block;
+  transition: color 0.15s ease;
 }
 .auth-forgot:hover { color: var(--gold); }
+
+/* ==========================================================================
+   VIBRANT AURORA LIGHT THEME ENHANCEMENTS FOR AUTH PAGE
+   ========================================================================== */
+[data-theme="light"] .auth-card {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 24px 60px -12px rgba(79, 70, 229, 0.12), 0 0 0 1px rgba(79, 70, 229, 0.08);
+}
+
+[data-theme="light"] .auth-card:focus-within {
+  border-color: rgba(79, 70, 229, 0.5);
+  box-shadow: 0 30px 70px -10px rgba(79, 70, 229, 0.18), 0 0 25px rgba(0, 196, 140, 0.15);
+}
+
+[data-theme="light"] .auth-tabs {
+  background: rgba(241, 245, 251, 0.85);
+}
+
+[data-theme="light"] .auth-tab {
+  color: #475569;
+}
+
+[data-theme="light"] .auth-tab:hover {
+  color: #4F46E5;
+  background: #EFF4FC;
+}
+
+[data-theme="light"] .auth-tab.active {
+  background: #FFFFFF;
+  color: #4F46E5;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+}
+
+

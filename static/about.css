@@ -37,13 +37,15 @@
 }
 
 .about-block:hover {
-  border-color: rgba(255, 122, 41, 0.3);
+  border-color: rgba(16, 216, 144, 0.35);
   transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(16, 216, 144, 0.08);
 }
 
 .about-block h2 {
   font-family: var(--font-display);
   font-size: 1.15rem;
+  font-weight: 700;
   margin: 12px 0 10px;
 }
 
@@ -67,6 +69,7 @@
 .about-disclaimer h3 {
   font-family: var(--font-display);
   font-size: 1rem;
+  font-weight: 700;
   margin: 0 0 10px;
   color: var(--risk-medium);
 }
@@ -93,6 +96,36 @@
 }
 
 .engine-tag-alt {
-  color: var(--teal);
-  background: var(--teal-dim);
+  color: var(--cyan);
+  background: var(--cyan-dim);
 }
+
+/* ==========================================================================
+   CREATIVE LIGHT THEME ENHANCEMENTS FOR ABOUT PAGE
+   ========================================================================== */
+[data-theme="light"] .about-block {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 10px 30px -4px rgba(15, 23, 42, 0.05);
+}
+
+[data-theme="light"] .about-block:hover {
+  border-color: #00A86B;
+  box-shadow: 0 16px 40px -6px rgba(0, 168, 107, 0.16);
+  transform: translateY(-2px);
+}
+
+[data-theme="light"] .about-disclaimer {
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-left: 4px solid #EA580C;
+}
+
+[data-theme="light"] .about-disclaimer h3 {
+  color: #C2410C;
+}
+
+[data-theme="light"] .about-disclaimer p {
+  color: #78350F;
+}
+

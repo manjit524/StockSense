@@ -35,7 +35,7 @@
 
 .stack-form input,
 .stack-form select {
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--input-bg);
   border: 1px solid var(--hairline);
   color: var(--text);
   font-family: var(--font-mono);
@@ -43,13 +43,21 @@
   padding: 11px 14px;
   border-radius: var(--radius-sm);
   width: 100%;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.stack-form select option {
+  background-color: var(--panel);
+  color: var(--text);
+  padding: 12px 14px;
 }
 
 .stack-form input:focus,
 .stack-form select:focus {
   outline: none;
   border-color: var(--gold);
+  background: var(--input-bg);
+  box-shadow: 0 0 0 3px var(--gold-dim);
 }
 
 /* Report result section */
@@ -75,3 +83,22 @@
 /* Trend colours in metrics table */
 .metrics-table td.trend-up   { color: var(--risk-low); }
 .metrics-table td.trend-down { color: var(--risk-high); }
+
+/* ==========================================================================
+   LIGHT THEME ENHANCEMENTS FOR REPORTS PAGE
+   ========================================================================== */
+[data-theme="light"] .report-card {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 14px 36px -6px rgba(79, 70, 229, 0.08);
+}
+
+[data-theme="light"] .metrics-table,
+[data-theme="light"] .report-table {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.04);
+}
+

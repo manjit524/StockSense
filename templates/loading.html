@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,30 +7,40 @@
 <script>
   (function () {
     try {
-      var t = localStorage.getItem('dl_theme') || 'dark';
+      var t = localStorage.getItem('theme') || localStorage.getItem('dl_theme') || 'dark';
       document.documentElement.setAttribute('data-theme', t);
     } catch (e) {}
   })();
 </script>
-<title>Desk & Ledger — Warming up</title>
+<title>StockSense — Warming up</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-<header class="topbar">
-  <div class="topbar-spacer"></div>
-  <div class="site-name">Desk<span class="brand-accent">&amp;</span>Ledger</div>
+<header class="dl-sticky-header">
+  <nav class="dl-nav" style="justify-content: center;">
+    <a href="{{ url_for('landing') }}" class="dl-brand">
+      Stock<span class="dl-brand-dot">Sense</span>
+    </a>
+  </nav>
 </header>
 
-<main class="hero">
-  <p class="eyebrow">One moment</p>
-  <h1>Loading the model.</h1>
-  <p class="hero-sub">{{ message }}</p>
-  <p class="hero-sub">This page refreshes itself every few seconds — no need to reload manually.
-  On a CPU-only machine this can take a minute or two the first time.</p>
-</main>
+<div class="dl-page">
+  <main class="dl-main" style="display: flex; align-items: center; justify-content: center; padding: 60px 24px; text-align: center;">
+    <div style="max-width: 580px;">
+      <span class="live-badge" style="margin-bottom: 16px;">
+        <span class="live-dot"></span> One moment
+      </span>
+      <h1 style="font-family: var(--font-display); font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 700; margin: 0 0 16px;">Loading the model.</h1>
+      <p class="lede" style="margin-bottom: 16px; color: var(--gold);">{{ message }}</p>
+      <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">This page refreshes itself every few seconds — no need to reload manually. On a CPU-only machine this can take a minute or two the first time.</p>
+    </div>
+  </main>
+</div>
 
 </body>
 </html>
+

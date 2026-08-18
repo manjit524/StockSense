@@ -210,4 +210,75 @@
       }, 350);
     });
   }
+
+  // --------------------------------------------------------------------
+  // THEME SWITCHER (Ultra-Smooth Aurora Circular Bloom Transition)
+  // --------------------------------------------------------------------
+  var themeToggleBtn = document.getElementById('themeToggleBtn');
+
+  function getPreferredTheme() {
+    var saved = localStorage.getItem('theme');
+    if (saved) return saved;
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }
+
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', function (e) {
+      var current = document.documentElement.getAttribute('data-theme') || getPreferredTheme();
+      var next = (current === 'light') ? 'dark' : 'light';
+
+      // Visual button ripple feedback
+      themeToggleBtn.classList.add('theme-pulsing');
+      setTimeout(function () { themeToggleBtn.classList.remove('theme-pulsing'); }, 750);
+
+      // Check if browser supports document.startViewTransition for circular aurora wipe
+      if (document.startViewTransition) {
+        var rect = themeToggleBtn.getBoundingClientRect();
+        var x = e.clientX || (rect.left + rect.width / 2);
+        var y = e.clientY || (rect.top + rect.height / 2);
+        var endRadius = Math.hypot(
+          Math.max(x, window.innerWidth - x),
+          Math.max(y, window.innerHeight - y)
+        );
+
+        var transition = document.startViewTransition(function () {
+          applyTheme(next);
+        });
+
+        transition.ready.then(function () {
+          var clipPath = [
+            'circle(0px at ' + x + 'px ' + y + 'px)',
+            'circle(' + endRadius + 'px at ' + x + 'px ' + y + 'px)'
+          ];
+          document.documentElement.animate(
+            {
+              clipPath: clipPath
+            },
+            {
+              duration: 720,
+              easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+              pseudoElement: '::view-transition-new(root)'
+            }
+          );
+        });
+      } else {
+        // Fallback smooth transition
+        applyTheme(next);
+      }
+    });
+  }
+
+  // Listen to system preference changes if user hasn't explicitly set preference
+  try {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+      if (!localStorage.getItem('theme')) {
+        applyTheme(e.matches ? 'dark' : 'light');
+      }
+    });
+  } catch (e) {}
 })();

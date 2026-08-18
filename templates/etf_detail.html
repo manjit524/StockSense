@@ -1,36 +1,36 @@
 {% extends "base.html" %}
-{% block title %}List of Exchange Traded Funds (ETFs) — Desk &amp; Ledger{% endblock %}
+{% block title %}List of Exchange Traded Funds (ETFs) — StockSense{% endblock %}
 {% block styles %}<link rel="stylesheet" href="{{ url_for('static', filename='markets.css') }}">{% endblock %}
 
 {% block content %}
-<div class="market-detail-wrap" style="max-width: 1160px; margin: 0 auto; padding: 40px 24px 80px;">
+<div class="market-detail-wrap">
 
   <!-- Back Link -->
-  <a href="{{ url_for('markets') }}" class="back-link" style="display:inline-flex; align-items:center; gap:6px; font-size:0.85rem; color:var(--gold); font-weight:600; text-decoration:none; margin-bottom:24px;">
+  <a href="{{ url_for('markets') }}" class="back-link">
     ← Back to Markets Hub
   </a>
 
   <!-- Header Section -->
-  <div class="detail-hero-header" style="margin-bottom:32px;">
+  <div class="detail-hero-header">
     <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
       <div>
-        <p class="eyebrow" style="font-family:var(--font-mono); font-size:0.75rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--gold); margin:0 0 8px;">Index &amp; Sector Trackers</p>
+        <p class="eyebrow" style="margin:0 0 8px;">Index &amp; Sector Trackers</p>
         <h1 style="font-family:var(--font-display); font-size:clamp(1.8rem, 4vw, 2.6rem); font-weight:700; margin:0 0 10px; line-height:1.2;">List of Exchange Traded Funds (ETFs)</h1>
       </div>
       <div>
         <span class="live-badge"><span class="live-dot"></span> Live Quotes · updated <span class="live-updated-time">just now</span></span>
       </div>
     </div>
-    <p class="lede" style="color:var(--text-muted); font-size:0.98rem; max-width:760px; margin:4px 0 0; line-height:1.6;">
+    <p class="lede" style="margin:4px 0 0;">
       ETFs combine the diversification of mutual funds with the intraday liquidity of stocks. Explore top US &amp; Indian ETFs below.
     </p>
   </div>
 
   <!-- Top Performing ETFs Cards (2-Column Grid) -->
-  <div class="etf-top-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:36px;">
+  <div class="etf-top-grid">
 
     <!-- Top Equity Index ETFs -->
-    <div class="etf-top-card" style="background:var(--panel); border:1px solid var(--hairline); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow);">
+    <div class="etf-top-card">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
         <h3 style="font-family:var(--font-display); font-size:1.1rem; font-weight:600; margin:0;">Top Equity Index ETFs</h3>
         <span class="engine-tag">Broad Market</span>
@@ -52,7 +52,7 @@
     </div>
 
     <!-- Top Commodity & Tech ETFs -->
-    <div class="etf-top-card" style="background:var(--panel); border:1px solid var(--hairline); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow);">
+    <div class="etf-top-card">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
         <h3 style="font-family:var(--font-display); font-size:1.1rem; font-weight:600; margin:0;">Gold &amp; Sector ETFs</h3>
         <span class="engine-tag engine-tag-alt">Commodity &amp; Tech</span>
@@ -78,26 +78,26 @@
   <!-- Category Filter Cards -->
   <div style="margin-bottom:36px;">
     <h3 style="font-family:var(--font-display); font-size:1.2rem; font-weight:600; margin-bottom:16px;">Explore ETFs by Category</h3>
-    <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:16px;">
-      <div class="etf-cat-card" onclick="filterEtfCategory('all')" style="background:var(--panel); border:1px solid var(--hairline); border-radius:var(--radius); padding:18px; text-align:center; cursor:pointer; transition:border-color 0.2s ease;">
+    <div class="etf-cat-grid">
+      <div class="etf-cat-card active" id="cat-all" onclick="filterEtfCategory('all')">
         <div style="font-size:1.4rem; color:var(--gold); margin-bottom:6px;">📊</div>
         <h4 style="font-family:var(--font-display); font-size:0.9rem; margin:0 0 4px;">All ETFs</h4>
         <p style="font-size:0.75rem; color:var(--text-muted); margin:0;">Complete List</p>
       </div>
 
-      <div class="etf-cat-card" onclick="filterEtfCategory('equity')" style="background:var(--panel); border:1px solid var(--hairline); border-radius:var(--radius); padding:18px; text-align:center; cursor:pointer; transition:border-color 0.2s ease;">
+      <div class="etf-cat-card" id="cat-equity" onclick="filterEtfCategory('equity')">
         <div style="font-size:1.4rem; color:var(--gold); margin-bottom:6px;">📈</div>
         <h4 style="font-family:var(--font-display); font-size:0.9rem; margin:0 0 4px;">Equity Index</h4>
         <p style="font-size:0.75rem; color:var(--text-muted); margin:0;">S&amp;P 500, Nifty 50</p>
       </div>
 
-      <div class="etf-cat-card" onclick="filterEtfCategory('commodity')" style="background:var(--panel); border:1px solid var(--hairline); border-radius:var(--radius); padding:18px; text-align:center; cursor:pointer; transition:border-color 0.2s ease;">
+      <div class="etf-cat-card" id="cat-commodity" onclick="filterEtfCategory('commodity')">
         <div style="font-size:1.4rem; color:var(--gold); margin-bottom:6px;">🛢️</div>
         <h4 style="font-family:var(--font-display); font-size:0.9rem; margin:0 0 4px;">Gold &amp; Commodities</h4>
         <p style="font-size:0.75rem; color:var(--text-muted); margin:0;">GLD, GOLDBEES</p>
       </div>
 
-      <div class="etf-cat-card" onclick="filterEtfCategory('tech')" style="background:var(--panel); border:1px solid var(--hairline); border-radius:var(--radius); padding:18px; text-align:center; cursor:pointer; transition:border-color 0.2s ease;">
+      <div class="etf-cat-card" id="cat-tech" onclick="filterEtfCategory('tech')">
         <div style="font-size:1.4rem; color:var(--gold); margin-bottom:6px;">⚡</div>
         <h4 style="font-family:var(--font-display); font-size:0.9rem; margin:0 0 4px;">Tech &amp; Sectors</h4>
         <p style="font-size:0.75rem; color:var(--text-muted); margin:0;">QQQ, XLK, ITBEES</p>
@@ -106,7 +106,7 @@
   </div>
 
   <!-- Full Filterable Data Table -->
-  <div style="background:var(--panel); border:1px solid var(--hairline); border-radius:var(--radius); padding:28px; box-shadow:var(--shadow); margin-bottom:48px;">
+  <div class="detail-card-panel" style="margin-bottom:48px;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
       <h3 style="font-family:var(--font-display); font-size:1.2rem; font-weight:600; margin:0;">List of All ETFs</h3>
       <input type="text" id="etf-search" class="table-search" placeholder="Search by symbol or name..." style="max-width:320px; margin:0;">
@@ -152,7 +152,7 @@
   </div>
 
   <!-- Concise FAQ Accordion Section -->
-  <div style="background:var(--panel); border:1px solid var(--hairline); border-radius:var(--radius); padding:32px;">
+  <div class="detail-card-panel">
     <h3 style="font-family:var(--font-display); font-size:1.3rem; font-weight:700; margin:0 0 20px;">Frequently Asked Questions on ETFs</h3>
 
     <div class="faq-list" style="display:flex; flex-direction:column; gap:16px;">
@@ -172,7 +172,7 @@
       </div>
 
       <div class="faq-item" style="padding-bottom:6px;">
-        <h4 style="font-family:var(--font-display); font-size:0.95rem; font-weight:600; margin:0 0 6px; color:var(--text);">How do I generate a technical report for an ETF on Desk &amp; Ledger?</h4>
+        <h4 style="font-family:var(--font-display); font-size:0.95rem; font-weight:600; margin:0 0 6px; color:var(--text);">How do I generate a technical report for an ETF on StockSense?</h4>
         <p style="font-size:0.85rem; color:var(--text-muted); margin:0; line-height:1.5;">Click the <strong>Report →</strong> button next to any ETF symbol to generate a full technical report with RSI, MACD, and historical return breakdowns.</p>
       </div>
     </div>
@@ -198,6 +198,12 @@
   // Category Filter function
   function filterEtfCategory(category) {
     if (!tbody) return;
+    document.querySelectorAll('.etf-cat-card').forEach(function(card) {
+      card.classList.remove('active');
+    });
+    var activeCard = document.getElementById('cat-' + category);
+    if (activeCard) activeCard.classList.add('active');
+
     var rows = Array.from(tbody.rows);
     rows.forEach(function (row) {
       var symbol = row.cells[0].textContent.trim();

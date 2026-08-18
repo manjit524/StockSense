@@ -86,7 +86,10 @@
   padding: 14px 16px;
   transition: border-color 0.15s ease;
 }
-.pick:hover { border-color: rgba(255, 122, 41, 0.25); }
+.pick:hover {
+  border-color: rgba(16, 216, 144, 0.35);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
 
 .pick-top {
   display: flex;
@@ -107,7 +110,7 @@
 .live-flash { animation: live-flash-bg 0.7s ease; }
 
 @keyframes live-flash-bg {
-  0%   { background: rgba(52, 201, 166, 0.16); }
+  0%   { background: rgba(16, 216, 144, 0.2); }
   100% { background: transparent; }
 }
 
@@ -117,3 +120,36 @@
   margin: 0 auto 60px;
   padding: 0 24px;
 }
+
+/* ==========================================================================
+   LIGHT THEME ENHANCEMENTS FOR RESULTS PAGE
+   ========================================================================== */
+[data-theme="light"] .risk-col {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 8px 24px -4px rgba(79, 70, 229, 0.05);
+}
+
+[data-theme="light"] .pick {
+  background: rgba(248, 250, 253, 0.9);
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+}
+
+[data-theme="light"] .pick:hover {
+  border-color: #4F46E5;
+  background: #FFFFFF;
+  box-shadow: 0 8px 24px rgba(79, 70, 229, 0.12);
+}
+
+[data-theme="light"] .live-flash {
+  animation: live-flash-bg-light 0.7s ease;
+}
+
+@keyframes live-flash-bg-light {
+  0%   { background: rgba(79, 70, 229, 0.15); }
+  100% { background: transparent; }
+}
+

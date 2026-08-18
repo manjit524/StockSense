@@ -429,26 +429,26 @@
       ctx.lineTo(w, h);
       ctx.closePath();
       var gr = ctx.createLinearGradient(0, 0, 0, h);
-      gr.addColorStop(0, 'rgba(255,122,41,0.22)');
-      gr.addColorStop(1, 'rgba(255,122,41,0)');
+      gr.addColorStop(0, 'rgba(16,216,144,0.22)');
+      gr.addColorStop(1, 'rgba(16,216,144,0)');
       ctx.fillStyle = gr;
       ctx.fill();
 
       ctx.beginPath();
       ctx.moveTo(coords[0].x, coords[0].y);
       coords.forEach(function(c) { ctx.lineTo(c.x, c.y); });
-      ctx.strokeStyle = '#FF7A29';
+      ctx.strokeStyle = '#10D890';
       ctx.lineWidth = 1.8;
       ctx.stroke();
 
       var last = coords[coords.length - 1];
       ctx.beginPath();
       ctx.arc(last.x, last.y, 3.5, 0, Math.PI * 2);
-      ctx.fillStyle = '#FF7A29';
+      ctx.fillStyle = '#10D890';
       ctx.fill();
       ctx.beginPath();
       ctx.arc(last.x, last.y, 7 + Math.sin(animOffset * 2) * 2, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(255,122,41,0.4)';
+      ctx.strokeStyle = 'rgba(16,216,144,0.4)';
       ctx.lineWidth = 1;
       ctx.stroke();
 

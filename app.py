@@ -65,6 +65,11 @@ for _s in TREND_STOCKS:
     _s["yf_symbol"] = to_yf_symbol(_s["symbol"], _s["exchange"])
 
 
+@app.context_processor
+def inject_global_data():
+    return {"trend_stocks": TREND_STOCKS}
+
+
 @app.route("/api/live-quotes")
 def live_quotes():
     """
