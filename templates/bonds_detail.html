@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+{% block title %}Bonds &amp; Sovereign Yields — StockSense Markets{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{{ url_for('static', filename='markets.css') }}">{% endblock %}
+
+{% block content %}
+<div class="market-detail-wrap">
+
+  <!-- Back Link -->
+  <a href="{{ url_for('markets') }}" class="back-link">
+    ← Back to Markets Hub
+  </a>
+
+  <!-- Header Section -->
+  <div class="detail-hero-header">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+      <div>
+        <p class="eyebrow" style="margin:0 0 8px;">Fixed Income &amp; Sovereign Debt</p>
+        <h1 style="font-family:var(--font-display); font-size:clamp(1.8rem, 4vw, 2.6rem); font-weight:700; margin:0 0 10px; line-height:1.2;">Bonds &amp; Sovereign Yield Curves</h1>
+      </div>
+      <div>
+        <span class="daily-badge">Daily Benchmark Yields</span>
+      </div>
+    </div>
+    <p class="lede" style="margin:4px 0 0;">
+      Benchmark US Treasury yields and Indian Government Securities (G-Sec) yield curves. Understand macroeconomic interest rate cycles.
+    </p>
+  </div>
+
+  <!-- Top Sovereign Yields Cards (2-Column Grid) -->
+  <div class="market-top-grid">
+
+    <!-- Indian Sovereign Yields -->
+    <div class="market-top-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="font-family:var(--font-display); font-size:1.1rem; font-weight:600; margin:0;">Indian Sovereign Yields (G-Sec)</h3>
+        <span class="engine-tag">RBI Benchmark</span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        {% for item in indian_bonds %}
+        <div class="stock-highlight-item">
+          <div>
+            <span class="mono" style="font-weight:700; color:var(--text); font-size:0.9rem;">{{ item.name }}</span>
+            <span style="font-size:0.75rem; color:var(--text-muted); margin-left:8px;">{{ item.as_of }}</span>
+          </div>
+          <div class="mono" style="text-align:right;">
+            <span style="color:var(--gold); font-size:1.05rem; font-weight:700;">{{ '%.2f'|format(item.yield_pct) }}%</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- US Treasury Benchmark Yields -->
+    <div class="market-top-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="font-family:var(--font-display); font-size:1.1rem; font-weight:600; margin:0;">US Treasury Yields</h3>
+        <span class="engine-tag engine-tag-alt">Federal Reserve FRED</span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        {% for item in us_bonds %}
+        <div class="stock-highlight-item">
+          <div>
+            <span class="mono" style="font-weight:700; color:var(--text); font-size:0.9rem;">{{ item.name }}</span>
+            <span style="font-size:0.75rem; color:var(--text-muted); margin-left:8px;">{{ item.date }}</span>
+          </div>
+          <div class="mono" style="text-align:right;">
+            <span style="color:var(--teal); font-size:1.05rem; font-weight:700;">{{ '%.2f'|format(item.yield_pct) + '%' if item.yield_pct is not none else '—' }}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Yield Curve Comparison Visualizer Card -->
+  <div class="detail-card-panel" style="margin-bottom:48px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+      <div>
+        <h3 style="font-family:var(--font-display); font-size:1.2rem; font-weight:600; margin:0;">Sovereign Yield Curve Comparison</h3>
+        <p style="font-size:0.8rem; color:var(--text-muted); margin:4px 0 0;">Visual comparison across maturity horizons (Short, Medium, Long term).</p>
+      </div>
+      <span class="engine-tag">Yield Spread: +280 bps (India vs US 10Y)</span>
+    </div>
+
+    <div class="yield-curve-wrap">
+      <!-- India Curve -->
+      <div class="yc-section">
+        <h4 class="yc-title">🇮🇳 Indian G-Sec Curve</h4>
+        <div class="yc-bars-row">
+          <div class="yc-bar-item">
+            <span class="yc-bar-val">6.55%</span>
+            <div class="yc-bar-track"><div class="yc-bar-fill india" style="height:65%;"></div></div>
+            <span class="yc-bar-lbl">91D T-Bill</span>
+          </div>
+          <div class="yc-bar-item">
+            <span class="yc-bar-val">6.75%</span>
+            <div class="yc-bar-track"><div class="yc-bar-fill india" style="height:67%;"></div></div>
+            <span class="yc-bar-lbl">364D T-Bill</span>
+          </div>
+          <div class="yc-bar-item">
+            <span class="yc-bar-val">6.85%</span>
+            <div class="yc-bar-track"><div class="yc-bar-fill india" style="height:68%;"></div></div>
+            <span class="yc-bar-lbl">5Y G-Sec</span>
+          </div>
+          <div class="yc-bar-item highlight">
+            <span class="yc-bar-val highlight">7.05%</span>
+            <div class="yc-bar-track"><div class="yc-bar-fill india highlight" style="height:70%;"></div></div>
+            <span class="yc-bar-lbl">10Y Bench</span>
+          </div>
+          <div class="yc-bar-item">
+            <span class="yc-bar-val">7.25%</span>
+            <div class="yc-bar-track"><div class="yc-bar-fill india" style="height:72%;"></div></div>
+            <span class="yc-bar-lbl">10Y SDL</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- US Curve -->
+      <div class="yc-section">
+        <h4 class="yc-title">🇺🇸 US Treasury Curve</h4>
+        <div class="yc-bars-row">
+          <div class="yc-bar-item">
+            <span class="yc-bar-val">4.85%</span>
+            <div class="yc-bar-track"><div class="yc-bar-fill us" style="height:48%;"></div></div>
+            <span class="yc-bar-lbl">3M T-Bill</span>
+          </div>
+          <div class="yc-bar-item">
+            <span class="yc-bar-val">4.05%</span>
+            <div class="yc-bar-track"><div class="yc-bar-fill us" style="height:40%;"></div></div>
+            <span class="yc-bar-lbl">2Y Note</span>
+          </div>
+          <div class="yc-bar-item highlight">
+            <span class="yc-bar-val highlight">4.25%</span>
+            <div class="yc-bar-track"><div class="yc-bar-fill us highlight" style="height:42%;"></div></div>
+            <span class="yc-bar-lbl">10Y Bench</span>
+          </div>
+          <div class="yc-bar-item">
+            <span class="yc-bar-val">4.50%</span>
+            <div class="yc-bar-track"><div class="yc-bar-fill us" style="height:45%;"></div></div>
+            <span class="yc-bar-lbl">30Y Bond</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Educational 4-Card Guide Section -->
+  <div style="margin-bottom:48px;">
+    <h3 style="font-family:var(--font-display); font-size:1.3rem; font-weight:700; margin:0 0 20px;">Understanding Fixed Income &amp; Sovereign Debt</h3>
+    <div class="market-guide-grid">
+      <div class="guide-card">
+        <div class="guide-icon">⚖️</div>
+        <h4>Inverse Price-Yield Relationship</h4>
+        <p>Bond prices move in the exact opposite direction of bond yields. When central banks cut interest rates, newly issued bonds yield less, causing existing higher-yielding bonds to surge in market price.</p>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-icon">🏛️</div>
+        <h4>RBI Retail Direct Scheme</h4>
+        <p>Retail investors in India can open a free Retail Direct Gilt (RDG) account directly with the Reserve Bank of India to purchase primary G-Secs, State Development Loans (SDLs), and T-Bills with zero brokerage.</p>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-icon">🌐</div>
+        <h4>US 10-Year Global Benchmark</h4>
+        <p>The US 10-Year Treasury yield is considered the global "risk-free rate." When this yield spikes, capital flows back into USD assets, putting downward pressure on emerging market equities and currencies.</p>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-icon">🛡️</div>
+        <h4>Sovereign Guarantee &amp; Credit Spread</h4>
+        <p>Government securities (G-Secs) carry zero credit default risk because they are backed by the sovereign authority. Corporate bonds offer higher yields to compensate investors for credit risk (credit spreads).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ Accordion Section -->
+  <div class="detail-card-panel" style="margin-bottom:48px;">
+    <h3 style="font-family:var(--font-display); font-size:1.3rem; font-weight:700; margin:0 0 20px;">Frequently Asked Questions on Bonds &amp; Yields</h3>
+
+    <div class="faq-accordion">
+      <details class="faq-item" open>
+        <summary>What is an Inverted Yield Curve and why does it matter?</summary>
+        <p>An inverted yield curve occurs when short-term interest rates (like 2-Year Treasuries) are higher than long-term interest rates (like 10-Year Treasuries). Historically, an inverted yield curve has been one of the most reliable leading indicators of an upcoming economic recession.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>What is the difference between Coupon Rate and Yield to Maturity (YTM)?</summary>
+        <p>The coupon rate is the fixed annual interest paid by the issuer on the bond's face value (e.g. 7% on ₹100). Yield to Maturity (YTM) is the total anticipated annual return if you buy the bond at its current fluctuating market price and hold it until maturity.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>How can retail investors buy Indian Government Securities?</summary>
+        <p>You can buy G-Secs either through the <strong>RBI Retail Direct</strong> portal (online direct with RBI) or through major discount brokers (like Zerodha Coin, Groww) via non-competitive bidding during weekly auctions.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>How are bond returns and interest taxed in India?</summary>
+        <p>Interest received from government securities and corporate bonds is added to your total income and taxed at your applicable slab rate. Capital gains on listed bonds held &gt; 12 months are taxed as LTCG at 12.5%.</p>
+      </details>
+    </div>
+  </div>
+
+  <!-- Related Markets Navigation Cards -->
+  <div class="related-markets-section">
+    <h3 style="font-family:var(--font-display); font-size:1.2rem; font-weight:700; margin:0 0 16px;">Explore Other Asset Classes</h3>
+    <div class="related-markets-grid">
+      <a href="{{ url_for('market_category', category_id='mutual-funds') }}" class="rel-mkt-card">
+        <span class="rel-mkt-icon">📈</span>
+        <div>
+          <h4>Mutual Funds</h4>
+          <p>~40,000 AMFI Schemes</p>
+        </div>
+      </a>
+      <a href="{{ url_for('market_category', category_id='etfs') }}" class="rel-mkt-card">
+        <span class="rel-mkt-icon">📊</span>
+        <div>
+          <h4>ETFs Hub</h4>
+          <p>Nifty, Bank &amp; Index Funds</p>
+        </div>
+      </a>
+      <a href="{{ url_for('market_category', category_id='commodities') }}" class="rel-mkt-card">
+        <span class="rel-mkt-icon">🛢️</span>
+        <div>
+          <h4>Commodities</h4>
+          <p>Gold, Silver, Crude Oil</p>
+        </div>
+      </a>
+      <a href="{{ url_for('market_category', category_id='us-stocks') }}" class="rel-mkt-card">
+        <span class="rel-mkt-icon">$</span>
+        <div>
+          <h4>US Stocks</h4>
+          <p>AAPL, TSLA, NVDA &amp; NYSE</p>
+        </div>
+      </a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,385 @@
+{% extends "base.html" %}
+{% block title %}Mutual Funds Directory &amp; NAVs — StockSense Markets{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{{ url_for('static', filename='markets.css') }}">{% endblock %}
+
+{% block content %}
+<div class="market-detail-wrap">
+
+  <!-- Back Link -->
+  <a href="{{ url_for('markets') }}" class="back-link">
+    ← Back to Markets Hub
+  </a>
+
+  <!-- Header Section -->
+  <div class="detail-hero-header">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+      <div>
+        <p class="eyebrow" style="margin:0 0 8px;">AMFI Registered Schemes</p>
+        <h1 style="font-family:var(--font-display); font-size:clamp(1.8rem, 4vw, 2.6rem); font-weight:700; margin:0 0 10px; line-height:1.2;">Mutual Funds &amp; NAV Explorer</h1>
+      </div>
+      <div>
+        <span class="daily-badge">Official AMFI Daily NAV</span>
+      </div>
+    </div>
+    <p class="lede" style="margin:4px 0 0;">
+      Official end-of-day Net Asset Values (NAV) for ~40,000 schemes across equity, hybrid, debt, and ELSS tax-saving funds.
+    </p>
+  </div>
+
+  <!-- Top Curated Mutual Funds (2-Column Grid) -->
+  <div class="market-top-grid">
+
+    <!-- Top Large & Flexi Cap Funds -->
+    <div class="market-top-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="font-family:var(--font-display); font-size:1.1rem; font-weight:600; margin:0;">Top Core Equity Funds</h3>
+        <span class="engine-tag">Large &amp; Flexi Cap</span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        {% for item in curated_funds[:6] %}
+        <div class="stock-highlight-item">
+          <div>
+            <span class="mono" style="font-weight:700; color:var(--text); font-size:0.86rem;">{{ item.name }}</span>
+            <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">
+              <span class="badge-tag">{{ item.cat_label }}</span>
+              <span style="margin-left:6px;">AUM: {{ item.aum }}</span>
+            </div>
+          </div>
+          <div class="mono" style="text-align:right;">
+            <span style="color:var(--gold); font-weight:700;">{{ item.rating }}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Top Small Cap & ELSS Tax Savers -->
+    <div class="market-top-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="font-family:var(--font-display); font-size:1.1rem; font-weight:600; margin:0;">Small Cap &amp; ELSS Tax Savers</h3>
+        <span class="engine-tag engine-tag-alt">High Growth · 80C</span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        {% for item in curated_funds[6:] %}
+        <div class="stock-highlight-item">
+          <div>
+            <span class="mono" style="font-weight:700; color:var(--text); font-size:0.86rem;">{{ item.name }}</span>
+            <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">
+              <span class="badge-tag">{{ item.cat_label }}</span>
+              <span style="margin-left:6px;">AUM: {{ item.aum }}</span>
+            </div>
+          </div>
+          <div class="mono" style="text-align:right;">
+            <span style="color:var(--gold); font-weight:700;">{{ item.rating }}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Interactive SIP & Wealth Growth Calculator Widget -->
+  <div class="detail-card-panel sip-calc-container" style="margin-bottom:48px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
+      <div>
+        <h3 style="font-family:var(--font-display); font-size:1.3rem; font-weight:700; margin:0 0 4px;">Interactive SIP &amp; Compounding Calculator</h3>
+        <p style="font-size:0.82rem; color:var(--text-muted); margin:0;">Simulate your systematic investment plan wealth creation over time.</p>
+      </div>
+      <span class="engine-tag">Compound Wealth Simulator</span>
+    </div>
+
+    <div class="sip-calc-grid">
+      <!-- Sliders Left -->
+      <div class="sip-sliders-col">
+        <div class="sip-input-group">
+          <div class="sip-label-row">
+            <span>Monthly Investment</span>
+            <span class="sip-val-pill" id="sipAmountDisplay">₹10,000</span>
+          </div>
+          <input type="range" id="sipAmount" min="1000" max="100000" step="1000" value="10000" class="sip-range-slider">
+          <div class="sip-range-ticks"><span>₹1k</span><span>₹50k</span><span>₹100k</span></div>
+        </div>
+
+        <div class="sip-input-group">
+          <div class="sip-label-row">
+            <span>Expected Annual Return (CAGR)</span>
+            <span class="sip-val-pill" id="sipRateDisplay">14.0%</span>
+          </div>
+          <input type="range" id="sipRate" min="6" max="25" step="0.5" value="14" class="sip-range-slider">
+          <div class="sip-range-ticks"><span>6% (Conservative)</span><span>14% (Equity Average)</span><span>25%</span></div>
+        </div>
+
+        <div class="sip-input-group">
+          <div class="sip-label-row">
+            <span>Time Horizon (Years)</span>
+            <span class="sip-val-pill" id="sipYearsDisplay">15 Years</span>
+          </div>
+          <input type="range" id="sipYears" min="1" max="30" step="1" value="15" class="sip-range-slider">
+          <div class="sip-range-ticks"><span>1 Yr</span><span>15 Yrs</span><span>30 Yrs</span></div>
+        </div>
+      </div>
+
+      <!-- Result Card Right -->
+      <div class="sip-result-card">
+        <div class="sip-stat-box">
+          <span class="sip-stat-lbl">Total Amount Invested</span>
+          <span class="sip-stat-num" id="sipTotalInvested">₹18,00,000</span>
+        </div>
+        <div class="sip-stat-box">
+          <span class="sip-stat-lbl">Estimated Returns (Wealth Gain)</span>
+          <span class="sip-stat-num highlight" id="sipTotalGains">₹43,58,247</span>
+        </div>
+        <div class="sip-stat-box total">
+          <span class="sip-stat-lbl">Expected Maturity Corpus</span>
+          <span class="sip-stat-num total" id="sipTotalCorpus">₹61,58,247</span>
+        </div>
+
+        <!-- Wealth Breakdown Visual Bar -->
+        <div class="sip-progress-wrap">
+          <div class="sip-progress-fill invested" id="sipBarInvested" style="width:29%;"></div>
+          <div class="sip-progress-fill gains" id="sipBarGains" style="width:71%;"></div>
+        </div>
+        <div class="sip-legend-row">
+          <span><span class="sip-dot invested"></span> Invested (29%)</span>
+          <span><span class="sip-dot gains"></span> Returns (71%)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live AMFI Schemes Search & Directory Table -->
+  <div class="detail-card-panel" style="margin-bottom:48px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+      <div>
+        <h3 style="font-family:var(--font-display); font-size:1.2rem; font-weight:600; margin:0;">Search ~40,000 AMFI Registered Schemes</h3>
+        <p style="font-size:0.8rem; color:var(--text-muted); margin:4px 0 0;">Type any AMC or fund name (e.g. Parag Parikh, Mirae, SBI, Nippon, Quant) to fetch live NAVs.</p>
+      </div>
+      <input type="text" id="mf-live-search" class="table-search" placeholder="Search all AMFI schemes..." style="max-width:340px; margin:0;">
+    </div>
+
+    <div id="mf-loading-indicator" style="display:none; padding:12px; text-align:center; color:var(--gold); font-size:0.85rem;">
+      Searching official AMFI database...
+    </div>
+
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Scheme Code</th>
+            <th>Scheme Name</th>
+            <th>NAV (₹)</th>
+            <th>NAV Date</th>
+          </tr>
+        </thead>
+        <tbody id="mf-table-body">
+          {% for f in all_funds %}
+          <tr>
+            <td class="mono" style="color:var(--text-muted);">{{ f.scheme_code }}</td>
+            <td style="font-weight:500;">{{ f.name }}</td>
+            <td class="mono" style="font-weight:700; color:var(--text);">{{ '₹%.4f'|format(f.nav) if f.nav is not none else '—' }}</td>
+            <td class="mono" style="color:var(--text-muted); font-size:0.82rem;">{{ f.date }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="panel-note" style="margin-top:16px;">Showing first 100 schemes by default. Use the search box above to instantly query across all 40,000+ mutual fund schemes.</p>
+  </div>
+
+  <!-- Educational 4-Card Guide Section -->
+  <div style="margin-bottom:48px;">
+    <h3 style="font-family:var(--font-display); font-size:1.3rem; font-weight:700; margin:0 0 20px;">Key Principles of Mutual Fund Wealth Building</h3>
+    <div class="market-guide-grid">
+      <div class="guide-card">
+        <div class="guide-icon">💰</div>
+        <h4>Direct vs. Regular Plans</h4>
+        <p>Direct mutual fund plans have zero distributor commissions, resulting in 0.5% to 1.5% lower Total Expense Ratios (TER). Over a 20-year horizon, this simple choice can add ₹15 to ₹25 Lakhs in extra wealth.</p>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-icon">📈</div>
+        <h4>Rupee Cost Averaging (SIP)</h4>
+        <p>SIP automatically acquires more units when market prices drop and fewer units when prices surge, mathematically lowering your average purchase cost without requiring you to time market tops and bottoms.</p>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-icon">⏰</div>
+        <h4>Daily NAV Cut-Off Timings</h4>
+        <p>For equity funds, orders placed before 3:00 PM IST receive the same day's closing NAV. Orders placed after 3:00 PM receive the next business day's NAV. NAV is published every evening around 9:00 PM IST by AMFI.</p>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-icon">📑</div>
+        <h4>Taxation on Mutual Funds</h4>
+        <p>Equity mutual funds (>65% domestic equity) are taxed at 12.5% LTCG (>1 yr, over ₹1.25L gain) and 20% STCG (&lt;1 yr). Debt mutual funds are taxed at your applicable income tax slab rates.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ Accordion Section -->
+  <div class="detail-card-panel" style="margin-bottom:48px;">
+    <h3 style="font-family:var(--font-display); font-size:1.3rem; font-weight:700; margin:0 0 20px;">Frequently Asked Questions on Mutual Funds</h3>
+
+    <div class="faq-accordion">
+      <details class="faq-item" open>
+        <summary>How is Net Asset Value (NAV) calculated by AMFI?</summary>
+        <p>NAV represents the per-unit market value of a mutual fund scheme. It is calculated at the end of each trading day by dividing the total net value of all securities in the portfolio (assets minus liabilities &amp; expenses) by the total number of outstanding units.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>What is an ELSS Tax Saver fund and what is the lock-in period?</summary>
+        <p>Equity Linked Savings Schemes (ELSS) are tax-saving equity mutual funds eligible for tax deductions under Section 80C of the Income Tax Act up to ₹1.5 Lakh. They have a mandatory 3-year lock-in period (the shortest among all 80C instruments).</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>What is the difference between an ETF and an Index Mutual Fund?</summary>
+        <p>Both track an underlying index like the NIFTY 50. However, ETFs trade throughout market hours on exchanges at live fluctuating prices and require a Demat account, while Index Mutual Funds are bought/sold directly with the fund house at end-of-day NAV.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>How do I find my specific fund in the StockSense directory?</summary>
+        <p>Use the search box above to enter the fund house or keyword (e.g. "Parag Parikh", "Quant Small", "SBI Bluechip"). Our backend asynchronously queries the official ~40,000 AMFI scheme registry.</p>
+      </details>
+    </div>
+  </div>
+
+  <!-- Related Markets Navigation Cards -->
+  <div class="related-markets-section">
+    <h3 style="font-family:var(--font-display); font-size:1.2rem; font-weight:700; margin:0 0 16px;">Explore Other Asset Classes</h3>
+    <div class="related-markets-grid">
+      <a href="{{ url_for('market_category', category_id='bonds') }}" class="rel-mkt-card">
+        <span class="rel-mkt-icon">🏛️</span>
+        <div>
+          <h4>Bonds &amp; Yields</h4>
+          <p>US Treasuries &amp; G-Sec Yields</p>
+        </div>
+      </a>
+      <a href="{{ url_for('market_category', category_id='etfs') }}" class="rel-mkt-card">
+        <span class="rel-mkt-icon">📊</span>
+        <div>
+          <h4>ETFs Hub</h4>
+          <p>Nifty, Bank &amp; Index Funds</p>
+        </div>
+      </a>
+      <a href="{{ url_for('market_category', category_id='indian-stocks') }}" class="rel-mkt-card">
+        <span class="rel-mkt-icon">₹</span>
+        <div>
+          <h4>Indian Stocks</h4>
+          <p>NSE &amp; BSE Bhavcopy Equities</p>
+        </div>
+      </a>
+      <a href="{{ url_for('market_category', category_id='us-stocks') }}" class="rel-mkt-card">
+        <span class="rel-mkt-icon">$</span>
+        <div>
+          <h4>US Stocks</h4>
+          <p>AAPL, TSLA, NVDA &amp; NYSE</p>
+        </div>
+      </a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // SIP Calculator Live Logic
+  (function() {
+    var amountSlider = document.getElementById('sipAmount');
+    var rateSlider = document.getElementById('sipRate');
+    var yearsSlider = document.getElementById('sipYears');
+
+    var amountDisp = document.getElementById('sipAmountDisplay');
+    var rateDisp = document.getElementById('sipRateDisplay');
+    var yearsDisp = document.getElementById('sipYearsDisplay');
+
+    var totalInvestedEl = document.getElementById('sipTotalInvested');
+    var totalGainsEl = document.getElementById('sipTotalGains');
+    var totalCorpusEl = document.getElementById('sipTotalCorpus');
+    var barInvested = document.getElementById('sipBarInvested');
+    var barGains = document.getElementById('sipBarGains');
+
+    function formatINR(val) {
+      return '₹' + Math.round(val).toLocaleString('en-IN');
+    }
+
+    function calculateSIP() {
+      var P = parseFloat(amountSlider.value);
+      var annualRate = parseFloat(rateSlider.value);
+      var years = parseFloat(yearsSlider.value);
+
+      amountDisp.textContent = '₹' + P.toLocaleString('en-IN');
+      rateDisp.textContent = annualRate.toFixed(1) + '%';
+      yearsDisp.textContent = years + (years === 1 ? ' Year' : ' Years');
+
+      var i = (annualRate / 100) / 12;
+      var n = years * 12;
+
+      // FV = P * [ ((1 + i)^n - 1) / i ] * (1 + i)
+      var maturity = P * ((Math.pow(1 + i, n) - 1) / i) * (1 + i);
+      var invested = P * n;
+      var gains = maturity - invested;
+
+      totalInvestedEl.textContent = formatINR(invested);
+      totalGainsEl.textContent = formatINR(gains);
+      totalCorpusEl.textContent = formatINR(maturity);
+
+      var invPct = Math.round((invested / maturity) * 100);
+      var gainPct = 100 - invPct;
+
+      barInvested.style.width = invPct + '%';
+      barGains.style.width = gainPct + '%';
+    }
+
+    if (amountSlider && rateSlider && yearsSlider) {
+      amountSlider.addEventListener('input', calculateSIP);
+      rateSlider.addEventListener('input', calculateSIP);
+      yearsSlider.addEventListener('input', calculateSIP);
+      calculateSIP();
+    }
+  })();
+
+  // Debounced AMFI Search
+  (function() {
+    var searchInput = document.getElementById('mf-live-search');
+    var tbody = document.getElementById('mf-table-body');
+    var loader = document.getElementById('mf-loading-indicator');
+    var debounceTimer = null;
+
+    if (!searchInput || !tbody) return;
+
+    searchInput.addEventListener('input', function() {
+      var q = searchInput.value.trim();
+      clearTimeout(debounceTimer);
+
+      if (q.length < 2) return;
+
+      debounceTimer = setTimeout(function() {
+        if (loader) loader.style.display = 'block';
+        fetch('/api/mutual-funds/search?q=' + encodeURIComponent(q))
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            if (loader) loader.style.display = 'none';
+            tbody.innerHTML = '';
+            if (!data || data.length === 0) {
+              tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:20px;">No mutual fund schemes found matching "' + q + '".</td></tr>';
+              return;
+            }
+            data.forEach(function(item) {
+              var tr = document.createElement('tr');
+              tr.innerHTML = '<td class="mono" style="color:var(--text-muted);">' + item.scheme_code + '</td>'
+                           + '<td style="font-weight:500;">' + item.name + '</td>'
+                           + '<td class="mono" style="font-weight:700; color:var(--text);">' + (item.nav ? '₹' + item.nav.toFixed(4) : '—') + '</td>'
+                           + '<td class="mono" style="color:var(--text-muted); font-size:0.82rem;">' + item.date + '</td>';
+              tbody.appendChild(tr);
+            });
+          })
+          .catch(function() {
+            if (loader) loader.style.display = 'none';
+          });
+      }, 350);
+    });
+  })();
+</script>
+{% endblock %}

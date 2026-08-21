@@ -1,0 +1,306 @@
+{% extends "base.html" %}
+{% block title %}Commodities (Gold, Silver, Crude Oil) — StockSense Markets{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{{ url_for('static', filename='markets.css') }}">{% endblock %}
+
+{% block content %}
+<div class="market-detail-wrap">
+
+  <!-- Back Link -->
+  <a href="{{ url_for('markets') }}" class="back-link">
+    ← Back to Markets Hub
+  </a>
+
+  <!-- Header Section -->
+  <div class="detail-hero-header">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+      <div>
+        <p class="eyebrow" style="margin:0 0 8px;">Precious Metals &amp; Global Energy</p>
+        <h1 style="font-family:var(--font-display); font-size:clamp(1.8rem, 4vw, 2.6rem); font-weight:700; margin:0 0 10px; line-height:1.2;">Commodities &amp; Futures Markets</h1>
+      </div>
+      <div>
+        <span class="live-badge"><span class="live-dot"></span> Live Quotes · updated <span class="live-updated-time">just now</span></span>
+      </div>
+    </div>
+    <p class="lede" style="margin:4px 0 0;">
+      Global USD futures pricing and benchmark commodity quotes for Gold, Silver, Crude Oil, Natural Gas, and industrial metals.
+    </p>
+  </div>
+
+  <!-- Top Commodities Highlights Cards (2-Column Grid) -->
+  <div class="market-top-grid">
+
+    <!-- Precious Metals Highlights -->
+    <div class="market-top-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="font-family:var(--font-display); font-size:1.1rem; font-weight:600; margin:0;">Precious Metals (Safe Haven)</h3>
+        <span class="engine-tag">COMEX / MCX</span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        {% for item in top_precious %}
+        <div data-symbol="{{ item.yf_symbol }}" data-currency="$" class="stock-highlight-item">
+          <div>
+            <span class="mono" style="font-weight:700; color:var(--text); font-size:0.9rem;">{{ item.symbol }}</span>
+            <span style="font-size:0.78rem; color:var(--text-muted); margin-left:8px;">{{ item.label }} ({{ item.unit }})</span>
+          </div>
+          <div class="mono" style="text-align:right;">
+            <span class="live-currency">$</span><span class="live-price-value">—</span>
+            <span class="live-arrow" style="margin-left:6px;">·</span> <span class="live-change-value">—</span>%
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Energy & Industrial Metals -->
+    <div class="market-top-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="font-family:var(--font-display); font-size:1.1rem; font-weight:600; margin:0;">Energy &amp; Industrial Demand</h3>
+        <span class="engine-tag engine-tag-alt">NYMEX / ICE</span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        {% for item in top_energy %}
+        <div data-symbol="{{ item.yf_symbol }}" data-currency="$" class="stock-highlight-item">
+          <div>
+            <span class="mono" style="font-weight:700; color:var(--text); font-size:0.9rem;">{{ item.symbol }}</span>
+            <span style="font-size:0.78rem; color:var(--text-muted); margin-left:8px;">{{ item.label }} ({{ item.unit }})</span>
+          </div>
+          <div class="mono" style="text-align:right;">
+            <span class="live-currency">$</span><span class="live-price-value">—</span>
+            <span class="live-arrow" style="margin-left:6px;">·</span> <span class="live-change-value">—</span>%
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Gold/Silver Ratio & Macro Indicator Card -->
+  <div class="detail-card-panel" style="margin-bottom:36px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+      <div>
+        <span class="eyebrow" style="margin-bottom:4px;">Macro Economic Barometer</span>
+        <h3 style="font-family:var(--font-display); font-size:1.2rem; font-weight:700; margin:0;">Gold-to-Silver Ratio: <span class="mono" style="color:var(--gold);">{{ gold_silver_ratio }}</span></h3>
+        <p style="font-size:0.8rem; color:var(--text-muted); margin:4px 0 0;">Historical mean ranges from 60 to 75. High ratios (>80) historically signal potential silver undervaluation relative to gold.</p>
+      </div>
+      <div style="display:flex; gap:12px; align-items:center;">
+        <div class="stat-pill-item" style="background:var(--panel-hi); padding:10px 16px; border-radius:var(--radius-pill); border:1px solid var(--hairline);">
+          <span>Gold Support: <strong style="color:var(--gold);">$2,380/oz</strong></span>
+        </div>
+        <div class="stat-pill-item" style="background:var(--panel-hi); padding:10px 16px; border-radius:var(--radius-pill); border:1px solid var(--hairline);">
+          <span>Brent Crude Pivot: <strong style="color:var(--teal);">$78.50/bbl</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Filter Cards -->
+  <div style="margin-bottom:36px;">
+    <h3 style="font-family:var(--font-display); font-size:1.2rem; font-weight:600; margin-bottom:16px;">Explore by Commodity Sector</h3>
+    <div class="category-filter-grid">
+      <div class="cat-filter-card active" id="cat-all" onclick="filterCommoditySector('all')">
+        <div class="cat-icon">🌐</div>
+        <h4>All Commodities</h4>
+        <p>Precious, Energy &amp; Metals</p>
+      </div>
+
+      <div class="cat-filter-card" id="cat-precious" onclick="filterCommoditySector('precious')">
+        <div class="cat-icon">🥇</div>
+        <h4>Precious Metals</h4>
+        <p>Gold, Silver, Platinum</p>
+      </div>
+
+      <div class="cat-filter-card" id="cat-energy" onclick="filterCommoditySector('energy')">
+        <div class="cat-icon">🛢️</div>
+        <h4>Energy &amp; Oil</h4>
+        <p>Crude Oil, Brent, Natural Gas</p>
+      </div>
+
+      <div class="cat-filter-card" id="cat-industrial" onclick="filterCommoditySector('industrial')">
+        <div class="cat-icon">⚙️</div>
+        <h4>Industrial Metals</h4>
+        <p>Copper, Aluminium, Zinc</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full Filterable Data Table -->
+  <div class="detail-card-panel" style="margin-bottom:48px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+      <div>
+        <h3 style="font-family:var(--font-display); font-size:1.2rem; font-weight:600; margin:0;">Live Global Commodity Benchmarks</h3>
+        <p style="font-size:0.8rem; color:var(--text-muted); margin:4px 0 0;">Continuous futures pricing from COMEX, NYMEX, and ICE exchanges.</p>
+      </div>
+      <input type="text" id="commodity-search" class="table-search" placeholder="Search commodity..." style="max-width:320px; margin:0;">
+    </div>
+
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Symbol</th>
+            <th>Commodity Name</th>
+            <th>Category</th>
+            <th>Unit / Quotation</th>
+            <th>Exchange</th>
+            <th>Live Price (USD)</th>
+            <th>24h Change</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="commodity-table-body">
+          {% for item in commodities %}
+          <tr data-symbol="{{ item.yf_symbol }}" data-currency="$" data-category="{{ item.category }}">
+            <td class="mono" style="font-weight:700; color:var(--text);">{{ item.symbol }}</td>
+            <td>{{ item.label }}</td>
+            <td><span class="sector-pill">{{ item.category|title }}</span></td>
+            <td><span class="tiny mono">{{ item.unit }}</span></td>
+            <td><span class="pick-exchange">{{ item.exchange }}</span></td>
+            <td class="mono">
+              <span class="live-currency">$</span><span class="live-price-value">—</span>
+            </td>
+            <td class="mono">
+              <span class="live-arrow">·</span> <span class="live-change-value">—</span>%
+            </td>
+            <td>
+              <form action="{{ url_for('reports_growth') }}" method="POST" style="display:inline;">
+                <input type="hidden" name="symbol" value="{{ item.symbol }}">
+                <input type="hidden" name="exchange" value="US">
+                <input type="hidden" name="period_days" value="7">
+                <button type="submit" class="btn btn-ghost btn-sm" style="padding:4px 10px; font-size:0.75rem;">Report →</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Educational 4-Card Guide Section -->
+  <div style="margin-bottom:48px;">
+    <h3 style="font-family:var(--font-display); font-size:1.3rem; font-weight:700; margin:0 0 20px;">Key Insights into Commodities Investing</h3>
+    <div class="market-guide-grid">
+      <div class="guide-card">
+        <div class="guide-icon">🛡️</div>
+        <h4>Gold as Inflation Hedge</h4>
+        <p>Gold has served as a timeless store of purchasing power across millennia. Sovereign central banks and institutional investors actively accumulate gold reserves to protect against fiat currency debasement.</p>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-icon">🏆</div>
+        <h4>SGB vs. Gold ETFs vs. Physical</h4>
+        <p>Sovereign Gold Bonds (SGB) pay a 2.5% annual coupon and offer 100% tax-free capital gains upon maturity. Gold ETFs offer instant intraday liquidity on NSE without storage risks or making charges.</p>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-icon">🛢️</div>
+        <h4>Crude Oil Impact on India</h4>
+        <p>India imports approximately 85% of its domestic crude oil requirement. Every $10 per barrel increase in crude oil prices expands India's Current Account Deficit (CAD) by ~0.5% and fuels domestic inflation.</p>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-icon">📑</div>
+        <h4>Futures Expiry &amp; Rollover</h4>
+        <p>Commodities trade via standardized futures contracts with monthly expiry cycles on the Multi Commodity Exchange (MCX) in India and COMEX/NYMEX globally, allowing transparent price discovery.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ Accordion Section -->
+  <div class="detail-card-panel" style="margin-bottom:48px;">
+    <h3 style="font-family:var(--font-display); font-size:1.3rem; font-weight:700; margin:0 0 20px;">Frequently Asked Questions on Commodities</h3>
+
+    <div class="faq-accordion">
+      <details class="faq-item" open>
+        <summary>What is the difference between Spot Price and Futures Price?</summary>
+        <p>Spot price represents the immediate cash price for delivery today. Futures price is the agreed-upon contract price for delivery at a future date, factoring in storage costs, insurance, financing interest (cost of carry), and market expectations (contango or backwardation).</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>What are MCX trading hours in India?</summary>
+        <p>The Multi Commodity Exchange of India (MCX) operates extended trading hours from <strong>9:00 AM to 11:30 PM IST</strong> (and up to 11:55 PM IST during US Daylight Saving Time), allowing Indian traders to participate during US market hours.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Why does the US Dollar index (DXY) move inversely to Gold?</summary>
+        <p>Because gold is globally priced in US Dollars. When the US Dollar strengthens against major world currencies, gold becomes relatively more expensive for foreign buyers, dampening demand and lowering USD gold prices.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>How can I invest in Gold through StockSense?</summary>
+        <p>You can analyze gold price trends using StockSense technical reports, and invest through liquid Gold ETFs listed on NSE (such as GOLDBEES) or Sovereign Gold Bonds (SGB) via your broker.</p>
+      </details>
+    </div>
+  </div>
+
+  <!-- Related Markets Navigation Cards -->
+  <div class="related-markets-section">
+    <h3 style="font-family:var(--font-display); font-size:1.2rem; font-weight:700; margin:0 0 16px;">Explore Other Asset Classes</h3>
+    <div class="related-markets-grid">
+      <a href="{{ url_for('market_category', category_id='crypto') }}" class="rel-mkt-card">
+        <span class="rel-mkt-icon">⚡</span>
+        <div>
+          <h4>Crypto &amp; Options</h4>
+          <p>Live 24/7 Coins &amp; NIFTY Chain</p>
+        </div>
+      </a>
+      <a href="{{ url_for('market_category', category_id='etfs') }}" class="rel-mkt-card">
+        <span class="rel-mkt-icon">📊</span>
+        <div>
+          <h4>ETFs Hub</h4>
+          <p>Nifty, Bank &amp; Index Funds</p>
+        </div>
+      </a>
+      <a href="{{ url_for('market_category', category_id='indian-stocks') }}" class="rel-mkt-card">
+        <span class="rel-mkt-icon">₹</span>
+        <div>
+          <h4>Indian Stocks</h4>
+          <p>NSE &amp; BSE Bhavcopy Equities</p>
+        </div>
+      </a>
+      <a href="{{ url_for('market_category', category_id='bonds') }}" class="rel-mkt-card">
+        <span class="rel-mkt-icon">🏛️</span>
+        <div>
+          <h4>Bonds &amp; Yields</h4>
+          <p>US Treasuries &amp; G-Sec Yields</p>
+        </div>
+      </a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  var searchInput = document.getElementById('commodity-search');
+  var tbody = document.getElementById('commodity-table-body');
+  if (searchInput && tbody) {
+    searchInput.addEventListener('input', function () {
+      var q = searchInput.value.trim().toLowerCase();
+      Array.from(tbody.rows).forEach(function (row) {
+        row.style.display = row.textContent.toLowerCase().indexOf(q) === -1 ? 'none' : '';
+      });
+    });
+  }
+
+  function filterCommoditySector(category) {
+    if (!tbody) return;
+    document.querySelectorAll('.cat-filter-card').forEach(function(card) {
+      card.classList.remove('active');
+    });
+    var activeCard = document.getElementById('cat-' + category);
+    if (activeCard) activeCard.classList.add('active');
+
+    Array.from(tbody.rows).forEach(function (row) {
+      var rowCat = row.getAttribute('data-category');
+      if (category === 'all' || rowCat === category) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+</script>
+{% endblock %}
