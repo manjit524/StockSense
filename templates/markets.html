@@ -63,55 +63,94 @@
 <!-- ========================= 8 ASSET CLASS CARDS GRID ========================= -->
 <section class="asset-grid-section" id="asset-cards">
   <h2>Trade and Invest Across Markets</h2>
-  <p style="color:var(--text-muted); margin-bottom:28px; font-size:0.95rem;">Select any category card below to open its dedicated market data page.</p>
+  <p style="color:var(--text-muted); margin-bottom:32px; font-size:0.95rem;">Select any category card below to open its dedicated research hub, sector filters, and educational guides.</p>
 
   <div class="asset-cards-grid">
     <a href="{{ url_for('market_category', category_id='us-stocks') }}" class="asset-class-card">
       <div class="asset-icon-box">$</div>
-      <h3>US Stocks</h3>
-      <p>AAPL, TSLA, NVDA &amp; 3,000+ NYSE/NASDAQ</p>
+      <div class="asset-card-content">
+        <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
+          <h3>US Stocks</h3>
+          <span class="live-dot" style="margin:0;"></span>
+        </div>
+        <p>AAPL, TSLA, NVDA &amp; 3,000+ NYSE/NASDAQ</p>
+      </div>
+      <span class="badge-tag">Live Quotes</span>
     </a>
 
     <a href="{{ url_for('market_category', category_id='indian-stocks') }}" class="asset-class-card">
       <div class="asset-icon-box">₹</div>
-      <h3>Indian Stocks</h3>
-      <p>NSE &amp; BSE Bhavcopy Equities</p>
+      <div class="asset-card-content">
+        <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
+          <h3>Indian Stocks</h3>
+          <span class="live-dot" style="margin:0;"></span>
+        </div>
+        <p>NSE &amp; BSE Bhavcopy Equities</p>
+      </div>
+      <span class="badge-tag">Live Quotes</span>
     </a>
 
     <a href="{{ url_for('market_category', category_id='mutual-funds') }}" class="asset-class-card">
       <div class="asset-icon-box">📈</div>
-      <h3>Mutual Funds</h3>
-      <p>~40,000 AMFI Schemes</p>
+      <div class="asset-card-content">
+        <h3>Mutual Funds</h3>
+        <p>~40,000 AMFI Schemes &amp; Calculator</p>
+      </div>
+      <span class="badge-tag" style="background:rgba(245, 158, 11, 0.15); color:#F59E0B;">Daily NAV</span>
     </a>
 
     <a href="{{ url_for('market_category', category_id='bonds') }}" class="asset-class-card">
       <div class="asset-icon-box">🏛️</div>
-      <h3>Bonds &amp; Yields</h3>
-      <p>US Treasuries &amp; G-Sec Yields</p>
+      <div class="asset-card-content">
+        <h3>Bonds &amp; Yields</h3>
+        <p>US Treasuries &amp; G-Sec Yield Curves</p>
+      </div>
+      <span class="badge-tag" style="background:rgba(59, 130, 246, 0.15); color:#60A5FA;">Daily Yields</span>
     </a>
 
     <a href="{{ url_for('market_category', category_id='commodities') }}" class="asset-class-card">
       <div class="asset-icon-box">🛢️</div>
-      <h3>Commodities</h3>
-      <p>Gold, Silver, Crude Oil</p>
+      <div class="asset-card-content">
+        <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
+          <h3>Commodities</h3>
+          <span class="live-dot" style="margin:0;"></span>
+        </div>
+        <p>Gold, Silver, Crude Oil &amp; Energy</p>
+      </div>
+      <span class="badge-tag">Live Quotes</span>
     </a>
 
     <a href="{{ url_for('market_category', category_id='ipos') }}" class="asset-class-card">
       <div class="asset-icon-box">📰</div>
-      <h3>IPOs</h3>
-      <p>NSE Issue Calendar &amp; Details</p>
+      <div class="asset-card-content">
+        <h3>IPOs</h3>
+        <p>NSE Issue Calendar &amp; Details</p>
+      </div>
+      <span class="badge-tag" style="background:rgba(168, 85, 247, 0.15); color:#C084FC;">Event Calendar</span>
     </a>
 
     <a href="{{ url_for('market_category', category_id='etfs') }}" class="asset-class-card">
       <div class="asset-icon-box">📊</div>
-      <h3>ETFs</h3>
-      <p>Nifty, Bank &amp; Index Funds</p>
+      <div class="asset-card-content">
+        <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
+          <h3>ETFs</h3>
+          <span class="live-dot" style="margin:0;"></span>
+        </div>
+        <p>Nifty, Bank &amp; Index Funds</p>
+      </div>
+      <span class="badge-tag">Live Quotes</span>
     </a>
 
     <a href="{{ url_for('market_category', category_id='crypto') }}" class="asset-class-card">
       <div class="asset-icon-box">⚡</div>
-      <h3>Crypto &amp; Options</h3>
-      <p>Live 24/7 Coins &amp; NIFTY Chain</p>
+      <div class="asset-card-content">
+        <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
+          <h3>Crypto &amp; Options</h3>
+          <span class="live-dot" style="margin:0;"></span>
+        </div>
+        <p>Live 24/7 Coins &amp; NIFTY Chain</p>
+      </div>
+      <span class="badge-tag">Live 24/7</span>
     </a>
   </div>
 </section>

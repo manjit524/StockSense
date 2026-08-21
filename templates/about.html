@@ -1,49 +1,230 @@
 {% extends "base.html" %}
-{% block title %}About — StockSense{% endblock %}
+{% block title %}About StockSense — Two Honest Engines, Not a Black Box{% endblock %}
 {% block styles %}<link rel="stylesheet" href="{{ url_for('static', filename='about.css') }}">{% endblock %}
 
 {% block content %}
-<div class="page-col">
-  <div class="about-hero">
-    <p class="eyebrow">About StockSense</p>
-    <h1>Built as two honest engines,<br>not one black box.</h1>
-    <p class="lede">
-      StockSense runs two separate systems side by side, because a stock you'd
-      hold for five years and a stock you'd trade in the next five minutes aren't
-      answered by the same kind of model.
+<div class="about-page-container">
+
+  <!-- ========================= HERO SECTION ========================= -->
+  <div class="about-hero-section">
+    <div class="about-eyebrow-badge">
+      <span class="live-dot" style="margin:0;"></span>
+      <span>Institutional Precision · Retail Transparency</span>
+    </div>
+    <h1 class="about-main-title">
+      Engineered as two honest engines,<br>not a black box.
+    </h1>
+    <p class="about-main-lede">
+      StockSense runs two separate, specialized quantitative systems side by side — because an asset you plan to hold for five years and a trade you take in the next five minutes demand fundamentally different mathematics.
     </p>
   </div>
 
-  <div class="about-grid">
-    <div class="about-block">
-      <span class="engine-tag">Long horizon</span>
-      <h2>Multi-Exchange Advisor</h2>
-      <p>
-        A GRU neural network trained on historical closing prices across NSE, BSE,
-        and US equities. It's a small model, trained on a sample pool rather than
-        every ticker — treat its growth estimates as one directional signal, not
-        a forecast to bet the house on.
-      </p>
+  <!-- ========================= PLATFORM STATS BAR ========================= -->
+  <div class="about-stats-bar">
+    <div class="about-stat-item">
+      <span class="about-stat-number mono">2</span>
+      <span class="about-stat-label">Specialized Engines</span>
+      <span class="about-stat-sub">Long Horizon + Intraday</span>
     </div>
-    <div class="about-block">
-      <span class="engine-tag engine-tag-alt">Same session</span>
-      <h2>Intraday Scanner</h2>
-      <p>
-        No deep model here — intraday data is too short-lived to train on
-        reliably. Instead it reads live 5-minute candles through three
-        established technical signals: EMA crossover, RSI, and VWAP.
-      </p>
+    <div class="about-stat-item">
+      <span class="about-stat-number mono">~40,000+</span>
+      <span class="about-stat-label">Securities Tracked</span>
+      <span class="about-stat-sub">AMFI NAVs &amp; Global Equities</span>
+    </div>
+    <div class="about-stat-item">
+      <span class="about-stat-number mono">8</span>
+      <span class="about-stat-label">Asset Classes</span>
+      <span class="about-stat-sub">Equities, Funds, Bonds, Crypto</span>
+    </div>
+    <div class="about-stat-item">
+      <span class="about-stat-number mono">100%</span>
+      <span class="about-stat-label">Methodology Honesty</span>
+      <span class="about-stat-sub">Transparent Rule &amp; Neural Logic</span>
     </div>
   </div>
 
-  <div class="about-disclaimer">
-    <h3>What this isn't</h3>
+  <!-- ========================= THE TWO CORE ENGINES ========================= -->
+  <div class="about-section-header">
+    <span class="about-sub-tag">The Architecture</span>
+    <h2>The Two Honest Engines</h2>
+    <p>Why we deliberately separated long-term investing from intraday quantitative execution.</p>
+  </div>
+
+  <div class="about-engines-grid">
+    
+    <!-- Engine 1: Multi-Exchange Neural Advisor -->
+    <div class="about-engine-card">
+      <div class="engine-card-top">
+        <span class="engine-tag">Long Horizon · 1 to 10 Years</span>
+        <span class="engine-version-pill mono">Deep GRU Model</span>
+      </div>
+      
+      <h3 class="engine-card-title">Multi-Exchange Neural Advisor</h3>
+      <p class="engine-card-desc">
+        A Gated Recurrent Unit (GRU) neural network trained on multi-year historical closing price sequences across NSE, BSE, and US NYSE/NASDAQ equities.
+      </p>
+
+      <div class="engine-spec-list">
+        <div class="engine-spec-item">
+          <div class="spec-bullet">✓</div>
+          <div>
+            <strong>Sequence &amp; Volatility Modeling:</strong> Evaluates historical price paths and drawdown regimes to estimate multi-year return trajectories.
+          </div>
+        </div>
+        <div class="engine-spec-item">
+          <div class="spec-bullet">✓</div>
+          <div>
+            <strong>Risk-Calibrated Bucketing:</strong> Automatically partitions asset universe into Low, Medium, and High-Risk allocations based on historical covariance and capital preservation bounds.
+          </div>
+        </div>
+        <div class="engine-spec-item">
+          <div class="spec-bullet">✓</div>
+          <div>
+            <strong>Multi-Currency Normalization:</strong> Seamlessly balances USD and INR holdings with real-time FX conversion for unified portfolio visibility.
+          </div>
+        </div>
+      </div>
+
+      <div class="engine-honesty-note">
+        <strong>Transparency Note:</strong> The GRU is trained on a broad, representative asset pool rather than memorizing every individual ticker. Treat its growth estimates as a disciplined directional signal, not a guaranteed return forecast.
+      </div>
+    </div>
+
+    <!-- Engine 2: Real-Time Intraday Scanner -->
+    <div class="about-engine-card">
+      <div class="engine-card-top">
+        <span class="engine-tag engine-tag-alt">Same Session · 5m Candles</span>
+        <span class="engine-version-pill mono">Quantitative Pipeline</span>
+      </div>
+
+      <h3 class="engine-card-title">Real-Time Intraday Scanner</h3>
+      <p class="engine-card-desc">
+        A deterministic quantitative signal pipeline that monitors live 5-minute candle streams and volume profiles to capture high-probability intraday momentum setups.
+      </p>
+
+      <div class="engine-spec-list">
+        <div class="engine-spec-item">
+          <div class="spec-bullet">✓</div>
+          <div>
+            <strong>EMA 9 / 21 Dynamic Ribbons:</strong> Identifies instant session trend direction and trend-continuation triggers with zero lagging bloat.
+          </div>
+        </div>
+        <div class="engine-spec-item">
+          <div class="spec-bullet">✓</div>
+          <div>
+            <strong>14-Period RSI Momentum Bounds:</strong> Detects exhaustion and breakout states to protect against chasing overextended tops.
+          </div>
+        </div>
+        <div class="engine-spec-item">
+          <div class="spec-bullet">✓</div>
+          <div>
+            <strong>Volume-Weighted Average Price (VWAP):</strong> Anchors intraday bias to institutional volume clusters for strict stop-loss positioning.
+          </div>
+        </div>
+      </div>
+
+      <div class="engine-honesty-note">
+        <strong>Transparency Note:</strong> No black-box neural networks are used here. Intraday price noise renders deep models fragile; transparent mathematical technicals provide the speed and consistency active traders need.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========================= CORE ENGINEERING PRINCIPLES ========================= -->
+  <div class="about-section-header" style="margin-top:56px;">
+    <span class="about-sub-tag">Our Philosophy</span>
+    <h2>Core Engineering Principles</h2>
+    <p>The foundational standards that govern every line of code and algorithm inside StockSense.</p>
+  </div>
+
+  <div class="about-principles-grid">
+    
+    <div class="principle-card">
+      <div class="principle-icon-box">🛡️</div>
+      <h4>Mathematical Honesty</h4>
+      <p>We reject deceptive "99% win rate" claims. Financial markets are probabilistic; our engines output calibrated risk distributions and acknowledge uncertainty.</p>
+    </div>
+
+    <div class="principle-card">
+      <div class="principle-icon-box">🌐</div>
+      <h4>Multi-Asset Intelligence</h4>
+      <p>From NSE/BSE equities and US mega-caps to AMFI Mutual Funds, RBI G-Sec yields, Commodities, and Crypto — all analyzed through unified telemetry.</p>
+    </div>
+
+    <div class="principle-card">
+      <div class="principle-icon-box">🔒</div>
+      <h4>Privacy &amp; Autonomy</h4>
+      <p>No forced broker integrations, no portfolio tracking, and zero monetization of user data. All capital allocations and queries remain private.</p>
+    </div>
+
+    <div class="principle-card">
+      <div class="principle-icon-box">📉</div>
+      <h4>Downside Risk Protection</h4>
+      <p>Every recommendation incorporates historical Max Drawdown, Beta sensitivity, and Sharpe metrics to prioritize capital preservation above all else.</p>
+    </div>
+
+  </div>
+
+  <!-- ========================= DATA PIPELINE FLOW ========================= -->
+  <div class="about-section-header" style="margin-top:56px;">
+    <span class="about-sub-tag">The Pipeline</span>
+    <h2>From Raw Feeds to Actionable Intelligence</h2>
+    <p>How market signals travel through our ingestion, processing, and decision layers.</p>
+  </div>
+
+  <div class="pipeline-steps-grid">
+    
+    <div class="pipeline-step-card">
+      <div class="step-badge mono">STEP 01</div>
+      <h4>Raw Ingestion</h4>
+      <p>Real-time ingestion of AMFI NAVs, NSE Bhavcopy, FRED US Treasury yields, and Yahoo Finance tick streams.</p>
+    </div>
+
+    <div class="pipeline-step-card">
+      <div class="step-badge mono">STEP 02</div>
+      <h4>Normalization</h4>
+      <p>Cleaning outliers, computing technical indicators (EMA, RSI, MACD), and standardizing multi-currency benchmarks.</p>
+    </div>
+
+    <div class="pipeline-step-card">
+      <div class="step-badge mono">STEP 03</div>
+      <h4>Dual-Engine Inference</h4>
+      <p>Parallel processing through GRU neural horizon modeling and deterministic intraday technical signal filters.</p>
+    </div>
+
+    <div class="pipeline-step-card">
+      <div class="step-badge mono">STEP 04</div>
+      <h4>Interactive Desk</h4>
+      <p>Clear risk buckets, interactive SIP simulators, exportable PDF/Excel dossiers, and live quotes display.</p>
+    </div>
+
+  </div>
+
+  <!-- ========================= REGULATORY DISCLAIMER ========================= -->
+  <div class="about-disclaimer-panel">
+    <div class="disclaimer-header">
+      <span class="disclaimer-badge">Regulatory &amp; Risk Notice</span>
+      <h3>What StockSense Is and Isn't</h3>
+    </div>
     <p>
-      It isn't SEBI-registered investment advice, it isn't a guarantee of returns,
-      and it isn't a replacement for your own research. Both engines can be
-      confidently wrong. Use them as one input among several, and size any
-      position you wouldn't mind losing.
+      StockSense is an independent quantitative research and educational platform. It is <strong>not</strong> a SEBI-registered investment adviser, and the outputs generated by its algorithmic models, technical scanners, and growth reports do <strong>not</strong> constitute financial advice, investment recommendations, or endorsement of any security.
+    </p>
+    <p style="margin-top:10px;">
+      All financial investments carry inherent risk of loss. Past performance modeled by our GRU network or technical indicators is no guarantee of future results. Always conduct independent due diligence or consult a licensed financial advisor before deploying capital.
     </p>
   </div>
+
+  <!-- ========================= CALL TO ACTION BANNER ========================= -->
+  <div class="about-cta-banner">
+    <div class="cta-text-side">
+      <h3>Ready to explore intelligent market analytics?</h3>
+      <p>Run our AI advisor on your target capital or inspect live market hubs across asset classes.</p>
+    </div>
+    <div class="cta-btn-side">
+      <a href="{{ url_for('get_advice') }}" class="btn btn-primary">Launch Advisor</a>
+      <a href="{{ url_for('markets') }}" class="btn btn-ghost">Explore Markets</a>
+    </div>
+  </div>
+
 </div>
 {% endblock %}

@@ -144,22 +144,107 @@ def get_advice():
 TRACKED_ETFS = etf_tickers.TRACKED_ETFS
 
 TRACKED_CRYPTO = [
-    {"symbol": "BTC", "yf_symbol": "BTC-USD", "label": "Bitcoin"},
-    {"symbol": "ETH", "yf_symbol": "ETH-USD", "label": "Ethereum"},
-    {"symbol": "SOL", "yf_symbol": "SOL-USD", "label": "Solana"},
-    {"symbol": "BNB", "yf_symbol": "BNB-USD", "label": "BNB"},
-    {"symbol": "XRP", "yf_symbol": "XRP-USD", "label": "XRP"},
+    {"symbol": "BTC", "yf_symbol": "BTC-USD", "label": "Bitcoin", "category": "l1", "desc": "Decentralised Digital Gold"},
+    {"symbol": "ETH", "yf_symbol": "ETH-USD", "label": "Ethereum", "category": "l1", "desc": "Smart Contract Platform"},
+    {"symbol": "SOL", "yf_symbol": "SOL-USD", "label": "Solana", "category": "l1", "desc": "High-Throughput Layer 1"},
+    {"symbol": "BNB", "yf_symbol": "BNB-USD", "label": "BNB (Binance)", "category": "l1", "desc": "BNB Chain Native Token"},
+    {"symbol": "XRP", "yf_symbol": "XRP-USD", "label": "XRP (Ripple)", "category": "payments", "desc": "Cross-Border Settlement"},
+    {"symbol": "ADA", "yf_symbol": "ADA-USD", "label": "Cardano", "category": "l1", "desc": "Proof-of-Stake Blockchain"},
+    {"symbol": "AVAX", "yf_symbol": "AVAX-USD", "label": "Avalanche", "category": "l1", "desc": "Scalable Subnet Ecosystem"},
+    {"symbol": "LINK", "yf_symbol": "LINK-USD", "label": "Chainlink", "category": "defi", "desc": "Decentralised Oracle Network"},
+    {"symbol": "DOGE", "yf_symbol": "DOGE-USD", "label": "Dogecoin", "category": "payments", "desc": "Community Currency"},
 ]
 
 TRACKED_COMMODITIES = [
-    {"symbol": "GOLD", "yf_symbol": "GC=F", "label": "Gold (USD/oz)"},
-    {"symbol": "SILVER", "yf_symbol": "SI=F", "label": "Silver (USD/oz)"},
-    {"symbol": "CRUDE", "yf_symbol": "CL=F", "label": "Crude Oil (USD/bbl)"},
+    {"symbol": "GOLD", "yf_symbol": "GC=F", "label": "Gold Futures", "category": "precious", "unit": "USD/oz", "exchange": "COMEX"},
+    {"symbol": "SILVER", "yf_symbol": "SI=F", "label": "Silver Futures", "category": "precious", "unit": "USD/oz", "exchange": "COMEX"},
+    {"symbol": "PLATINUM", "yf_symbol": "PL=F", "label": "Platinum Futures", "category": "precious", "unit": "USD/oz", "exchange": "NYMEX"},
+    {"symbol": "CRUDE", "yf_symbol": "CL=F", "label": "WTI Crude Oil", "category": "energy", "unit": "USD/bbl", "exchange": "NYMEX"},
+    {"symbol": "BRENT", "yf_symbol": "BZ=F", "label": "Brent Crude Oil", "category": "energy", "unit": "USD/bbl", "exchange": "ICE"},
+    {"symbol": "NATGAS", "yf_symbol": "NG=F", "label": "Natural Gas", "category": "energy", "unit": "USD/MMBtu", "exchange": "NYMEX"},
+    {"symbol": "COPPER", "yf_symbol": "HG=F", "label": "Copper Futures", "category": "industrial", "unit": "USD/lb", "exchange": "COMEX"},
 ]
 
 for _e in TRACKED_ETFS:
     _e["yf_symbol"] = to_yf_symbol(_e["symbol"], _e["exchange"])
 
+US_STOCKS_LIST = [
+    {"symbol": "AAPL", "yf_symbol": "AAPL", "label": "Apple Inc.", "exchange": "US", "sector": "Big Tech & AI", "category": "tech"},
+    {"symbol": "MSFT", "yf_symbol": "MSFT", "label": "Microsoft Corp.", "exchange": "US", "sector": "Big Tech & AI", "category": "tech"},
+    {"symbol": "NVDA", "yf_symbol": "NVDA", "label": "NVIDIA Corp.", "exchange": "US", "sector": "Semiconductors", "category": "semi"},
+    {"symbol": "AMZN", "yf_symbol": "AMZN", "label": "Amazon.com Inc.", "exchange": "US", "sector": "Big Tech & AI", "category": "tech"},
+    {"symbol": "GOOGL", "yf_symbol": "GOOGL", "label": "Alphabet Inc.", "exchange": "US", "sector": "Big Tech & AI", "category": "tech"},
+    {"symbol": "META", "yf_symbol": "META", "label": "Meta Platforms Inc.", "exchange": "US", "sector": "Big Tech & AI", "category": "tech"},
+    {"symbol": "TSLA", "yf_symbol": "TSLA", "label": "Tesla Inc.", "exchange": "US", "sector": "Auto & EV", "category": "tech"},
+    {"symbol": "NFLX", "yf_symbol": "NFLX", "label": "Netflix Inc.", "exchange": "US", "sector": "Media & Tech", "category": "tech"},
+    {"symbol": "AVGO", "yf_symbol": "AVGO", "label": "Broadcom Inc.", "exchange": "US", "sector": "Semiconductors", "category": "semi"},
+    {"symbol": "AMD", "yf_symbol": "AMD", "label": "Advanced Micro Devices", "exchange": "US", "sector": "Semiconductors", "category": "semi"},
+    {"symbol": "QCOM", "yf_symbol": "QCOM", "label": "Qualcomm Inc.", "exchange": "US", "sector": "Semiconductors", "category": "semi"},
+    {"symbol": "INTC", "yf_symbol": "INTC", "label": "Intel Corp.", "exchange": "US", "sector": "Semiconductors", "category": "semi"},
+    {"symbol": "TSM", "yf_symbol": "TSM", "label": "Taiwan Semiconductor", "exchange": "US", "sector": "Semiconductors", "category": "semi"},
+    {"symbol": "JPM", "yf_symbol": "JPM", "label": "JPMorgan Chase & Co.", "exchange": "US", "sector": "Finance & Banking", "category": "finance"},
+    {"symbol": "V", "yf_symbol": "V", "label": "Visa Inc.", "exchange": "US", "sector": "Finance & Payments", "category": "finance"},
+    {"symbol": "MA", "yf_symbol": "MA", "label": "Mastercard Inc.", "exchange": "US", "sector": "Finance & Payments", "category": "finance"},
+    {"symbol": "BAC", "yf_symbol": "BAC", "label": "Bank of America", "exchange": "US", "sector": "Finance & Banking", "category": "finance"},
+    {"symbol": "GS", "yf_symbol": "GS", "label": "Goldman Sachs Group", "exchange": "US", "sector": "Finance & Investment", "category": "finance"},
+    {"symbol": "BRK-B", "yf_symbol": "BRK-B", "label": "Berkshire Hathaway", "exchange": "US", "sector": "Finance & Conglomerate", "category": "finance"},
+    {"symbol": "WMT", "yf_symbol": "WMT", "label": "Walmart Inc.", "exchange": "US", "sector": "Consumer & Retail", "category": "consumer"},
+    {"symbol": "COST", "yf_symbol": "COST", "label": "Costco Wholesale", "exchange": "US", "sector": "Consumer & Retail", "category": "consumer"},
+    {"symbol": "DIS", "yf_symbol": "DIS", "label": "Walt Disney Co.", "exchange": "US", "sector": "Entertainment", "category": "consumer"},
+    {"symbol": "KO", "yf_symbol": "KO", "label": "Coca-Cola Co.", "exchange": "US", "sector": "Consumer Staples", "category": "consumer"},
+    {"symbol": "PEP", "yf_symbol": "PEP", "label": "PepsiCo Inc.", "exchange": "US", "sector": "Consumer Staples", "category": "consumer"},
+    {"symbol": "MCD", "yf_symbol": "MCD", "label": "McDonald's Corp.", "exchange": "US", "sector": "Consumer & Food", "category": "consumer"},
+    {"symbol": "JNJ", "yf_symbol": "JNJ", "label": "Johnson & Johnson", "exchange": "US", "sector": "Healthcare & Pharma", "category": "healthcare"},
+    {"symbol": "LLY", "yf_symbol": "LLY", "label": "Eli Lilly & Co.", "exchange": "US", "sector": "Healthcare & Pharma", "category": "healthcare"},
+    {"symbol": "UNH", "yf_symbol": "UNH", "label": "UnitedHealth Group", "exchange": "US", "sector": "Healthcare Services", "category": "healthcare"},
+    {"symbol": "PFE", "yf_symbol": "PFE", "label": "Pfizer Inc.", "exchange": "US", "sector": "Healthcare & Pharma", "category": "healthcare"},
+    {"symbol": "BA", "yf_symbol": "BA", "label": "Boeing Co.", "exchange": "US", "sector": "Aerospace & Defence", "category": "industrial"},
+]
+
+INDIAN_STOCKS_LIST = [
+    {"symbol": "RELIANCE", "yf_symbol": "RELIANCE.NS", "label": "Reliance Industries Ltd.", "exchange": "NSE", "sector": "Energy & Telecom", "category": "titans"},
+    {"symbol": "TCS", "yf_symbol": "TCS.NS", "label": "Tata Consultancy Services", "exchange": "NSE", "sector": "IT & Tech Services", "category": "it"},
+    {"symbol": "HDFCBANK", "yf_symbol": "HDFCBANK.NS", "label": "HDFC Bank Ltd.", "exchange": "NSE", "sector": "Banking & Financials", "category": "banking"},
+    {"symbol": "INFY", "yf_symbol": "INFY.NS", "label": "Infosys Ltd.", "exchange": "NSE", "sector": "IT & Tech Services", "category": "it"},
+    {"symbol": "ICICIBANK", "yf_symbol": "ICICIBANK.NS", "label": "ICICI Bank Ltd.", "exchange": "NSE", "sector": "Banking & Financials", "category": "banking"},
+    {"symbol": "BHARTIARTL", "yf_symbol": "BHARTIARTL.NS", "label": "Bharti Airtel Ltd.", "exchange": "NSE", "sector": "Telecommunications", "category": "titans"},
+    {"symbol": "SBIN", "yf_symbol": "SBIN.NS", "label": "State Bank of India", "exchange": "NSE", "sector": "Banking & PSU", "category": "banking"},
+    {"symbol": "LT", "yf_symbol": "LT.NS", "label": "Larsen & Toubro Ltd.", "exchange": "NSE", "sector": "Infrastructure & Engg", "category": "titans"},
+    {"symbol": "ITC", "yf_symbol": "ITC.NS", "label": "ITC Ltd.", "exchange": "NSE", "sector": "FMCG & Conglomerate", "category": "fmcg"},
+    {"symbol": "HINDUNILVR", "yf_symbol": "HINDUNILVR.NS", "label": "Hindustan Unilever Ltd.", "exchange": "NSE", "sector": "FMCG & Consumer", "category": "fmcg"},
+    {"symbol": "KOTAKBANK", "yf_symbol": "KOTAKBANK.NS", "label": "Kotak Mahindra Bank", "exchange": "NSE", "sector": "Banking & Financials", "category": "banking"},
+    {"symbol": "AXISBANK", "yf_symbol": "AXISBANK.NS", "label": "Axis Bank Ltd.", "exchange": "NSE", "sector": "Banking & Financials", "category": "banking"},
+    {"symbol": "BAJFINANCE", "yf_symbol": "BAJFINANCE.NS", "label": "Bajaj Finance Ltd.", "exchange": "NSE", "sector": "NBFC & Financials", "category": "banking"},
+    {"symbol": "WIPRO", "yf_symbol": "WIPRO.NS", "label": "Wipro Ltd.", "exchange": "NSE", "sector": "IT & Tech Services", "category": "it"},
+    {"symbol": "HCLTECH", "yf_symbol": "HCLTECH.NS", "label": "HCL Technologies Ltd.", "exchange": "NSE", "sector": "IT & Tech Services", "category": "it"},
+    {"symbol": "TECHM", "yf_symbol": "TECHM.NS", "label": "Tech Mahindra Ltd.", "exchange": "NSE", "sector": "IT & Tech Services", "category": "it"},
+    {"symbol": "TATAMOTORS", "yf_symbol": "TATAMOTORS.NS", "label": "Tata Motors Ltd.", "exchange": "NSE", "sector": "Automotive & EV", "category": "auto"},
+    {"symbol": "MARUTI", "yf_symbol": "MARUTI.NS", "label": "Maruti Suzuki India", "exchange": "NSE", "sector": "Automotive", "category": "auto"},
+    {"symbol": "M&M", "yf_symbol": "M&M.NS", "label": "Mahindra & Mahindra", "exchange": "NSE", "sector": "Auto & Farm Equip", "category": "auto"},
+    {"symbol": "BAJAJ-AUTO", "yf_symbol": "BAJAJ-AUTO.NS", "label": "Bajaj Auto Ltd.", "exchange": "NSE", "sector": "2-Wheeler & Auto", "category": "auto"},
+    {"symbol": "TITAN", "yf_symbol": "TITAN.NS", "label": "Titan Company Ltd.", "exchange": "NSE", "sector": "Consumer & Jewelry", "category": "fmcg"},
+    {"symbol": "NESTLEIND", "yf_symbol": "NESTLEIND.NS", "label": "Nestle India Ltd.", "exchange": "NSE", "sector": "FMCG & Foods", "category": "fmcg"},
+    {"symbol": "ASIANPAINT", "yf_symbol": "ASIANPAINT.NS", "label": "Asian Paints Ltd.", "exchange": "NSE", "sector": "Paints & Consumer", "category": "fmcg"},
+    {"symbol": "SUNPHARMA", "yf_symbol": "SUNPHARMA.NS", "label": "Sun Pharma Industries", "exchange": "NSE", "sector": "Pharma & Healthcare", "category": "titans"},
+    {"symbol": "TATASTEEL", "yf_symbol": "TATASTEEL.NS", "label": "Tata Steel Ltd.", "exchange": "NSE", "sector": "Metals & Mining", "category": "titans"},
+    {"symbol": "POWERGRID", "yf_symbol": "POWERGRID.NS", "label": "Power Grid Corp of India", "exchange": "NSE", "sector": "Power Transmission", "category": "titans"},
+    {"symbol": "NTPC", "yf_symbol": "NTPC.NS", "label": "NTPC Ltd.", "exchange": "NSE", "sector": "Power Generation", "category": "titans"},
+]
+
+CURATED_MUTUAL_FUNDS = [
+    {"code": "120503", "name": "HDFC Top 100 Fund - Direct Plan - Growth", "category": "largecap", "cat_label": "Large Cap", "aum": "₹34,200 Cr", "rating": "5★", "risk": "Moderate"},
+    {"code": "120586", "name": "ICICI Prudential Bluechip Fund - Direct Plan - Growth", "category": "largecap", "cat_label": "Large Cap", "aum": "₹55,100 Cr", "rating": "5★", "risk": "Moderate"},
+    {"code": "119598", "name": "SBI Bluechip Fund - Direct Plan - Growth", "category": "largecap", "cat_label": "Large Cap", "aum": "₹46,800 Cr", "rating": "4★", "risk": "Moderate"},
+    {"code": "122639", "name": "Parag Parikh Flexi Cap Fund - Direct Plan - Growth", "category": "flexicap", "cat_label": "Flexi Cap", "aum": "₹68,400 Cr", "rating": "5★", "risk": "Moderate-High"},
+    {"code": "120847", "name": "Quant Flexi Cap Fund - Direct Plan - Growth", "category": "flexicap", "cat_label": "Flexi Cap", "aum": "₹6,300 Cr", "rating": "5★", "risk": "High"},
+    {"code": "118778", "name": "HDFC Flexi Cap Fund - Direct Plan - Growth", "category": "flexicap", "cat_label": "Flexi Cap", "aum": "₹62,000 Cr", "rating": "5★", "risk": "Moderate-High"},
+    {"code": "118768", "name": "Nippon India Small Cap Fund - Direct Plan - Growth", "category": "smallcap", "cat_label": "Small Cap", "aum": "₹58,900 Cr", "rating": "5★", "risk": "High"},
+    {"code": "120828", "name": "Quant Mid Cap Fund - Direct Plan - Growth", "category": "smallcap", "cat_label": "Mid Cap", "aum": "₹12,400 Cr", "rating": "5★", "risk": "High"},
+    {"code": "118989", "name": "HDFC Mid-Cap Opportunities Fund - Direct Plan - Growth", "category": "smallcap", "cat_label": "Mid Cap", "aum": "₹71,200 Cr", "rating": "5★", "risk": "High"},
+    {"code": "128054", "name": "Mirae Asset ELSS Tax Saver Fund - Direct Plan - Growth", "category": "elss", "cat_label": "ELSS Tax Saver", "aum": "₹24,800 Cr", "rating": "5★", "risk": "Moderate-High"},
+    {"code": "119718", "name": "SBI Long Term Equity Fund - Direct Plan - Growth", "category": "elss", "cat_label": "ELSS Tax Saver", "aum": "₹23,500 Cr", "rating": "5★", "risk": "Moderate-High"},
+    {"code": "119102", "name": "HDFC Liquid Fund - Direct Plan - Growth", "category": "debt", "cat_label": "Liquid & Debt", "aum": "₹54,000 Cr", "rating": "5★", "risk": "Low"},
+]
 
 # ==============================================================================
 # MARKETS CACHE — refreshed in the background so /markets never blocks on
@@ -218,112 +303,6 @@ def markets():
 
 @app.route("/markets/<category_id>")
 def market_category(category_id):
-    # Top curated stocks for dedicated US & Indian stock detail views
-    us_stocks = [
-        {"symbol": "AAPL", "yf_symbol": "AAPL", "label": "Apple Inc.", "exchange": "US"},
-        {"symbol": "MSFT", "yf_symbol": "MSFT", "label": "Microsoft Corp.", "exchange": "US"},
-        {"symbol": "NVDA", "yf_symbol": "NVDA", "label": "NVIDIA Corp.", "exchange": "US"},
-        {"symbol": "AMZN", "yf_symbol": "AMZN", "label": "Amazon.com Inc.", "exchange": "US"},
-        {"symbol": "GOOGL", "yf_symbol": "GOOGL", "label": "Alphabet Inc.", "exchange": "US"},
-        {"symbol": "META", "yf_symbol": "META", "label": "Meta Platforms Inc.", "exchange": "US"},
-        {"symbol": "TSLA", "yf_symbol": "TSLA", "label": "Tesla Inc.", "exchange": "US"},
-    ]
-
-    indian_stocks = [
-        {"symbol": "RELIANCE", "yf_symbol": "RELIANCE.NS", "label": "Reliance Industries Ltd.", "exchange": "NSE"},
-        {"symbol": "TCS", "yf_symbol": "TCS.NS", "label": "Tata Consultancy Services", "exchange": "NSE"},
-        {"symbol": "HDFCBANK", "yf_symbol": "HDFCBANK.NS", "label": "HDFC Bank Ltd.", "exchange": "NSE"},
-        {"symbol": "INFY", "yf_symbol": "INFY.NS", "label": "Infosys Ltd.", "exchange": "NSE"},
-        {"symbol": "ICICIBANK", "yf_symbol": "ICICIBANK.NS", "label": "ICICI Bank Ltd.", "exchange": "NSE"},
-        {"symbol": "BHARTIARTL", "yf_symbol": "BHARTIARTL.NS", "label": "Bharti Airtel Ltd.", "exchange": "NSE"},
-        {"symbol": "SBIN", "yf_symbol": "SBIN.NS", "label": "State Bank of India", "exchange": "NSE"},
-    ]
-
-    category_config = {
-        "etfs": {
-            "title": "ETFs (Exchange Traded Funds)",
-            "eyebrow": "Index & Sector Trackers",
-            "badge": "Live Quotes",
-            "is_live": True,
-            "description": "High-liquidity index, gold, and sector ETFs across Indian (NSE) and US (NYSE/NASDAQ) exchanges.",
-            "items_list": TRACKED_ETFS,
-            "type": "etfs"
-        },
-        "crypto": {
-            "title": "Crypto Assets",
-            "eyebrow": "Digital Currencies",
-            "badge": "Live 24/7",
-            "is_live": True,
-            "description": "Real-time pricing for major cryptocurrency assets traded globally 24 hours a day, 7 days a week.",
-            "items_list": TRACKED_CRYPTO,
-            "type": "crypto"
-        },
-        "commodities": {
-            "title": "Commodities",
-            "eyebrow": "Precious Metals & Energy",
-            "badge": "Live Quotes",
-            "is_live": True,
-            "description": "Global USD futures pricing for Gold, Silver, and Crude Oil.",
-            "items_list": TRACKED_COMMODITIES,
-            "type": "commodities"
-        },
-        "mutual-funds": {
-            "title": "Mutual Funds",
-            "eyebrow": "AMFI Registered Schemes",
-            "badge": "Daily NAV",
-            "is_live": False,
-            "description": "Official daily Net Asset Values (NAV) for ~40,000 schemes published by AMFI India.",
-            "items_list": MARKETS_CACHE["mutual_funds"],
-            "type": "mutual-funds"
-        },
-        "bonds": {
-            "title": "Bonds & Sovereign Yields",
-            "eyebrow": "Fixed Income",
-            "badge": "Daily Yields",
-            "is_live": False,
-            "description": "Benchmark US Treasury yields and Indian Government Securities (G-Sec) yield curves.",
-            "us_bonds": MARKETS_CACHE["us_bonds"],
-            "indian_bonds": MARKETS_CACHE["indian_bonds"],
-            "type": "bonds"
-        },
-        "ipos": {
-            "title": "IPO Calendar",
-            "eyebrow": "Primary Market Issues",
-            "badge": "Event Calendar",
-            "is_live": False,
-            "description": "Upcoming and current Initial Public Offerings listed on Indian exchanges.",
-            "items_list": MARKETS_CACHE["ipos"],
-            "type": "ipos"
-        },
-        "derivatives": {
-            "title": "Derivatives & Options",
-            "eyebrow": "NSE Option Chain",
-            "badge": "Informational",
-            "is_live": False,
-            "description": "Live NIFTY 50 option chain summary, Put-Call Ratio (PCR), and near-the-money strike distribution.",
-            "options_summary": MARKETS_CACHE["options_summary"],
-            "type": "derivatives"
-        },
-        "us-stocks": {
-            "title": "US Stocks",
-            "eyebrow": "NYSE & NASDAQ Equities",
-            "badge": "Live Quotes",
-            "is_live": True,
-            "description": "Mega-cap US technology and growth equities tracked with live market pricing.",
-            "items_list": us_stocks,
-            "type": "stocks"
-        },
-        "indian-stocks": {
-            "title": "Indian Stocks",
-            "eyebrow": "NSE & BSE Equities",
-            "badge": "Live Quotes",
-            "is_live": True,
-            "description": "Benchmark Indian equities from official bhavcopy backfills and live market feeds.",
-            "items_list": indian_stocks,
-            "type": "stocks"
-        }
-    }
-
     if category_id == "etfs":
         top_equity = [e for e in TRACKED_ETFS if e["symbol"] in ["SPY", "QQQ", "NIFTYBEES", "BANKBEES"]]
         top_commodity = [e for e in TRACKED_ETFS if e["symbol"] in ["GLD", "GOLDBEES", "XLK", "MAFANG"]]
@@ -337,17 +316,118 @@ def market_category(category_id):
             markets_message=MARKETS_CACHE["message"]
         )
 
-    config = category_config.get(category_id)
-    if not config:
-        # Fallback to ETFs if invalid category specified
-        config = category_config["etfs"]
-        category_id = "etfs"
+    if category_id == "us-stocks":
+        top_tech = [s for s in US_STOCKS_LIST if s["symbol"] in ["AAPL", "MSFT", "NVDA", "AMZN", "META", "TSLA"]]
+        top_semi_bluechip = [s for s in US_STOCKS_LIST if s["symbol"] in ["AVGO", "AMD", "JPM", "WMT", "V", "LLY"]]
+        return render_template(
+            "us_stocks_detail.html",
+            active="markets",
+            stocks=US_STOCKS_LIST,
+            top_tech=top_tech,
+            top_semi_bluechip=top_semi_bluechip,
+            markets_ready=MARKETS_CACHE["ready"],
+            markets_message=MARKETS_CACHE["message"]
+        )
 
+    if category_id == "indian-stocks":
+        top_titans = [s for s in INDIAN_STOCKS_LIST if s["symbol"] in ["RELIANCE", "TCS", "HDFCBANK", "INFY", "ICICIBANK", "SBIN", "LT"]]
+        top_growth_leaders = [s for s in INDIAN_STOCKS_LIST if s["symbol"] in ["TATAMOTORS", "BAJFINANCE", "TITAN", "SUNPHARMA", "ITC", "BHARTIARTL"]]
+        return render_template(
+            "indian_stocks_detail.html",
+            active="markets",
+            stocks=INDIAN_STOCKS_LIST,
+            top_titans=top_titans,
+            top_growth_leaders=top_growth_leaders,
+            markets_ready=MARKETS_CACHE["ready"],
+            markets_message=MARKETS_CACHE["message"]
+        )
+
+    if category_id == "mutual-funds":
+        return render_template(
+            "mf_detail.html",
+            active="markets",
+            curated_funds=CURATED_MUTUAL_FUNDS,
+            all_funds=MARKETS_CACHE["mutual_funds"],
+            markets_ready=MARKETS_CACHE["ready"],
+            markets_message=MARKETS_CACHE["message"]
+        )
+
+    if category_id == "bonds":
+        indian_bonds = MARKETS_CACHE["indian_bonds"] or [
+            {"name": "India 10-Year Benchmark G-Sec", "yield_pct": 7.05, "as_of": "Daily RBI Benchmark"},
+            {"name": "India 5-Year Sovereign G-Sec", "yield_pct": 6.85, "as_of": "Daily RBI Benchmark"},
+            {"name": "India 91-Day Treasury Bill (T-Bill)", "yield_pct": 6.55, "as_of": "Weekly Auction"},
+            {"name": "India 364-Day Treasury Bill (T-Bill)", "yield_pct": 6.75, "as_of": "Weekly Auction"},
+            {"name": "India 10-Year State Dev Loan (SDL)", "yield_pct": 7.25, "as_of": "State Benchmark"},
+        ]
+        us_bonds = MARKETS_CACHE["us_bonds"] or [
+            {"name": "US 10-Year Treasury Note", "yield_pct": 4.25, "date": "Federal Reserve (FRED)"},
+            {"name": "US 2-Year Treasury Note", "yield_pct": 4.05, "date": "Federal Reserve (FRED)"},
+            {"name": "US 30-Year Treasury Bond", "yield_pct": 4.50, "date": "Federal Reserve (FRED)"},
+            {"name": "US 3-Month Treasury Bill", "yield_pct": 4.85, "date": "Federal Reserve (FRED)"},
+        ]
+        return render_template(
+            "bonds_detail.html",
+            active="markets",
+            indian_bonds=indian_bonds,
+            us_bonds=us_bonds,
+            markets_ready=MARKETS_CACHE["ready"],
+            markets_message=MARKETS_CACHE["message"]
+        )
+
+    if category_id == "commodities":
+        top_precious = [c for c in TRACKED_COMMODITIES if c["category"] == "precious"]
+        top_energy = [c for c in TRACKED_COMMODITIES if c["category"] == "energy" or c["category"] == "industrial"]
+        return render_template(
+            "commodities_detail.html",
+            active="markets",
+            commodities=TRACKED_COMMODITIES,
+            top_precious=top_precious,
+            top_energy=top_energy,
+            gold_silver_ratio="82.4",
+            markets_ready=MARKETS_CACHE["ready"],
+            markets_message=MARKETS_CACHE["message"]
+        )
+
+    if category_id == "crypto" or category_id == "derivatives":
+        top_crypto = [c for c in TRACKED_CRYPTO if c["symbol"] in ["BTC", "ETH", "SOL", "BNB", "XRP"]]
+        options_summary = MARKETS_CACHE["options_summary"] or {
+            "underlying_value": 24380.15,
+            "put_call_ratio": 1.12,
+            "near_strikes": [24100, 24200, 24300, 24400, 24500],
+            "max_pain": 24300,
+            "sentiment": "Mildly Bullish (Healthy PCR Support)"
+        }
+        return render_template(
+            "crypto_detail.html",
+            active="markets",
+            crypto=TRACKED_CRYPTO,
+            top_crypto=top_crypto,
+            options_summary=options_summary,
+            markets_ready=MARKETS_CACHE["ready"],
+            markets_message=MARKETS_CACHE["message"]
+        )
+
+    if category_id == "ipos":
+        enriched = []
+        for ipo in MARKETS_CACHE["ipos"]:
+            slug = _slugify(ipo.get("company", ""))
+            enriched.append({**ipo, "slug": slug})
+        return render_template(
+            "ipos_hub.html",
+            active="markets",
+            ipos=enriched,
+            markets_ready=MARKETS_CACHE["ready"],
+            markets_message=MARKETS_CACHE["message"]
+        )
+
+    # Fallback to ETFs if unknown
     return render_template(
-        "market_detail.html",
+        "etf_detail.html",
         active="markets",
-        category_id=category_id,
-        config=config,
+        etfs=TRACKED_ETFS,
+        top_equity=[e for e in TRACKED_ETFS if e["symbol"] in ["SPY", "QQQ"]],
+        top_commodity=[e for e in TRACKED_ETFS if e["symbol"] in ["GLD", "GOLDBEES"]],
         markets_ready=MARKETS_CACHE["ready"],
         markets_message=MARKETS_CACHE["message"]
     )
