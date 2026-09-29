@@ -43,12 +43,32 @@
 </section>
 {% else %}
 
+<div class="results-hero-card">
+  <div class="rhc-inner">
+    <div class="rhc-content">
+      <span class="rhc-badge"><span class="live-dot"></span> Risk-Adjusted Allocation Spectrum</span>
+      <h3>3 Distinct Risk Horizons Sized to Your Budget</h3>
+      <p>Picks are segmented into Low, Medium, and High risk bands. Compare expected returns, allocation sizing, and technical factors across the tiers below.</p>
+    </div>
+    <div class="rhc-image-wrap">
+      <img src="{{ url_for('static', filename='advice_risk_tiers.jpg') }}" alt="Three Risk Horizons: Low Risk Green, Medium Risk Amber, High Risk Red">
+    </div>
+  </div>
+</div>
+
 <section class="risk-columns">
-  {% for risk_name, icon_class in [('Low Risk','low'), ('Medium Risk','medium'), ('High Risk','high')] %}
+  {% for risk_name, icon_class, risk_badge in [
+    ('Low Risk', 'low', 'Conservative · Capital Protection'),
+    ('Medium Risk', 'medium', 'Balanced · Moderate Growth'),
+    ('High Risk', 'high', 'Aggressive · Alpha Upside')
+  ] %}
   <div class="risk-col risk-{{ icon_class }}">
     <div class="risk-col-head">
-      <span class="risk-dot risk-dot-{{ icon_class }}"></span>
-      <h2>{{ risk_name }}</h2>
+      <div class="risk-head-title">
+        <span class="risk-dot risk-dot-{{ icon_class }}"></span>
+        <h2>{{ risk_name }}</h2>
+      </div>
+      <span class="risk-tier-badge risk-tier-{{ icon_class }}">{{ risk_badge }}</span>
     </div>
 
     {% set bucket = buckets.get(risk_name) %}

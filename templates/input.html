@@ -12,10 +12,17 @@
 <section class="engines">
 
   <article class="engine-card engine-gold" id="advisor-panel">
+    <div class="engine-media">
+      <img src="{{ url_for('static', filename='advice_gru_ai.jpg') }}" alt="AI Neural Network Multi-Exchange Engine" loading="lazy">
+      <div class="engine-media-overlay">
+        <span class="engine-media-badge">GRU Deep Learning · NSE · BSE · US</span>
+      </div>
+    </div>
+
     <div class="engine-head">
       <span class="engine-tag">Long horizon</span>
       <h2>Multi-Exchange Advisor</h2>
-      <p>A GRU model trained across NSE, BSE, and US price histories, sorted into
+      <p>A GRU neural model trained across NSE, BSE, and US price histories, sorted into
          low, medium, and high-risk shortlists sized to your capital.</p>
     </div>
 
@@ -40,6 +47,13 @@
   </article>
 
   <article class="engine-card engine-teal" id="intraday-panel">
+    <div class="engine-media">
+      <img src="{{ url_for('static', filename='advice_intraday.jpg') }}" alt="Real-time Intraday Multi-screen Scanner" loading="lazy">
+      <div class="engine-media-overlay">
+        <span class="engine-media-badge">5-Min Live Candles · VWAP · RSI</span>
+      </div>
+    </div>
+
     <div class="engine-head">
       <span class="engine-tag engine-tag-alt">Same session</span>
       <h2>Intraday Scanner</h2>
@@ -63,5 +77,56 @@
     </form>
   </article>
 
+</section>
+
+<!-- ========================= RISK SPECTRUM SHOWCASE ========================= -->
+<section class="advice-risk-showcase">
+  <div class="ars-header">
+    <h2>Three Distinct Risk Horizons</h2>
+    <p>Every scan organizes recommendations into 3 transparent risk buckets so your allocation matches your exact appetite.</p>
+  </div>
+
+  <div class="ars-banner-wrap">
+    <img src="{{ url_for('static', filename='advice_risk_tiers.jpg') }}" alt="Three Risk Levels: Low Risk Green, Medium Risk Amber, High Risk Red">
+    <div class="ars-banner-caption">
+      <span class="ars-banner-title">Algorithmic Risk Profiling</span>
+      <span class="ars-banner-tag">Dynamic Volatility Bands</span>
+    </div>
+  </div>
+
+  <div class="risk-preview-grid">
+    <div class="risk-preview-card low">
+      <span class="rpc-badge">Tier 1 · Conservative</span>
+      <h3 class="rpc-title">Low Risk</h3>
+      <p class="rpc-desc">Defensive large-caps, market leaders, and high-conviction dividend paying securities designed for capital preservation.</p>
+      <ul class="rpc-list">
+        <li>Low historical beta (&lt; 0.85)</li>
+        <li>Steady balance sheets and consistent margins</li>
+        <li>Minimal drawdowns during market corrections</li>
+      </ul>
+    </div>
+
+    <div class="risk-preview-card medium">
+      <span class="rpc-badge">Tier 2 · Balanced</span>
+      <h3 class="rpc-title">Medium Risk</h3>
+      <p class="rpc-desc">Established mid-to-large cap growth equities balancing capital appreciation with measured cyclical volatility.</p>
+      <ul class="rpc-list">
+        <li>Market beta around benchmark (0.85 – 1.25)</li>
+        <li>Strong sector tailwinds and secular growth</li>
+        <li>Healthy risk-to-reward Sharpe profile</li>
+      </ul>
+    </div>
+
+    <div class="risk-preview-card high">
+      <span class="rpc-badge">Tier 3 · Aggressive</span>
+      <h3 class="rpc-title">High Risk</h3>
+      <p class="rpc-desc">High-beta, high-momentum breakouts and emerging growth names with potential for outsized alpha gains.</p>
+      <ul class="rpc-list">
+        <li>Elevated beta and intraday momentum</li>
+        <li>High upside potential with wider price swings</li>
+        <li>Suited for tactical short-to-medium swings</li>
+      </ul>
+    </div>
+  </div>
 </section>
 {% endblock %}

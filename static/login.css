@@ -10,6 +10,121 @@
   padding: 48px 20px;
 }
 
+.login-split-wrap {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 32px;
+  max-width: 960px;
+  width: 100%;
+  align-items: center;
+}
+
+@media (max-width: 840px) {
+  .login-split-wrap {
+    grid-template-columns: 1fr;
+    max-width: 440px;
+  }
+}
+
+.login-hero-side {
+  height: 100%;
+  min-height: 480px;
+}
+
+@media (max-width: 840px) {
+  .login-hero-side {
+    display: none;
+  }
+}
+
+.lhs-image-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--hairline);
+  box-shadow: var(--shadow);
+}
+
+.lhs-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lhs-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8, 11, 16, 0.4) 0%, rgba(8, 11, 16, 0.92) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 32px 28px;
+}
+
+[data-theme="light"] .lhs-overlay {
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.3) 0%, rgba(15, 23, 42, 0.88) 100%);
+}
+
+.lhs-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  background: rgba(16, 216, 144, 0.15);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(16, 216, 144, 0.3);
+  margin-bottom: 12px;
+  width: fit-content;
+}
+
+.lhs-overlay h2 {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0 0 8px;
+}
+
+.lhs-overlay p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  margin: 0 0 20px;
+}
+
+.lhs-stats-row {
+  display: flex;
+  gap: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.lhs-stats-row > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.lhs-stats-row span {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.lhs-stats-row small {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
 .auth-card {
   background: var(--panel);
   border: 1px solid var(--hairline);
@@ -17,7 +132,7 @@
   padding: 8px;
   box-shadow: var(--shadow);
   width: 100%;
-  max-width: 430px;
+  max-width: 440px;
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 

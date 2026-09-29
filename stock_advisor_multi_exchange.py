@@ -43,7 +43,7 @@ NSE_FOLDER = "C:/Ved/project/Model/Market_Data/NSE"
 BSE_FOLDER = "C:/Ved/project/Model/Market_Data/BSE"
 US_FOLDER = "C:/Ved/project/Model/Market_Data/US"   # will be created automatically
 
-TWELVE_DATA_API_KEY = "YOUR_API_KEY_HERE"   # sign up free at https://twelvedata.com
+TWELVE_DATA_API_KEY = "f2a2afa08f944f429637b64d23044e13"   # sign up free at https://twelvedata.com
 
 # Your static NSE/BSE data covers Jan 2026, so backfill picks up from Feb 2026.
 BACKFILL_START_DATE = "2026-02-01"
@@ -175,7 +175,7 @@ def backfill_us_stocks(us_folder, tickers, api_key, start_date, end_date):
     CSV per symbol. Throttled for free-tier rate limits; on error for a symbol
     it skips and moves on so partial progress is preserved.
     """
-    if api_key == "YOUR_API_KEY_HERE":
+    if api_key == "f2a2afa08f944f429637b64d23044e13":
         print("⚠️ US backfill skipped: set TWELVE_DATA_API_KEY to your real free API key first.")
         return
 

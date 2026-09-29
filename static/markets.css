@@ -1280,6 +1280,202 @@ canvas#heroLiveChart {
   box-shadow: 0 8px 24px rgba(79, 70, 229, 0.14);
 }
 
+/* ==========================================================================
+   MARKET PHOTO SHOWCASE (3 High-Res Visual Cards)
+   ========================================================================== */
+.market-photo-showcase {
+  max-width: 1160px;
+  margin: 48px auto 0;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 860px) {
+  .market-photo-showcase {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mps-card {
+  background: var(--panel);
+  border: 1px solid var(--hairline);
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.mps-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(16, 216, 144, 0.4);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+}
+
+.mps-img-wrap {
+  width: 100%;
+  height: 175px;
+  position: relative;
+  overflow: hidden;
+}
+
+.mps-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.mps-card:hover .mps-img-wrap img {
+  transform: scale(1.06);
+}
+
+.mps-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: rgba(8, 11, 16, 0.85);
+  backdrop-filter: blur(8px);
+  color: var(--gold);
+  border: 1px solid rgba(16, 216, 144, 0.35);
+}
+
+.mps-info {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.mps-info h3 {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.mps-info p {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin: 0 0 16px;
+  flex: 1;
+}
+
+.mps-link {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--gold);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: gap 0.15s ease, color 0.15s ease;
+}
+
+.mps-card:hover .mps-link {
+  gap: 10px;
+}
+
+[data-theme="light"] .mps-card {
+  background: #FFFFFF;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.06);
+}
+
+[data-theme="light"] .mps-card:hover {
+  border-color: #00A86B;
+  box-shadow: 0 18px 40px -8px rgba(0, 168, 107, 0.18);
+}
+
+[data-theme="light"] .mps-badge {
+  background: rgba(255, 255, 255, 0.9);
+  color: #065F46;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+[data-theme="light"] .mps-link {
+  color: #008756;
+}
+
+/* ==========================================================================
+   CATEGORY HERO VISUAL BANNER (Dedicated to each individual market category)
+   ========================================================================== */
+.category-hero-visual {
+  max-width: 1160px;
+  margin: 0 auto 32px;
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+  height: 220px;
+  border: 1px solid var(--hairline);
+  box-shadow: var(--shadow-sm);
+  background: var(--panel);
+}
+
+@media (max-width: 768px) {
+  .category-hero-visual {
+    height: 160px;
+    margin-bottom: 24px;
+    border-radius: 14px;
+  }
+}
+
+.category-hero-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.category-hero-visual-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8, 11, 16, 0.1) 0%, rgba(8, 11, 16, 0.88) 100%);
+  display: flex;
+  align-items: flex-end;
+  padding: 22px 26px;
+}
+
+[data-theme="light"] .category-hero-visual-overlay {
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.05) 0%, rgba(15, 23, 42, 0.84) 100%);
+}
+
+.category-hero-visual-badge {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 6px;
+  width: fit-content;
+}
+
+.category-hero-visual-title {
+  color: #FFFFFF;
+  font-family: var(--font-heading);
+  font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+
 
 
 
