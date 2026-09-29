@@ -20,8 +20,10 @@ ENGINE_STATUS = {"ready": False, "message": "Starting up — loading the advisor
 
 def to_yf_symbol(symbol, exchange):
     """Converts a plain symbol + exchange into the ticker format yfinance expects."""
-    if symbol.endswith(".NS") or symbol.endswith(".BO"):
+    if symbol.endswith(".NS") or symbol.endswith(".BO") or "-USD" in symbol:
         return symbol
+    if exchange == "CRYPTO":
+        return f"{symbol}-USD"
     if exchange == "NSE":
         return f"{symbol}.NS"
     if exchange == "BSE":
@@ -51,16 +53,32 @@ threading.Thread(target=_load_engine_in_background, daemon=True).start()
 # change here are just the initial values shown before the first live poll;
 # /api/live-quotes overwrites them in the browser a moment after page load.
 TREND_STOCKS = [
-    {"symbol": "RELIANCE", "exchange": "NSE", "price": 2948.10, "change": 1.24, "spark": "0,20 15,18 30,14 45,16 60,10 75,8 100,4"},
-    {"symbol": "TCS", "exchange": "NSE", "price": 3812.55, "change": -0.62, "spark": "0,8 15,10 30,9 45,14 60,16 75,20 100,22"},
-    {"symbol": "HDFCBANK", "exchange": "BSE", "price": 1712.85, "change": 0.87, "spark": "0,18 15,16 30,17 45,12 60,13 75,9 100,7"},
-    {"symbol": "ICICIBANK", "exchange": "BSE", "price": 1284.40, "change": -0.35, "spark": "0,10 15,12 30,11 45,15 60,14 75,18 100,19"},
-    {"symbol": "AAPL", "exchange": "US", "price": 231.18, "change": 2.10, "spark": "0,22 15,18 30,15 45,13 60,9 75,6 100,3"},
-    {"symbol": "MSFT", "exchange": "US", "price": 468.02, "change": -1.05, "spark": "0,6 15,9 30,10 45,13 60,17 75,19 100,21"},
-    {"symbol": "NVDA", "exchange": "US", "price": 142.66, "change": 3.42, "spark": "0,24 15,19 30,16 45,11 60,7 75,5 100,2"},
-    {"symbol": "TITAN", "exchange": "NSE", "price": 3402.75, "change": 0.44, "spark": "0,16 15,15 30,14 45,13 60,12 75,10 100,9"},
-    {"symbol": "SBIN", "exchange": "BSE", "price": 812.40, "change": -0.28, "spark": "0,9 15,11 30,10 45,13 60,12 75,15 100,16"},
+    # --- Indian & US Stocks ---
+    {"symbol": "RELIANCE", "name": "Reliance Industries Ltd", "exchange": "NSE", "category": "stocks", "price": 2948.10, "change": 1.24, "spark": "0,20 15,18 30,14 45,16 60,10 75,8 100,4"},
+    {"symbol": "TCS", "name": "Tata Consultancy Services", "exchange": "NSE", "category": "stocks", "price": 3812.55, "change": -0.62, "spark": "0,8 15,10 30,9 45,14 60,16 75,20 100,22"},
+    {"symbol": "HDFCBANK", "name": "HDFC Bank Ltd", "exchange": "BSE", "category": "stocks", "price": 1712.85, "change": 0.87, "spark": "0,18 15,16 30,17 45,12 60,13 75,9 100,7"},
+    {"symbol": "ICICIBANK", "name": "ICICI Bank Ltd", "exchange": "BSE", "category": "stocks", "price": 1284.40, "change": -0.35, "spark": "0,10 15,12 30,11 45,15 60,14 75,18 100,19"},
+    {"symbol": "AAPL", "name": "Apple Inc.", "exchange": "US", "category": "stocks", "price": 231.18, "change": 2.10, "spark": "0,22 15,18 30,15 45,13 60,9 75,6 100,3"},
+    {"symbol": "MSFT", "name": "Microsoft Corporation", "exchange": "US", "category": "stocks", "price": 468.02, "change": -1.05, "spark": "0,6 15,9 30,10 45,13 60,17 75,19 100,21"},
+    {"symbol": "NVDA", "name": "NVIDIA Corporation", "exchange": "US", "category": "stocks", "price": 142.66, "change": 3.42, "spark": "0,24 15,19 30,16 45,11 60,7 75,5 100,2"},
+    {"symbol": "TITAN", "name": "Titan Company Ltd", "exchange": "NSE", "category": "stocks", "price": 3402.75, "change": 0.44, "spark": "0,16 15,15 30,14 45,13 60,12 75,10 100,9"},
+    {"symbol": "SBIN", "name": "State Bank of India", "exchange": "BSE", "category": "stocks", "price": 812.40, "change": -0.28, "spark": "0,9 15,11 30,10 45,13 60,12 75,15 100,16"},
+
+    # --- Crypto Assets ---
+    {"symbol": "BTC", "name": "Bitcoin (USD)", "exchange": "CRYPTO", "category": "crypto", "price": 89450.00, "change": 2.34, "spark": "0,22 15,19 30,17 45,12 60,9 75,6 100,2"},
+    {"symbol": "ETH", "name": "Ethereum (USD)", "exchange": "CRYPTO", "category": "crypto", "price": 3310.40, "change": -0.78, "spark": "0,7 15,9 30,12 45,15 60,14 75,18 100,21"},
+    {"symbol": "SOL", "name": "Solana (USD)", "exchange": "CRYPTO", "category": "crypto", "price": 184.25, "change": 4.15, "spark": "0,23 15,18 30,14 45,12 60,7 75,5 100,2"},
+    {"symbol": "BNB", "name": "BNB (USD)", "exchange": "CRYPTO", "category": "crypto", "price": 638.10, "change": 0.85, "spark": "0,16 15,15 30,12 45,14 60,10 75,8 100,6"},
+    {"symbol": "XRP", "name": "XRP (USD)", "exchange": "CRYPTO", "category": "crypto", "price": 2.24, "change": 1.45, "spark": "0,19 15,17 30,15 45,11 60,12 75,7 100,5"},
+
+    # --- ETFs ---
+    {"symbol": "SPY", "name": "SPDR S&P 500 ETF Trust", "exchange": "US", "category": "etfs", "price": 586.20, "change": 0.58, "spark": "0,18 15,16 30,15 45,13 60,11 75,9 100,6"},
+    {"symbol": "QQQ", "name": "Invesco QQQ Trust (Nasdaq 100)", "exchange": "US", "category": "etfs", "price": 512.80, "change": 1.12, "spark": "0,21 15,17 30,14 45,12 60,8 75,6 100,3"},
+    {"symbol": "NIFTYBEES", "name": "Nippon India Nifty 50 BeES", "exchange": "NSE", "category": "etfs", "price": 270.10, "change": 0.42, "spark": "0,17 15,16 30,14 45,13 60,11 75,9 100,8"},
+    {"symbol": "GOLDBEES", "name": "Nippon India ETF Gold BeES", "exchange": "NSE", "category": "etfs", "price": 72.85, "change": 0.28, "spark": "0,15 15,14 30,13 45,12 60,11 75,9 100,7"},
+    {"symbol": "BANKBEES", "name": "Nippon India Nifty Bank BeES", "exchange": "NSE", "category": "etfs", "price": 542.40, "change": -0.32, "spark": "0,9 15,11 30,10 45,14 60,15 75,17 100,19"}
 ]
+
 for _s in TREND_STOCKS:
     _s["yf_symbol"] = to_yf_symbol(_s["symbol"], _s["exchange"])
 
@@ -106,6 +124,84 @@ def live_quotes():
             continue
 
     return jsonify(results)
+
+
+@app.route("/api/asset-chart")
+def asset_chart():
+    """
+    Returns historical candlestick and closing price series with high/low/volume stats
+    for the interactive Big Format Graph modal on the homepage.
+    """
+    ticker = request.args.get("ticker", "").strip()
+    tf = request.args.get("tf", "1D").upper()
+    if not ticker:
+        return jsonify({"error": "No ticker specified"}), 400
+
+    tf_map = {
+        "1D": ("1d", "5m"),
+        "1W": ("5d", "15m"),
+        "1M": ("1mo", "1h"),
+        "1Y": ("1y", "1d"),
+        "ALL": ("5y", "1wk")
+    }
+    period, interval = tf_map.get(tf, ("1d", "5m"))
+
+    try:
+        t = yf.Ticker(ticker)
+        df = t.history(period=period, interval=interval)
+        if df is None or df.empty:
+            return jsonify({"points": [], "stats": {}})
+
+        df = df.dropna()
+        points = []
+        for idx, row in df.iterrows():
+            if interval in ("5m", "15m"):
+                t_str = idx.strftime("%H:%M")
+            elif interval == "1h":
+                t_str = idx.strftime("%d %b %H:%M")
+            else:
+                t_str = idx.strftime("%d %b '%y")
+
+            c_val = round(float(row["Close"]), 2)
+            o_val = round(float(row["Open"]), 2)
+            h_val = round(float(row["High"]), 2)
+            l_val = round(float(row["Low"]), 2)
+            v_val = int(row["Volume"]) if ("Volume" in row and not pd.isna(row["Volume"])) else 0
+
+            points.append({
+                "time": t_str,
+                "price": c_val,
+                "open": o_val,
+                "high": h_val,
+                "low": l_val,
+                "volume": v_val
+            })
+
+        if not points:
+            return jsonify({"points": [], "stats": {}})
+
+        first_open = points[0]["open"]
+        last_price = points[-1]["price"]
+        change_val = round(last_price - first_open, 2)
+        change_pct = round(((last_price - first_open) / first_open) * 100, 2) if first_open else 0.0
+        high_price = round(max(p["high"] for p in points), 2)
+        low_price = round(min(p["low"] for p in points), 2)
+        total_vol = sum(p["volume"] for p in points)
+
+        return jsonify({
+            "ticker": ticker,
+            "tf": tf,
+            "points": points,
+            "current_price": last_price,
+            "change_val": change_val,
+            "change_pct": change_pct,
+            "high": high_price,
+            "low": low_price,
+            "open": first_open,
+            "volume": total_vol
+        })
+    except Exception as e:
+        return jsonify({"error": str(e), "points": []})
 
 
 @app.route("/")

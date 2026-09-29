@@ -44,9 +44,11 @@
   --radius-sm:   10px;
   --radius-pill: 100px;
 
-  --font-display: 'Plus Jakarta Sans', 'Outfit', sans-serif;
-  --font-body:    'Plus Jakarta Sans', 'Inter', sans-serif;
-  --font-mono:    'JetBrains Mono', monospace;
+  --font-display: 'Plus Jakarta Sans', 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: 'Plus Jakarta Sans', 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body:    'Plus Jakarta Sans', 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono:    'Plus Jakarta Sans', 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-numeric: 'Plus Jakarta Sans', 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
   --theme-transition: background-color 0.7s cubic-bezier(0.16, 1, 0.3, 1),
                       background 0.7s cubic-bezier(0.16, 1, 0.3, 1),
@@ -154,9 +156,12 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
-  line-height: 1.6;
+  font-weight: 450;
+  line-height: 1.62;
+  letter-spacing: -0.011em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   transition: var(--theme-transition);
 }
 
@@ -172,6 +177,103 @@ body, .dl-sticky-header, .dl-nav, .dl-nav-link, .ticker-scroll-wrap,
 
 a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
+
+/* ==========================================================================
+   GLOBAL TYPOGRAPHIC HIERARCHY (Plus Jakarta Sans & Manrope)
+   ========================================================================== */
+h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.028em;
+  line-height: 1.16;
+}
+
+h2 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: -0.024em;
+  line-height: 1.22;
+}
+
+h3 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  line-height: 1.28;
+}
+
+h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: -0.014em;
+  line-height: 1.35;
+}
+
+p {
+  font-family: var(--font-body);
+  font-weight: 450;
+  line-height: 1.62;
+  letter-spacing: -0.01em;
+}
+
+/* Navigation Links */
+.dl-nav-link, .nav-link {
+  font-family: var(--font-body);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+/* Buttons */
+button, .btn, .vw-btn, [type="submit"], [type="button"] {
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Form Inputs, Selects & Labels */
+label {
+  font-family: var(--font-body);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+input, select, textarea {
+  font-family: var(--font-body);
+  font-weight: 450;
+  letter-spacing: -0.01em;
+}
+
+/* Table Headers & Cells */
+table th {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+table td {
+  font-family: var(--font-body);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+/* Financial numbers, values, metrics, stock prices, percentages & tabular figures */
+.price, .val, .num, .metric, .change, .stock-price, .stock-change,
+.wpr-price, .wpr-change, .hqs-num, .wm-val, .pill-num, .ticker-val, .ticker-change,
+.chart-val-num, .chart-val-change, .stat-pill-item, .mono,
+.badge-tag, .engine-tag, .rpc-badge, .mps-badge, .stat-pill-item span,
+.stock-highlight-item div, .stock-highlight-item span,
+[class*="price"], [class*="change"], [class*="val"], [class*="stat"], [class*="num"] {
+  font-family: var(--font-numbers);
+  font-variant-numeric: tabular-nums lining-nums;
+  -webkit-font-feature-settings: "tnum" 1, "lnum" 1;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+/* Stock Symbols & Names */
+.stock-name, .stock-symbol, .company-name, .ticker-name {
+  font-family: var(--font-heading);
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
 
 /* ==========================================================================
    STICKY HEADER (NAVBAR + MOVING TICKER) — shared across all pages

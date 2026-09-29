@@ -534,3 +534,116 @@
   background: linear-gradient(135deg, #ECFDF5 0%, #F0FDFA 100%);
   border-color: #A7F3D0;
 }
+
+/* ==========================================================================
+   ABOUT PHOTO SHOWCASE (3 High-Res Visual Cards)
+   ========================================================================== */
+.about-photo-showcase {
+  margin-top: 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.aps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 860px) {
+  .aps-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.aps-card {
+  background: var(--panel);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.aps-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(16, 216, 144, 0.4);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+}
+
+.aps-img-wrap {
+  width: 100%;
+  height: 175px;
+  position: relative;
+  overflow: hidden;
+}
+
+.aps-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.aps-card:hover .aps-img-wrap img {
+  transform: scale(1.06);
+}
+
+.aps-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: rgba(8, 11, 16, 0.85);
+  backdrop-filter: blur(8px);
+  color: var(--gold);
+  border: 1px solid rgba(16, 216, 144, 0.35);
+}
+
+.aps-info {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.aps-info h3 {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.aps-info p {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin: 0;
+}
+
+[data-theme="light"] .aps-card {
+  background: #FFFFFF;
+  border: 1.5px solid #E2E8F0;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.06);
+}
+
+[data-theme="light"] .aps-card:hover {
+  border-color: #00A86B;
+  box-shadow: 0 18px 40px -8px rgba(0, 168, 107, 0.18);
+}
+
+[data-theme="light"] .aps-badge {
+  background: rgba(255, 255, 255, 0.9);
+  color: #065F46;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+

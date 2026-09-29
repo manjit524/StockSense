@@ -4,45 +4,65 @@
 
 {% block content %}
 <div class="login-wrap">
-  <div class="auth-card">
-    <div class="auth-tabs">
-      <button type="button" class="auth-tab active" data-target="panel-login">Login</button>
-      <button type="button" class="auth-tab" data-target="panel-signup">Sign up</button>
+  <div class="login-split-wrap">
+
+    <div class="login-hero-side">
+      <div class="lhs-image-wrap">
+        <img src="{{ url_for('static', filename='login_desk.jpg') }}" alt="StockSense Institutional Trading Desk">
+        <div class="lhs-overlay">
+          <span class="lhs-badge"><span class="live-dot"></span> Institutional Access</span>
+          <h2>Unified Market Terminal</h2>
+          <p>Access your personalized watchlists, deep learning GRU advisor recommendations, and custom portfolio risk allocations.</p>
+          <div class="lhs-stats-row">
+            <div><span class="mono">7,700+</span><small>Tickers</small></div>
+            <div><span class="mono">26</span><small>Metrics</small></div>
+            <div><span class="mono">24/7</span><small>Live Quotes</small></div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="auth-panel active" id="panel-login">
-      <h2>Welcome back</h2>
-      <p class="auth-sub">Sign in to your StockSense account.</p>
-      <form class="form-stack" data-demo-form>
-        <label for="login-email">Email</label>
-        <input type="email" id="login-email" name="email" placeholder="you@example.com" required>
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button type="button" class="auth-tab active" data-target="panel-login">Login</button>
+        <button type="button" class="auth-tab" data-target="panel-signup">Sign up</button>
+      </div>
 
-        <label for="login-password">Password</label>
-        <input type="password" id="login-password" name="password" placeholder="••••••••" required>
-        <a href="#" class="auth-forgot">Forgot password?</a>
+      <div class="auth-panel active" id="panel-login">
+        <h2>Welcome back</h2>
+        <p class="auth-sub">Sign in to your StockSense account.</p>
+        <form class="form-stack" data-demo-form>
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" name="email" placeholder="you@example.com" required>
 
-        <button type="submit" class="btn btn-primary btn-block">Log in</button>
-        <p class="form-note">This is a UI demo — no accounts are actually created or checked yet.</p>
-      </form>
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" name="password" placeholder="••••••••" required>
+          <a href="#" class="auth-forgot">Forgot password?</a>
+
+          <button type="submit" class="btn btn-primary btn-block">Log in</button>
+          <p class="form-note">This is a UI demo — no accounts are actually created or checked yet.</p>
+        </form>
+      </div>
+
+      <div class="auth-panel" id="panel-signup">
+        <h2>Create account</h2>
+        <p class="auth-sub">Start analysing markets in seconds.</p>
+        <form class="form-stack" data-demo-form>
+          <label for="signup-name">Name</label>
+          <input type="text" id="signup-name" name="name" placeholder="Your name" required>
+
+          <label for="signup-email">Email</label>
+          <input type="email" id="signup-email" name="email" placeholder="you@example.com" required>
+
+          <label for="signup-password">Password</label>
+          <input type="password" id="signup-password" name="password" placeholder="••••••••" required>
+
+          <button type="submit" class="btn btn-primary btn-block">Create account</button>
+          <p class="form-note">This is a UI demo — no accounts are actually created or checked yet.</p>
+        </form>
+      </div>
     </div>
 
-    <div class="auth-panel" id="panel-signup">
-      <h2>Create account</h2>
-      <p class="auth-sub">Start analysing markets in seconds.</p>
-      <form class="form-stack" data-demo-form>
-        <label for="signup-name">Name</label>
-        <input type="text" id="signup-name" name="name" placeholder="Your name" required>
-
-        <label for="signup-email">Email</label>
-        <input type="email" id="signup-email" name="email" placeholder="you@example.com" required>
-
-        <label for="signup-password">Password</label>
-        <input type="password" id="signup-password" name="password" placeholder="••••••••" required>
-
-        <button type="submit" class="btn btn-primary btn-block">Create account</button>
-        <p class="form-note">This is a UI demo — no accounts are actually created or checked yet.</p>
-      </form>
-    </div>
   </div>
 </div>
 {% endblock %}

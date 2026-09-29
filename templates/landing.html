@@ -228,25 +228,40 @@
 
   <div class="vw-asset-grid">
     {% for a in trend_stocks %}
-    <div class="vw-asset-card" data-category="{{ a.category if a.category is defined else 'stocks' }}" data-symbol="{{ a.yf_symbol }}">
+    <div class="vw-asset-card" 
+         data-category="{{ a.category if a.category is defined else 'stocks' }}" 
+         data-symbol="{{ a.yf_symbol }}"
+         data-ticker="{{ a.symbol }}"
+         data-name="{{ a.name if a.name is defined else a.symbol }}"
+         data-exchange="{{ a.exchange }}"
+         data-price="{{ '%.2f'|format(a.price) if a.price is defined else '0' }}"
+         data-change="{{ '%.2f'|format(a.change) if a.change is defined else '0' }}"
+         data-currency="{{ '$' if (a.exchange == 'US' or a.exchange == 'CRYPTO' or a.category == 'crypto') else '₹' }}"
+         data-spark="{{ a.spark }}">
       <div class="vw-asset-top">
-        <span class="vw-asset-symbol">{{ a.symbol }}</span>
+        <div class="vw-asset-identity">
+          <span class="vw-asset-symbol">{{ a.symbol }}</span>
+          {% if a.name %}
+          <span class="vw-asset-fullname" title="{{ a.name }}">{{ a.name }}</span>
+          {% endif %}
+        </div>
         <span class="vw-asset-badge">{{ a.exchange }}</span>
       </div>
-      <div class="vw-asset-sparkline-wrap">
+      <div class="vw-asset-sparkline-wrap" title="Click card to expand big interactive chart">
         <svg viewBox="0 0 100 28" class="asset-spark" data-spark="{{ a.spark }}">
-          <polyline fill="none" stroke="{{ '#34D399' if a.change >= 0 else '#F87171' }}" stroke-width="1.6" points="{{ a.spark }}" vector-effect="non-scaling-stroke"/>
+          <polyline fill="none" stroke="{{ '#34D399' if (a.change is defined and a.change >= 0) else '#F87171' }}" stroke-width="1.6" points="{{ a.spark }}" vector-effect="non-scaling-stroke"/>
         </svg>
       </div>
       <div class="vw-asset-price">
-        <span class="live-currency">{{ '$' if a.exchange == 'US' else '₹' }}</span><span class="live-price-value">{{ '%.2f'|format(a.price) if a.price is defined else '—' }}</span>
+        <span class="live-currency">{{ '$' if (a.exchange == 'US' or a.exchange == 'CRYPTO' or a.category == 'crypto') else '₹' }}</span><span class="live-price-value">{{ '%.2f'|format(a.price) if a.price is defined else '—' }}</span>
       </div>
       <div class="vw-asset-change {{ 'up' if (a.change is defined and a.change >= 0) else 'down' }}">
         <span class="live-arrow">{{ '▲' if (a.change is defined and a.change >= 0) else '▼' }}</span>
         <span class="live-change-value">{{ '%.2f'|format(a.change) if a.change is defined else '—' }}</span>%
       </div>
       <div class="vw-asset-actions">
-        <a href="{{ url_for('reports') }}" class="vw-btn vw-btn-ghost vw-btn-sm">View Report</a>
+        <button type="button" class="vw-btn vw-btn-primary vw-btn-sm btn-open-chart" data-symbol="{{ a.yf_symbol }}">📈 Chart</button>
+        <a href="{{ url_for('reports') }}?ticker={{ a.yf_symbol }}" class="vw-btn vw-btn-ghost vw-btn-sm">Report</a>
       </div>
     </div>
     {% endfor %}
@@ -393,7 +408,10 @@
 
   <div class="vw-grid-3">
     <div class="vw-insight-card">
-      <div class="vw-insight-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg></div>
+      <div class="vw-insight-visual">
+        <img src="{{ url_for('static', filename='home_engine_ai.jpg') }}" alt="Deep Learning GRU AI Engine Architecture" loading="lazy">
+        <span class="vw-insight-badge">GRU Neural Engine</span>
+      </div>
       <div class="vw-insight-body">
         <h3>How the Engines Work</h3>
         <p>What the GRU model does, what the intraday scanner doesn't, and where each one's limits are.</p>
@@ -401,7 +419,10 @@
       </div>
     </div>
     <div class="vw-insight-card">
-      <div class="vw-insight-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19V5M4 15l5-5 4 4 7-8"/></svg></div>
+      <div class="vw-insight-visual">
+        <img src="{{ url_for('static', filename='home_markets_live.jpg') }}" alt="Real-time Multi-Exchange Live Market Terminal" loading="lazy">
+        <span class="vw-insight-badge">Live Multi-Asset</span>
+      </div>
       <div class="vw-insight-body">
         <h3>Market Data, Live</h3>
         <p>Stocks, ETFs, crypto, mutual funds, bonds, IPOs — all in one place, refreshed continuously.</p>
@@ -409,7 +430,10 @@
       </div>
     </div>
     <div class="vw-insight-card">
-      <div class="vw-insight-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h5"/></svg></div>
+      <div class="vw-insight-visual">
+        <img src="{{ url_for('static', filename='home_reports_analytics.jpg') }}" alt="Quantitative Technical Indicator Suite and Reports" loading="lazy">
+        <span class="vw-insight-badge">26 Indicator Suite</span>
+      </div>
       <div class="vw-insight-body">
         <h3>Full Technical Reports</h3>
         <p>RSI, MACD, Beta, Sharpe, drawdown, and a transparent AI score — for any symbol, any period.</p>
@@ -450,6 +474,86 @@
     </form>
   </div>
 </section>
+
+<!-- ===================== BIG FORMAT ASSET CHART MODAL ===================== -->
+<div class="asset-modal-overlay" id="assetChartModal" aria-hidden="true" role="dialog">
+  <div class="asset-modal-backdrop" id="assetModalBackdrop"></div>
+  <div class="asset-modal-dialog">
+    <div class="asset-modal-header">
+      <div class="amh-left">
+        <div class="amh-title-row">
+          <h3 class="amh-symbol" id="modalAssetSymbol">RELIANCE</h3>
+          <span class="amh-badge" id="modalAssetExchange">NSE</span>
+          <span class="amh-category" id="modalAssetCategory">Stocks</span>
+        </div>
+        <div class="amh-name" id="modalAssetName">Reliance Industries Ltd</div>
+      </div>
+      <div class="amh-right">
+        <div class="amh-price-wrap">
+          <span class="amh-price" id="modalAssetPrice">₹2,948.10</span>
+          <span class="amh-change up" id="modalAssetChange"><span class="amh-arrow">▲</span> <span class="amh-change-num">+1.24%</span></span>
+        </div>
+        <button type="button" class="amh-close" id="modalAssetClose" aria-label="Close modal">&times;</button>
+      </div>
+    </div>
+
+    <!-- Timeframe selector -->
+    <div class="asset-modal-controls">
+      <div class="amc-timeframes" id="modalTimeframes">
+        <button type="button" class="amc-tf-btn active" data-tf="1D">1D</button>
+        <button type="button" class="amc-tf-btn" data-tf="1W">1W</button>
+        <button type="button" class="amc-tf-btn" data-tf="1M">1M</button>
+        <button type="button" class="amc-tf-btn" data-tf="1Y">1Y</button>
+        <button type="button" class="amc-tf-btn" data-tf="ALL">ALL</button>
+      </div>
+      <div class="amc-status" id="modalChartStatus">
+        <span class="amc-pulse-dot"></span> Live Data Feed
+      </div>
+    </div>
+
+    <!-- Big Canvas Graphic -->
+    <div class="asset-modal-canvas-wrap" id="modalCanvasWrap">
+      <canvas id="modalBigCanvas"></canvas>
+      <div class="asset-modal-tooltip" id="modalChartTooltip" style="display:none;">
+        <span class="amt-price" id="modalTooltipPrice">—</span>
+        <span class="amt-change" id="modalTooltipChange">—</span>
+        <span class="amt-time" id="modalTooltipTime">—</span>
+      </div>
+      <div class="asset-modal-loading" id="modalChartLoading" style="display:none;">
+        <div class="aml-spinner"></div>
+        <span>Fetching live chart...</span>
+      </div>
+    </div>
+
+    <!-- Asset Key Stats Grid -->
+    <div class="asset-modal-stats">
+      <div class="ams-item">
+        <span class="ams-label">Open</span>
+        <span class="ams-val" id="modalStatOpen">—</span>
+      </div>
+      <div class="ams-item">
+        <span class="ams-label">Day High</span>
+        <span class="ams-val" id="modalStatHigh">—</span>
+      </div>
+      <div class="ams-item">
+        <span class="ams-label">Day Low</span>
+        <span class="ams-val" id="modalStatLow">—</span>
+      </div>
+      <div class="ams-item">
+        <span class="ams-label">Volume</span>
+        <span class="ams-val" id="modalStatVolume">—</span>
+      </div>
+    </div>
+
+    <!-- Action footer -->
+    <div class="asset-modal-footer">
+      <div class="amf-actions">
+        <a href="#" class="vw-btn vw-btn-primary" id="modalViewReportBtn">Open Full Technical Report</a>
+        <a href="{{ url_for('get_advice') }}" class="vw-btn vw-btn-ghost">Analyze in Advisor Engine</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
 

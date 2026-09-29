@@ -503,7 +503,7 @@
 
       // 1. Horizontal Dashed Grid Lines & Right Y-Axis Price Labels
       var gridSteps = 4;
-      wCtx.font = '10px "JetBrains Mono", monospace';
+      wCtx.font = '10px "Plus Jakarta Sans", "Manrope", sans-serif';
       wCtx.fillStyle = textAxisColor;
       wCtx.textAlign = 'right';
       wCtx.textBaseline = 'middle';
@@ -529,7 +529,7 @@
       var xLabels = d.xLabels || [];
       if (xLabels.length > 0) {
         wCtx.fillStyle = textAxisColor;
-        wCtx.font = '10px "JetBrains Mono", monospace';
+        wCtx.font = '10px "Plus Jakarta Sans", "Manrope", sans-serif';
         wCtx.textBaseline = 'top';
         for (var xi = 0; xi < xLabels.length; xi++) {
           var xlX = padL + (xi / (xLabels.length - 1)) * plotW;
@@ -641,7 +641,7 @@
           wCtx.lineWidth = 1;
           wCtx.strokeRect(padL + plotW + 2, closest.y - 9, padR - 6, 18);
           wCtx.fillStyle = isLight ? '#0F172A' : '#FFFFFF';
-          wCtx.font = '10px "JetBrains Mono", monospace';
+          wCtx.font = '600 10px "Plus Jakarta Sans", "Manrope", sans-serif';
           wCtx.textAlign = 'center';
           wCtx.textBaseline = 'middle';
           wCtx.fillText(badgePriceStr, padL + plotW + (padR - 4) / 2, closest.y);
@@ -995,7 +995,7 @@
 
       // 1. Horizontal Dashed Grid Lines & Right Y-Axis Price Levels
       var gridSteps = 5;
-      hCtx.font = '11px "JetBrains Mono", monospace';
+      hCtx.font = '11px "Plus Jakarta Sans", "Manrope", sans-serif';
       hCtx.fillStyle = textAxisColor;
       hCtx.textAlign = 'right';
       hCtx.textBaseline = 'middle';
@@ -1021,7 +1021,7 @@
       var xLabels = d.xLabels || [];
       if (xLabels.length > 0) {
         hCtx.fillStyle = textAxisColor;
-        hCtx.font = '11px "JetBrains Mono", monospace';
+        hCtx.font = '11px "Plus Jakarta Sans", "Manrope", sans-serif';
         hCtx.textBaseline = 'top';
         for (var xi = 0; xi < xLabels.length; xi++) {
           var xlX = padL + (xi / (xLabels.length - 1)) * plotW;
@@ -1189,13 +1189,13 @@
 
         // Signal Text
         hCtx.fillStyle = sigColor;
-        hCtx.font = 'bold 9px "JetBrains Mono", monospace';
+        hCtx.font = '700 9px "Plus Jakarta Sans", "Manrope", sans-serif';
         hCtx.textAlign = 'center';
         hCtx.textBaseline = 'top';
         hCtx.fillText(d.signal.label, sigX, pillY + 5);
 
         hCtx.fillStyle = isLight ? '#0F172A' : '#FFFFFF';
-        hCtx.font = '9px "JetBrains Mono", monospace';
+        hCtx.font = '600 9px "Plus Jakarta Sans", "Manrope", sans-serif';
         hCtx.fillText(d.signal.price, sigX, pillY + 18);
         hCtx.restore();
       }
@@ -1229,7 +1229,7 @@
       hCtx.fill();
 
       hCtx.fillStyle = '#FFFFFF';
-      hCtx.font = 'bold 10px "JetBrains Mono", monospace';
+      hCtx.font = '700 10px "Plus Jakarta Sans", "Manrope", sans-serif';
       hCtx.textAlign = 'center';
       hCtx.textBaseline = 'middle';
       hCtx.fillText(livePriceStr, badgeX + badgeW / 2, badgeY + badgeH / 2);
@@ -1368,7 +1368,7 @@
       dCtx.textAlign = 'center';
       dCtx.textBaseline = 'middle';
       dCtx.fillText('Risk', donutCx, donutCy - 10);
-      dCtx.font = '12px "JetBrains Mono", monospace';
+      dCtx.font = '12px "Plus Jakarta Sans", "Manrope", sans-serif';
       dCtx.fillStyle = isLight ? '#64748B' : '#94A3B8';
       dCtx.fillText('Profile', donutCx, donutCy + 12);
 
@@ -1433,6 +1433,8 @@
             if (changeWrap) {
               changeWrap.className = 'vw-asset-change ' + (q.change >= 0 ? 'up' : 'down');
             }
+            card.setAttribute('data-price', q.price);
+            card.setAttribute('data-change', q.change);
             card.classList.add('live-flash');
             setTimeout(function () { card.classList.remove('live-flash'); }, 700);
           });
@@ -1442,6 +1444,470 @@
 
     refreshQuotes();
     setInterval(refreshQuotes, 30000);
+  }
+
+  /* =============================================================
+     BIG FORMAT ASSET CHART MODAL CONTROLLER
+     ============================================================= */
+  var modalEl = qs('#assetChartModal');
+  var modalBackdrop = qs('#assetModalBackdrop');
+  var modalCloseBtn = qs('#modalAssetClose');
+  var modalCanvasWrap = qs('#modalCanvasWrap');
+  var modalCanvas = qs('#modalBigCanvas');
+  var modalTooltip = qs('#modalChartTooltip');
+  var modalLoading = qs('#modalChartLoading');
+
+  var currentModalAsset = null;
+  var currentModalTf = '1D';
+  var modalChartData = null;
+  var modalMouseX = -1;
+  var modalMouseY = -1;
+
+  if (modalEl && modalCanvas && modalCanvasWrap) {
+    var mCtx = modalCanvas.getContext('2d');
+
+    function resizeModalCanvas() {
+      if (!modalEl.classList.contains('active')) return;
+      var dpr = window.devicePixelRatio || 1;
+      var rect = modalCanvasWrap.getBoundingClientRect();
+      modalCanvas.width = rect.width * dpr;
+      modalCanvas.height = rect.height * dpr;
+      mCtx.setTransform(1, 0, 0, 1, 0, 0);
+      mCtx.scale(dpr, dpr);
+      renderModalChart();
+    }
+    window.addEventListener('resize', resizeModalCanvas);
+
+    modalCanvasWrap.addEventListener('mousemove', function (e) {
+      var rect = modalCanvasWrap.getBoundingClientRect();
+      modalMouseX = e.clientX - rect.left;
+      modalMouseY = e.clientY - rect.top;
+      renderModalChart();
+    });
+
+    modalCanvasWrap.addEventListener('mouseleave', function () {
+      modalMouseX = -1;
+      modalMouseY = -1;
+      if (modalTooltip) modalTooltip.style.display = 'none';
+      renderModalChart();
+    });
+
+    function formatNumber(num) {
+      if (num >= 1e9) return (num / 1e9).toFixed(2) + 'B';
+      if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
+      if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
+      return num.toLocaleString();
+    }
+
+    function openAssetModal(card) {
+      var sym = card.getAttribute('data-symbol') || '';
+      var ticker = card.getAttribute('data-ticker') || sym;
+      var name = card.getAttribute('data-name') || ticker;
+      var exchange = card.getAttribute('data-exchange') || 'US';
+      var category = card.getAttribute('data-category') || 'stocks';
+      var currency = card.getAttribute('data-currency') || '₹';
+      var price = parseFloat(card.getAttribute('data-price')) || 0;
+      var change = parseFloat(card.getAttribute('data-change')) || 0;
+      var spark = card.getAttribute('data-spark') || '';
+
+      currentModalAsset = {
+        symbol: sym,
+        ticker: ticker,
+        name: name,
+        exchange: exchange,
+        category: category,
+        currency: currency,
+        price: price,
+        change: change,
+        spark: spark
+      };
+
+      currentModalTf = '1D';
+
+      // Update header elements
+      var elSym = qs('#modalAssetSymbol');
+      var elEx = qs('#modalAssetExchange');
+      var elCat = qs('#modalAssetCategory');
+      var elName = qs('#modalAssetName');
+      var elPrice = qs('#modalAssetPrice');
+      var elChange = qs('#modalAssetChange');
+      var reportBtn = qs('#modalViewReportBtn');
+
+      if (elSym) elSym.textContent = ticker;
+      if (elEx) elEx.textContent = exchange;
+      if (elCat) elCat.textContent = category;
+      if (elName) elName.textContent = name;
+      if (elPrice) elPrice.textContent = currency + (price >= 1000 ? price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : price.toFixed(2));
+      if (elChange) {
+        var isUp = change >= 0;
+        elChange.className = 'amh-change ' + (isUp ? 'up' : 'down');
+        var changeNumEl = elChange.querySelector('.amh-change-num');
+        var arrowEl = elChange.querySelector('.amh-arrow');
+        if (arrowEl) arrowEl.textContent = isUp ? '▲' : '▼';
+        if (changeNumEl) changeNumEl.textContent = (isUp ? '+' : '') + change.toFixed(2) + '%';
+      }
+      if (reportBtn) {
+        reportBtn.href = '/reports?ticker=' + encodeURIComponent(sym);
+      }
+
+      // Reset timeframes active state
+      qsa('#modalTimeframes .amc-tf-btn').forEach(function (btn) {
+        if (btn.getAttribute('data-tf') === '1D') {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      // Quick baseline chart from sparkline or base price for instant feel
+      generateInitialChartData(currentModalAsset);
+
+      // Show modal
+      modalEl.classList.add('active');
+      modalEl.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+
+      // Resize & render
+      setTimeout(function () {
+        resizeModalCanvas();
+        fetchModalData(sym, currentModalTf);
+      }, 50);
+    }
+
+    function closeAssetModal() {
+      modalEl.classList.remove('active');
+      modalEl.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      currentModalAsset = null;
+      modalChartData = null;
+    }
+
+    if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeAssetModal);
+    if (modalBackdrop) modalBackdrop.addEventListener('click', closeAssetModal);
+
+    window.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modalEl.classList.contains('active')) {
+        closeAssetModal();
+      }
+    });
+
+    // Timeframe selector buttons
+    qsa('#modalTimeframes .amc-tf-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        qsa('#modalTimeframes .amc-tf-btn').forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        currentModalTf = btn.getAttribute('data-tf');
+        if (currentModalAsset) {
+          fetchModalData(currentModalAsset.symbol, currentModalTf);
+        }
+      });
+    });
+
+    // Click on cards opens modal (except clicking report links)
+    document.addEventListener('click', function (e) {
+      var link = e.target.closest('a');
+      if (link) return;
+
+      var chartBtn = e.target.closest('.btn-open-chart');
+      var card = e.target.closest('.vw-asset-card');
+
+      if (chartBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        var parentCard = chartBtn.closest('.vw-asset-card');
+        if (parentCard) openAssetModal(parentCard);
+        return;
+      }
+
+      if (card) {
+        e.preventDefault();
+        openAssetModal(card);
+      }
+    });
+
+    function generateInitialChartData(asset) {
+      var pts = [];
+      var base = asset.price || 100;
+      var pointsCount = 40;
+      var cur = base * (1 - (asset.change / 100) * 0.8);
+      var drift = ((base - cur) / pointsCount);
+
+      for (var i = 0; i < pointsCount; i++) {
+        cur += drift + (Math.sin(i * 0.6) * base * 0.003) + ((Math.random() - 0.48) * base * 0.004);
+        var hr = 9 + Math.floor((i * 6.5) / 60);
+        var mn = Math.floor((i * 6.5) % 60);
+        pts.push({
+          time: String(hr).padStart(2, '0') + ':' + String(mn).padStart(2, '0'),
+          price: Math.max(cur, 0.01),
+          open: cur * 0.998,
+          high: cur * 1.002,
+          low: cur * 0.997,
+          volume: Math.floor(12000 + Math.random() * 45000)
+        });
+      }
+      pts[pts.length - 1].price = base;
+
+      modalChartData = {
+        points: pts,
+        currency: asset.currency,
+        isUp: asset.change >= 0,
+        open: pts[0].price,
+        high: Math.max.apply(null, pts.map(function (p) { return p.price; })),
+        low: Math.min.apply(null, pts.map(function (p) { return p.price; })),
+        volume: pts.reduce(function (a, b) { return a + b.volume; }, 0)
+      };
+      updateModalStats(modalChartData);
+    }
+
+    function updateModalStats(data) {
+      var elOpen = qs('#modalStatOpen');
+      var elHigh = qs('#modalStatHigh');
+      var elLow = qs('#modalStatLow');
+      var elVol = qs('#modalStatVolume');
+      var c = currentModalAsset ? currentModalAsset.currency : '';
+
+      if (elOpen) elOpen.textContent = c + (data.open ? (data.open >= 1000 ? data.open.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : data.open.toFixed(2)) : '—');
+      if (elHigh) elHigh.textContent = c + (data.high ? (data.high >= 1000 ? data.high.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : data.high.toFixed(2)) : '—');
+      if (elLow) elLow.textContent = c + (data.low ? (data.low >= 1000 ? data.low.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : data.low.toFixed(2)) : '—');
+      if (elVol) elVol.textContent = data.volume ? formatNumber(data.volume) : '—';
+    }
+
+    function fetchModalData(symbol, tf) {
+      if (!symbol) return;
+      if (modalLoading) modalLoading.style.display = 'flex';
+
+      fetch('/api/asset-chart?ticker=' + encodeURIComponent(symbol) + '&tf=' + encodeURIComponent(tf))
+        .then(function (r) { return r.json(); })
+        .then(function (res) {
+          if (modalLoading) modalLoading.style.display = 'none';
+          if (res && res.points && res.points.length > 1) {
+            var firstP = res.points[0].price;
+            var lastP = res.points[res.points.length - 1].price;
+            var isUp = lastP >= firstP;
+
+            modalChartData = {
+              points: res.points,
+              currency: currentModalAsset.currency,
+              isUp: isUp,
+              open: res.open || firstP,
+              high: res.high || Math.max.apply(null, res.points.map(function (p) { return p.price; })),
+              low: res.low || Math.min.apply(null, res.points.map(function (p) { return p.price; })),
+              volume: res.volume || 0,
+              changePct: res.change_pct
+            };
+
+            // Update header price & change
+            var elPrice = qs('#modalAssetPrice');
+            var elChange = qs('#modalAssetChange');
+            if (elPrice && res.current_price) {
+              elPrice.textContent = currentModalAsset.currency + (res.current_price >= 1000 ? res.current_price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : res.current_price.toFixed(2));
+            }
+            if (elChange && res.change_pct !== undefined) {
+              elChange.className = 'amh-change ' + (isUp ? 'up' : 'down');
+              var changeNumEl = elChange.querySelector('.amh-change-num');
+              var arrowEl = elChange.querySelector('.amh-arrow');
+              if (arrowEl) arrowEl.textContent = isUp ? '▲' : '▼';
+              if (changeNumEl) changeNumEl.textContent = (isUp ? '+' : '') + res.change_pct.toFixed(2) + '%';
+            }
+
+            updateModalStats(modalChartData);
+            renderModalChart();
+          }
+        })
+        .catch(function () {
+          if (modalLoading) modalLoading.style.display = 'none';
+        });
+    }
+
+    function renderModalChart() {
+      if (!modalEl.classList.contains('active') || !modalChartData) return;
+
+      var w = modalCanvasWrap.clientWidth;
+      var h = modalCanvasWrap.clientHeight;
+      mCtx.clearRect(0, 0, w, h);
+
+      var pts = modalChartData.points;
+      if (!pts || pts.length < 2) return;
+
+      var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      var gridColor = isLight ? 'rgba(0, 0, 0, 0.06)' : 'rgba(255, 255, 255, 0.05)';
+      var textAxisColor = isLight ? '#64748B' : '#94A3B8';
+
+      var padL = 16;
+      var padR = 74; // Room for price tags on right
+      var padT = 20;
+      var padB = 30; // Room for time tags on bottom
+      var plotW = Math.max(w - padL - padR, 100);
+      var plotH = Math.max(h - padT - padB, 80);
+      var baseline = padT + plotH;
+
+      var prices = pts.map(function (p) { return p.price; });
+      var minP = Math.min.apply(null, prices);
+      var maxP = Math.max.apply(null, prices);
+      var padRange = (maxP - minP) * 0.12 || 1;
+      minP -= padRange;
+      maxP += padRange;
+      var rngP = maxP - minP || 1;
+
+      // 1. Horizontal Dashed Grid Lines & Right Y-Axis Price Labels
+      var gridSteps = 4;
+      mCtx.font = '11px "Plus Jakarta Sans", "Manrope", sans-serif';
+      mCtx.fillStyle = textAxisColor;
+      mCtx.textAlign = 'right';
+      mCtx.textBaseline = 'middle';
+
+      for (var gi = 0; gi <= gridSteps; gi++) {
+        var gy = padT + (gi / gridSteps) * plotH;
+        var gPrice = maxP - (gi / gridSteps) * (maxP - minP);
+
+        mCtx.beginPath();
+        mCtx.strokeStyle = gridColor;
+        mCtx.lineWidth = 1;
+        mCtx.setLineDash([3, 4]);
+        mCtx.moveTo(padL, gy);
+        mCtx.lineTo(padL + plotW, gy);
+        mCtx.stroke();
+        mCtx.setLineDash([]);
+
+        var pStr = gPrice >= 1000 ? gPrice.toLocaleString('en-US', { maximumFractionDigits: 2 }) : gPrice.toFixed(2);
+        mCtx.fillText((modalChartData.currency || '') + pStr, w - 8, gy);
+      }
+
+      // 2. Bottom Timeline Labels (X-Axis)
+      var stepX = Math.max(Math.floor((pts.length - 1) / 4), 1);
+      mCtx.fillStyle = textAxisColor;
+      mCtx.font = '10px "Plus Jakarta Sans", "Manrope", sans-serif';
+      mCtx.textBaseline = 'top';
+
+      for (var xi = 0; xi < pts.length; xi += stepX) {
+        var xlX = padL + (xi / (pts.length - 1)) * plotW;
+        mCtx.textAlign = (xi === 0) ? 'left' : (xi >= pts.length - stepX) ? 'right' : 'center';
+        mCtx.fillText(pts[xi].time || '', xlX, baseline + 8);
+      }
+
+      // Coordinates mapping
+      var coords = pts.map(function (p, i) {
+        return {
+          x: padL + (i / (pts.length - 1)) * plotW,
+          y: padT + plotH - ((p.price - minP) / rngP) * plotH,
+          val: p.price,
+          time: p.time,
+          idx: i
+        };
+      });
+
+      var isUp = modalChartData.isUp;
+      var lineColor = isUp ? (isLight ? '#00A86B' : '#10D890') : (isLight ? '#E11D48' : '#FF4D6D');
+      var areaColor1 = isUp ? (isLight ? 'rgba(0, 168, 107, 0.25)' : 'rgba(16, 216, 144, 0.28)') : (isLight ? 'rgba(225, 29, 72, 0.25)' : 'rgba(255, 77, 109, 0.28)');
+      var areaColor2 = isUp ? (isLight ? 'rgba(0, 168, 107, 0.02)' : 'rgba(16, 216, 144, 0.01)') : (isLight ? 'rgba(225, 29, 72, 0.02)' : 'rgba(255, 77, 109, 0.01)');
+
+      // Area Fill
+      mCtx.beginPath();
+      mCtx.moveTo(coords[0].x, baseline);
+      mCtx.lineTo(coords[0].x, coords[0].y);
+      buildSplinePath(mCtx, coords);
+      mCtx.lineTo(coords[coords.length - 1].x, baseline);
+      mCtx.closePath();
+
+      var areaGrad = mCtx.createLinearGradient(0, padT, 0, baseline);
+      areaGrad.addColorStop(0, areaColor1);
+      areaGrad.addColorStop(0.75, areaColor2);
+      areaGrad.addColorStop(1, isLight ? 'rgba(255, 255, 255, 0)' : 'rgba(8, 11, 16, 0)');
+      mCtx.fillStyle = areaGrad;
+      mCtx.fill();
+
+      // Stroke Line
+      mCtx.save();
+      mCtx.beginPath();
+      buildSplinePath(mCtx, coords);
+      mCtx.shadowColor = lineColor;
+      mCtx.shadowBlur = isLight ? 4 : 8;
+      mCtx.strokeStyle = lineColor;
+      mCtx.lineWidth = 2.4;
+      mCtx.stroke();
+      mCtx.restore();
+
+      // Pulsing End Beacon Dot
+      var lastPt = coords[coords.length - 1];
+      mCtx.beginPath();
+      mCtx.arc(lastPt.x, lastPt.y, 4.5, 0, Math.PI * 2);
+      mCtx.fillStyle = lineColor;
+      mCtx.fill();
+
+      mCtx.beginPath();
+      mCtx.arc(lastPt.x, lastPt.y, 8, 0, Math.PI * 2);
+      mCtx.strokeStyle = lineColor;
+      mCtx.lineWidth = 1.2;
+      mCtx.stroke();
+
+      // Interactive Crosshairs & Tooltip
+      if (modalMouseX >= padL && modalMouseX <= padL + plotW) {
+        var closest = coords[0];
+        var minDist = Math.abs(coords[0].x - modalMouseX);
+        for (var k = 1; k < coords.length; k++) {
+          var dist = Math.abs(coords[k].x - modalMouseX);
+          if (dist < minDist) { minDist = dist; closest = coords[k]; }
+        }
+
+        // Vertical crosshair
+        mCtx.save();
+        mCtx.strokeStyle = isLight ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.24)';
+        mCtx.lineWidth = 1;
+        mCtx.setLineDash([4, 4]);
+        mCtx.beginPath();
+        mCtx.moveTo(closest.x, padT);
+        mCtx.lineTo(closest.x, baseline);
+        mCtx.stroke();
+
+        // Horizontal crosshair
+        mCtx.beginPath();
+        mCtx.moveTo(padL, closest.y);
+        mCtx.lineTo(padL + plotW, closest.y);
+        mCtx.stroke();
+        mCtx.restore();
+
+        // Hover dot on curve
+        mCtx.beginPath();
+        mCtx.arc(closest.x, closest.y, 6, 0, Math.PI * 2);
+        mCtx.fillStyle = isLight ? '#0F172A' : '#FFFFFF';
+        mCtx.shadowColor = lineColor;
+        mCtx.shadowBlur = 10;
+        mCtx.fill();
+        mCtx.shadowBlur = 0;
+
+        // Floating Y-axis Badge
+        var badgePriceStr = (modalChartData.currency || '') + (closest.val >= 1000 ? closest.val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : closest.val.toFixed(2));
+        mCtx.fillStyle = isLight ? '#FFFFFF' : '#0B0F17';
+        mCtx.fillRect(padL + plotW + 2, closest.y - 10, padR - 6, 20);
+        mCtx.strokeStyle = lineColor;
+        mCtx.lineWidth = 1.2;
+        mCtx.strokeRect(padL + plotW + 2, closest.y - 10, padR - 6, 20);
+        mCtx.fillStyle = isLight ? '#0F172A' : '#FFFFFF';
+        mCtx.font = '700 11px "Plus Jakarta Sans", "Manrope", sans-serif';
+        mCtx.textAlign = 'center';
+        mCtx.textBaseline = 'middle';
+        mCtx.fillText(badgePriceStr, padL + plotW + (padR - 4) / 2, closest.y);
+
+        // Update Tooltip HUD
+        if (modalTooltip) {
+          modalTooltip.style.display = 'flex';
+          var ttPrice = qs('#modalTooltipPrice');
+          var ttChange = qs('#modalTooltipChange');
+          var ttTime = qs('#modalTooltipTime');
+          var startP = coords[0].val;
+          var diffPct = ((closest.val - startP) / startP) * 100;
+
+          if (ttPrice) ttPrice.textContent = badgePriceStr;
+          if (ttChange) {
+            ttChange.textContent = (diffPct >= 0 ? '+' : '') + diffPct.toFixed(2) + '%';
+            ttChange.className = 'amt-change ' + (diffPct >= 0 ? 'up' : 'down');
+          }
+          if (ttTime) {
+            ttTime.textContent = closest.time || ('Point ' + (closest.idx + 1));
+          }
+        }
+      }
+    }
   }
 
 })();
