@@ -97,7 +97,7 @@ def build_intraday_snapshot(tickers):
     intraday volatility, and a risk bucket — the same shape of analysis
     your long-term advisor produces, but computed from live intraday candles.
     """
-    print("🚀 Scanning tickers for intraday signals...")
+    print("🛸 Scanning tickers for intraday signals...")
     rows = []
     for ticker in tickers:
         try:
@@ -183,7 +183,7 @@ def run_portfolio_suggestion(snapshot):
     }
 
     print("\n" + "=" * 110)
-    print(f" 📈 INTRADAY PORTFOLIO SUGGESTION — Capital: ₹{capital:,.2f}")
+    print(f" 💹 INTRADAY PORTFOLIO SUGGESTION — Capital: ₹{capital:,.2f}")
     print("=" * 110)
 
     for risk in ['Low Risk', 'Medium Risk', 'High Risk']:

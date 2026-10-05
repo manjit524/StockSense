@@ -55,7 +55,7 @@ BACKFILL_END_DATE = datetime.today().strftime("%Y-%m-%d")
 import us_tickers
 
 US_TICKERS_TO_TRACK = us_tickers.get_sp500_tickers()
-print(f"📈 Tracking {len(US_TICKERS_TO_TRACK)} US tickers.")
+print(f"💹 Tracking {len(US_TICKERS_TO_TRACK)} US tickers.")
 
 os.makedirs(US_FOLDER, exist_ok=True)
 
@@ -255,7 +255,7 @@ for file in us_files:
     if key not in unique_ticker_registry:
         unique_ticker_registry[key] = {'path': file, 'exchange': 'US'}
 
-print("\n--- 📊 EXCHANGE REGISTRY SUMMARY ---")
+print("\n--- 🗂️ EXCHANGE REGISTRY SUMMARY ---")
 print(f"Total Unique Tickers Registered: {len(unique_ticker_registry)}")
 for exch in ['NSE', 'BSE', 'US']:
     print(f" -> {exch} Unique Files Linked: {sum(1 for x in unique_ticker_registry.values() if x['exchange'] == exch)}")
@@ -317,7 +317,7 @@ if X_train_pool:
     print(f"🧠 Training on {X_train.shape[0]} sequence samples from {processed_count} companies...")
     with tf.device('/CPU:0'):
         model.fit(X_train, y_train, epochs=5, batch_size=128, verbose=1)
-    print("👍 Multi-asset model training complete!")
+    print("✨ Multi-asset model training complete!")
 else:
     print("❌ ERROR: Training data compilation failed. Check file access.")
 
@@ -325,7 +325,7 @@ else:
 # EVALUATE ALL TICKERS
 # ==============================================================================
 processed_stocks = []
-print(f"🚀 Starting bulk evaluation loop across {len(unique_ticker_registry)} unique tickers...")
+print(f"🛸 Starting bulk evaluation loop across {len(unique_ticker_registry)} unique tickers...")
 
 for index, (symbol, meta) in enumerate(unique_ticker_registry.items()):
     file_path = meta['path']
@@ -434,7 +434,7 @@ if exchange_choice == '5':
           "FX conversion — treat cross-currency comparisons with caution.")
 
 print("\n" + "=" * 120)
-print(f" 📈 GENERATING MATRIX [{selection_tag}]: {user_capital:,.2f} over {investment_years} Year(s)")
+print(f" 💹 GENERATING MATRIX [{selection_tag}]: {user_capital:,.2f} over {investment_years} Year(s)")
 print("=" * 120 + "\n")
 
 filtered_pool = working_df[(working_df['current_price'] <= user_capital) & (working_df['current_price'] >= 1.0)].copy()

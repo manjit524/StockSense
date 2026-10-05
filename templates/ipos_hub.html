@@ -87,9 +87,9 @@
             <span class="ipo-lc-size">Issue: {{ ipo.issue_size if ipo.issue_size else '—' }}</span>
           </div>
           <div class="ipo-lc-dates">
-            <span>📅 Opens: {{ ipo.open_date }}</span>
+            <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:4px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Opens: { ipo.open_date }</span>
             <span style="color:var(--hairline);">—</span>
-            <span>🔒 Closes: {{ ipo.close_date }}</span>
+            <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:4px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Closes: { ipo.close_date }</span>
           </div>
         </div>
         <span class="ipo-lc-arrow">View Details →</span>
@@ -106,25 +106,25 @@
     <h3 style="font-family:var(--font-display); font-size:1.3rem; font-weight:700; margin:0 0 20px;">Understanding Primary Market IPO Investing</h3>
     <div class="market-guide-grid">
       <div class="guide-card">
-        <div class="guide-icon">🏢</div>
+        <div class="guide-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01M8 14h.01M16 14h.01M12 14h.01"/></svg></div>
         <h4>What is an IPO?</h4>
         <p>An Initial Public Offering (IPO) is when a privately-held company sells fresh equity or promoter holdings to the public for the first time, listing its shares on public exchanges to raise growth capital.</p>
       </div>
 
       <div class="guide-card">
-        <div class="guide-icon">🔒</div>
+        <div class="guide-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg></div>
         <h4>ASBA Banking Facility</h4>
         <p>Under SEBI's ASBA (Application Supported by Blocked Amount) system, your bid funds remain in your own bank account earning regular interest. Money is deducted only upon confirmed allotment.</p>
       </div>
 
       <div class="guide-card">
-        <div class="guide-icon">👥</div>
+        <div class="guide-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
         <h4>Quota Allocation Rules</h4>
         <p>Mainboard IPOs allocate shares across 3 main investor categories: Qualified Institutional Buyers (QIB 50%), Non-Institutional HNI Investors (NII 15%), and Retail Individual Investors (RII 35%).</p>
       </div>
 
       <div class="guide-card">
-        <div class="guide-icon">📑</div>
+        <div class="guide-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
         <h4>DRHP Prospectus Review</h4>
         <p>The Draft Red Herring Prospectus (DRHP) filed with SEBI discloses crucial company balance sheets, revenue growth, promoter shareholding, debt obligations, and key operational risk factors.</p>
       </div>
@@ -170,14 +170,14 @@
         </div>
       </a>
       <a href="{{ url_for('market_category', category_id='etfs') }}" class="rel-mkt-card">
-        <span class="rel-mkt-icon">📊</span>
+        <span class="rel-mkt-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></span>
         <div>
           <h4>ETFs Hub</h4>
           <p>Nifty, Bank &amp; Index Funds</p>
         </div>
       </a>
       <a href="{{ url_for('market_category', category_id='mutual-funds') }}" class="rel-mkt-card">
-        <span class="rel-mkt-icon">📈</span>
+        <span class="rel-mkt-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/><path d="M19 5v4h-4"/></svg></span>
         <div>
           <h4>Mutual Funds</h4>
           <p>~40,000 AMFI Schemes</p>
