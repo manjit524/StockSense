@@ -79,8 +79,8 @@
         <div class="wpr-right">
           <span class="live-pill"><span class="live-pulse"></span> LIVE</span>
           <div class="chart-mode-group">
-            <button class="cm-btn active" data-mode="line" title="Line Chart">📈</button>
-            <button class="cm-btn" data-mode="candles" title="Candlestick View">📊</button>
+            <button class="cm-btn active" data-mode="line" title="Line Chart"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></button>
+            <button class="cm-btn" data-mode="candles" title="Candlestick View"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v2M6 19v2M18 3v5M18 16v5"/><rect x="4" y="5" width="4" height="14" rx="1"/><rect x="16" y="8" width="4" height="8" rx="1"/></svg></button>
           </div>
         </div>
       </div>
@@ -155,7 +155,7 @@
         <span class="hct-flag">₿</span> Bitcoin
       </button>
       <button class="hct-btn" data-market="gold">
-        <span class="hct-flag">🥇</span> Gold
+        <span class="hct-flag"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:4px;"><rect x="2" y="14" width="20" height="6" rx="1"/><path d="m5 14 3-8h8l3 8"/></svg></span> Gold
       </button>
     </div>
 
@@ -260,7 +260,7 @@
         <span class="live-change-value">{{ '%.2f'|format(a.change) if a.change is defined else '—' }}</span>%
       </div>
       <div class="vw-asset-actions">
-        <button type="button" class="vw-btn vw-btn-primary vw-btn-sm btn-open-chart" data-symbol="{{ a.yf_symbol }}">📈 Chart</button>
+        <button type="button" class="vw-btn vw-btn-primary vw-btn-sm btn-open-chart" data-symbol="{ a.yf_symbol }"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:4px;"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Chart</button>
         <a href="{{ url_for('reports') }}?ticker={{ a.yf_symbol }}" class="vw-btn vw-btn-ghost vw-btn-sm">Report</a>
       </div>
     </div>
